@@ -51,6 +51,12 @@
     <Compile Include="GUI\GUIEnvironment.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="Menus\MenuFrame.cs" />
+    <Compile Include="Menus\MenuTextBox.cs" />
+    <Compile Include="Menus\MenuLabel.cs" />
+    <Compile Include="Menus\MenuControl.cs" />
+    <Compile Include="Menus\MenuPage.cs" />
+    <Compile Include="Menus\MenuManager.cs" />
     <Compile Include="OpenTKWindow.cs" />
     <Compile Include="AsterionGame.cs" />
     <Compile Include="Audio\AudioPlayer.cs" />
@@ -77,9 +83,7 @@
     <Compile Include="Video\TileManager.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Menus\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />

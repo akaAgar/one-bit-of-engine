@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Asterion.Video;
 
 namespace Asterion.Menus
 {
     public sealed class MenuManager
     {
-        private MenuPage CurrentPage = null;
+        private MenuPage Page = null;
 
-        public bool InMenu { get { return CurrentPage != null; } }
+        private VBO TilesVBO;
+
+        public bool InMenu { get { return Page != null; } }
 
         public AsterionGame Game { get; private set; }
 
@@ -19,18 +22,23 @@ namespace Asterion.Menus
             Game = game;
         }
 
+        internal void OnLoad()
+        {
+            TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX * Game.Tiles.TileCountY);
+        }
+
         public void ShowPage<T>(params object[] parameters) where T : MenuPage, new()
         {
             ClosePage();
-            CurrentPage = new T();
-            CurrentPage.Initialize(this, parameters);
+            Page = new T();
+            Page.Initialize(this, parameters);
         }
 
         public void ClosePage()
         {
-            if (CurrentPage == null) return;
-            CurrentPage.Dispose();
-            CurrentPage = null;
+            if (Page == null) return;
+            Page.Dispose();
+            Page = null;
         }
 
         internal void Dispose()
@@ -41,6 +49,9 @@ namespace Asterion.Menus
         internal void Render()
         {
             if (!InMenu) return;
+
+            //Page.Render();
+            Page.OnRender();
         }
     }
 }
