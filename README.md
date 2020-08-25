@@ -1,2 +1,18 @@
-# asterion-engine
- 
+# Asterion Engine
+A cross-platform OpenGL4 1-bit tilemap engine similar to the one used by the first Ultima games, written in C# (.NET Framework 4.5) with OpenTK. Released under the GNU General Public License.
+
+- **Don't forget to add a NuGet reference to OpenTK 3.2 in the OneBitOfEngine project**
+
+![Preview images](Preview.png)
+
+## Features
+- Similar structure to the OpenTK GameWindow class, just override the OnLoad/OnUpdate methods and you're set
+- Handles keyboard and mouse input events
+- Virtual "tile board" of customizable size where any number of tiles
+- Handles animated tiles and special effects (projectiles, explosions...)
+- Can load tiles from up to 4 tilemaps, each as large as the video memory can store
+- Can play way files (requires OpenAL32.dll in the assembly directory)
+- Data (sounds, tilemaps, etc) can be loaded from files or .NET Framework classes such as Image and Bitmap, but also from encrypted archives, which can be created and loaded with the ResourceAchive class
+- Handles all OpenTK/OpenGL/OpenAL calls internally, you *don't* have to add a reference to OpenTK in your game, just to OneBitOfEngine.dll (but you'll need a reference to System.Drawing)
+- Ultra-fast (no immediate mode OpenGL calls, only vertex buffers)
+- Demo project included
