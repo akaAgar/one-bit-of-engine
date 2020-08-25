@@ -18,18 +18,17 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 using Asterion.Audio;
 using Asterion.GUI;
 using Asterion.Input;
+using Asterion.Menus;
 using Asterion.Scene;
 using Asterion.Video;
 using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
 
 namespace Asterion
 {
     /// <summary>
-    /// The OBoEGame class contains everything required to create and run a game.
+    /// The AsterionGame class contains everything required to create and run a game. Just override it.
     /// </summary>
     public class AsterionGame : IDisposable
     {
@@ -86,6 +85,7 @@ namespace Asterion
         public SceneManager Scene { get; private set; } = null;
         public GUIEnvironment GUI { get; private set; } = null;
 
+        public MenuManager Menu { get; private set; } = null;
 
         public TileManager Tiles { get; private set; } = null;
 
@@ -107,6 +107,7 @@ namespace Asterion
             Audio = new AudioPlayer();
             Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
 
+            Menu = new MenuManager(this);
             Scene = new SceneManager(this);
             GUI = new GUIEnvironment(this);
         }
@@ -230,6 +231,9 @@ namespace Asterion
         /// </summary>
         public void Dispose()
         {
+            Menu.Dispose();
+            Scene.Dispose();
+
             Audio.Dispose();
             OpenTKWindow.Dispose();
 

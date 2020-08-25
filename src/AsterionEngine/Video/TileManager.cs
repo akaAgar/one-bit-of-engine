@@ -83,6 +83,7 @@ namespace Asterion.Video
 
             GL.Disable(EnableCap.Blend);
             Game.GUI.RenderInterface();
+            Game.Menu.Render();
             Game.Scene.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
             Game.GUI.RenderCursor();
