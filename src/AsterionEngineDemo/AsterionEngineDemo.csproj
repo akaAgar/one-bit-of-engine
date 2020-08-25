@@ -51,7 +51,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OneBitOfEngine\AsterionEngine.csproj">
+    <ProjectReference Include="..\AsterionEngine\AsterionEngine.csproj">
       <Project>{877cdca9-4ab5-412a-9ae1-9bdb36af045e}</Project>
       <Name>AsterionEngine</Name>
     </ProjectReference>
