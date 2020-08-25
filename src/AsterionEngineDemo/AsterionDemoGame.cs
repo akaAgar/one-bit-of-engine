@@ -54,7 +54,7 @@ namespace Asterion.Demo
         protected override void OnLoad()
         {
             Title = "OneBitOfEngine Demo Game";
-            Tiles.SetTilemap(0, Image.FromFile("Media/Tilemap.png"));
+            Tiles.SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
 
             GUI.ClearTiles(new Tile(0, Color.Black));
 
@@ -149,11 +149,11 @@ namespace Asterion.Demo
             //    (newPosition.X >= TileBoard.TileCountX) || (newPosition.Y >= TileBoard.TileCountY - 4) ||
             //    Walls.Contains(newPosition))
             //{
-            //    Audio.PlaySound("noway", "Media/noway.wav");
+            //    Audio.PlaySound("noway", "../../media/noway.wav");
             //    return;
             //}
 
-            //Audio.PlaySound("walk", "Media/walk.wav");
+            //Audio.PlaySound("walk", "../../media/walk.wav");
 
             //SkeletonPosition = newPosition;
             //DrawWorld();
@@ -167,8 +167,8 @@ namespace Asterion.Demo
         {
             switch (fxName)
             {
-                case "fireball": Audio.PlaySound("fire", "Media/fire.wav"); return;
-                case "fireball_impact": Audio.PlaySound("impact", "Media/impact.wav"); return;
+                case "fireball": Audio.PlaySound("fire", "../../media/fire.wav"); return;
+                case "fireball_impact": Audio.PlaySound("impact", "../../media/impact.wav"); return;
             }
         }
 
