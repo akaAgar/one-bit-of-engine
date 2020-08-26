@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace Asterion.Menus
 {
-    public abstract class MenuPage
+    public class MenuPage
     {
         private List<MenuControl> Controls = new List<MenuControl>();
 
         public Tile BackgroundTile { get; set; } = new Tile(0, Color.Black);
+
+        public MenuManager Menus { get; private set; }
 
         public MenuPage() { }
 
@@ -32,6 +34,7 @@ namespace Asterion.Menus
 
         internal void Initialize(MenuManager menuManager, object[] parameters)
         {
+            Menus = menuManager;
             OnInitialize(parameters);
         }
 
@@ -40,7 +43,7 @@ namespace Asterion.Menus
             Controls = Controls.OrderBy(x => x.ZOrder).ToList();
         }
 
-        protected abstract void OnInitialize(object[] parameters);
+        protected virtual void OnInitialize(object[] parameters) { }
 
         internal void OnRender()
         {
@@ -48,7 +51,7 @@ namespace Asterion.Menus
                 control.Render();
         }
 
-        protected abstract void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat);
+        protected virtual void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { }
 
         public virtual void KeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
         {

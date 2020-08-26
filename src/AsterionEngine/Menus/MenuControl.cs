@@ -9,7 +9,7 @@ namespace Asterion.Menus
 {
     public abstract class MenuControl
     {
-        private MenuPage Page = null;
+        internal MenuPage Page { get; private set; }
 
         public Point Position { get; set; } = Point.Empty;
 

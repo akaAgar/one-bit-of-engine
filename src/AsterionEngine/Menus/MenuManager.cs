@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,12 @@ namespace Asterion.Menus
         internal void Dispose()
         {
             ClosePage();
+        }
+
+        public void DrawTile(Point pt, Tile tile) { DrawTile(pt.X, pt.Y, tile); }
+        public void DrawTile(int x, int y, Tile tile)
+        {
+            TilesVBO.UpdateTileData(y * Game.Tiles.TileCountX + x, x, y, tile);
         }
 
         internal void Render()
