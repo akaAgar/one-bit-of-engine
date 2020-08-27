@@ -50,47 +50,52 @@ namespace Asterion.Video
         /// <summary>
         /// Total number of tiles in this VBO.
         /// </summary>
-        internal int TileCount { get; set; } = 0;
+        internal int TileCount { get { return Width * Height; } }
 
-        internal bool IsVisible = true;
+        internal int Width { get; private set; } = 0;
+        internal int Height { get; private set; } = 0;
 
         private static readonly PointF[] TILE_CORNERS = new PointF[] { new PointF(1, 0), new PointF(1, 1), new PointF(0, 1), new PointF(0, 0) };
 
         //protected readonly TileBoard Screen;
 
-        internal VBO(TileManager tiles, int tileCount)
+        internal VBO(TileManager tiles, int width, int height)
         {
             UVWidth = (float)tiles.TileWidth / tiles.TilemapWidth;
             UVHeight = (float)tiles.TileHeight / tiles.TilemapHeight;
             TilemapCountX = tiles.TilemapCountX;
 
             Handle = GL.GenBuffer();
-            CreateNewBuffer(tileCount);
+            CreateNewBuffer(width, height);
         }
 
-        internal void CreateNewBuffer(int tileCount)
+        internal void CreateNewBuffer(int width, int height)
         {
-            TileCount = tileCount;
+            Width = Math.Max(1, width);
+            Height = Math.Max(1, height);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, Handle);
             GL.BufferData(BufferTarget.ArrayBuffer, SIZE_OF_FLOAT * Length, new float[Length], BufferUsageHint.DynamicDraw);
         }
 
-        internal void UpdateTileData(int index, float x, float y, Tile tile)
+        internal void UpdateTileData(int x, int y, Tile tile) { UpdateTileData(x, y, x, y, tile); }
+        internal void UpdateTileData(int x, int y, float xPos, float yPos, Tile tile)
         {
+            int index = y * Width + x;
+
             int tileY = tile.TileIndex / TilemapCountX;
             int tileX = tile.TileIndex - tileY * TilemapCountX;
 
             float[] vertexData = new float[FLOATS_PER_VERTEX * 4];
 
-            Color4 color4 = (Color4)tile.Color;
+            Color4 color4 = tile.Color;
 
             for (int i = 0; i < 4; i++)
                 Array.Copy(
                     new float[]
                     {
-                        x + TILE_CORNERS[i].X,
-                        y + TILE_CORNERS[i].Y,
+                        xPos + TILE_CORNERS[i].X,
+                        yPos + TILE_CORNERS[i].Y,
                         color4.R, color4.G, color4.B,
                         (tileX + TILE_CORNERS[i].X) * UVWidth,
                         (tileY + TILE_CORNERS[i].Y) * UVHeight,
@@ -104,8 +109,6 @@ namespace Asterion.Video
 
         internal void Render()
         {
-            if (!IsVisible) return;
-
             GL.BindBuffer(BufferTarget.ArrayBuffer, Handle);
             GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 0); // x, y
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 2 * SIZE_OF_FLOAT); // r, g, b
