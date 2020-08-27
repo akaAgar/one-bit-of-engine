@@ -12,7 +12,11 @@ namespace Asterion.Menus
     {
         public Size Size { get; set; } = new Size(1, 1);
 
-        internal override void Render()
+        public bool Filled { get; set; } = false;
+
+        public int FillTile { get; set; } = 0;
+
+        internal override void SetTiles(VBO vbo)
         {
             int x, y;
             int frameTileIndex;
@@ -39,12 +43,14 @@ namespace Asterion.Menus
                     }
                     else if (y == rect.Top) frameTileIndex += 4;
                     else if (y == rect.Bottom - 1) frameTileIndex += 6;
+                    else if (Filled)
+                        frameTileIndex = FillTile;
                     else
                         continue;
 
                     frameTile = new Tile(frameTileIndex, Color, Tilemap);
 
-                    //DrawTile(x, y, frameTile);
+                    vbo.UpdateTileData(x, y, frameTile);
                 }
         }
     }
