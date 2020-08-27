@@ -120,6 +120,7 @@ namespace Asterion
             Tiles.OnLoad();
             Scene.OnLoad();
             GUI.OnLoad();
+            Menu.OnLoad();
 
             OnLoad();
         }
