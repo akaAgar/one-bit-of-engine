@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Asterion.Menus
 {
@@ -19,16 +17,14 @@ namespace Asterion.Menus
 
         public MenuPage() { }
 
-        internal void Dispose()
-        {
-
-        }
+        internal void Dispose() { }
 
         protected T AddControl<T>() where T : MenuControl, new()
         {
             T newControl = new T();
+            newControl.Initialize(this);
             Controls.Add(newControl);
-            UpdateControlsZOrder();
+            Menus.UpdateTiles();
             return newControl;
         }
 
@@ -36,26 +32,25 @@ namespace Asterion.Menus
         {
             Menus = menuManager;
             OnInitialize(parameters);
-        }
-
-        internal void UpdateControlsZOrder()
-        {
-            Controls = Controls.OrderBy(x => x.ZOrder).ToList();
+            Menus.UpdateTiles();
         }
 
         protected virtual void OnInitialize(object[] parameters) { }
-
-        internal void OnRender()
-        {
-            foreach (MenuControl control in Controls)
-                control.Render();
-        }
 
         protected virtual void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { }
 
         public virtual void KeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
         {
             OnKeyDown(key, shift, control, alt, isRepeat);
+        }
+
+        internal void SetTiles(VBO vbo)
+        {
+            // Order controls by Z-Order
+            Controls = Controls.OrderBy(x => x.ZOrder).ToList();
+
+            foreach (MenuControl control in Controls)
+                control.SetTiles(vbo);
         }
     }
 }
