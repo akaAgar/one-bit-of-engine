@@ -103,13 +103,13 @@ namespace Asterion.Scene
 
         internal void OnLoad()
         {
-            Tiles = new VBO(Game.Tiles, 0);
+            Tiles = new VBO(Game.Tiles, 0, 0);
             RecreateVBO();
         }
 
         private void RecreateVBO()
         {
-            Tiles.CreateNewBuffer(_Viewport.Width * _Viewport.Height);
+            Tiles.CreateNewBuffer(_Viewport.Width, _Viewport.Height);
             UpdateVBO();
         }
 
@@ -139,16 +139,16 @@ namespace Asterion.Scene
                         Point? pt = GetScenePointFromTile(x + _Viewport.X, y + _Viewport.Y);
                         if (!pt.HasValue)
                         {
-                            Tiles.UpdateTileData(y * _Viewport.Width + x, _Viewport.X + x, _Viewport.Y + y, Map.DefaultTile);
+                            Tiles.UpdateTileData(x, y, _Viewport.X + x, _Viewport.Y + y, Map.DefaultTile);
                             continue;
                         }
 
                         Entity[] e = GetEntitiesInCell(pt.Value);
 
                         if (e.Length > 0)
-                            Tiles.UpdateTileData(y * _Viewport.Width + x, _Viewport.X + x, _Viewport.Y + y, e[0].Tile);
+                            Tiles.UpdateTileData(x, y, _Viewport.X + x, _Viewport.Y + y, e[0].Tile);
                         else
-                            Tiles.UpdateTileData(y * _Viewport.Width + x, _Viewport.X + x, _Viewport.Y + y, Map[pt.Value.X, pt.Value.Y].Value.Tile);
+                            Tiles.UpdateTileData(x, y, _Viewport.X + x, _Viewport.Y + y, Map[pt.Value.X, pt.Value.Y].Value.Tile);
 
                         //UpdateVBOCell(x, y);
                         // TODO: entities

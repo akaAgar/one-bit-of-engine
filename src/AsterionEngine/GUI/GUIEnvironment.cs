@@ -23,8 +23,8 @@ namespace Asterion.GUI
 
         internal void OnLoad()
         {
-            TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX * Game.Tiles.TileCountY);
-            CursorVBO = new VBO(Game.Tiles, 1);
+            TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX, Game.Tiles.TileCountY);
+            CursorVBO = new VBO(Game.Tiles, 1, 1);
             UpdateCursor();
         }
 
@@ -69,7 +69,7 @@ namespace Asterion.GUI
 
         private void UpdateCursor()
         {
-            CursorVBO.UpdateTileData(0, CursorPosition.X, CursorPosition.Y, CursorTile);
+            CursorVBO.UpdateTileData(CursorPosition.X, CursorPosition.Y, CursorTile);
         }
 
         public void ClearTiles(Tile tile)
@@ -89,7 +89,7 @@ namespace Asterion.GUI
         public void DrawTile(Point pt, Tile tile) { DrawTile(pt.X, pt.Y, tile); }
         public void DrawTile(int x, int y, Tile tile)
         {
-            TilesVBO.UpdateTileData(y * Game.Tiles.TileCountX + x, x, y, tile);
+            TilesVBO.UpdateTileData(x, y, tile);
         }
 
         public void DrawFrame(Rectangle rect, Tile tile)
