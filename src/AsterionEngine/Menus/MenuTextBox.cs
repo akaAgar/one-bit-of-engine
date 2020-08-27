@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Asterion.Video;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,5 +11,10 @@ namespace Asterion.Menus
     public class MenuTextBox : MenuControl
     {
         public string Text { get; set; } = "";
+
+        internal override void SetTiles(VBO vbo)
+        {
+
+        }
     }
 }

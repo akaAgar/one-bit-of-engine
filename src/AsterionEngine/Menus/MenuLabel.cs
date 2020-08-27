@@ -14,7 +14,7 @@ namespace Asterion.Menus
 
         public int MaxLength { get; set; } = 0;
 
-        internal override void Render()
+        internal override void SetTiles(VBO vbo)
         {
             if (string.IsNullOrEmpty(Text)) return;
 
@@ -29,7 +29,7 @@ namespace Asterion.Menus
 
                 Tile charTile = new Tile(Tile + textBytes[i] - 32, Color, Tilemap);
 
-                Page.Menus.DrawTile(Position.X + i, Position.Y, charTile);
+                vbo.UpdateTileData(Position.X + i, Position.Y, charTile);
             }
         }
     }

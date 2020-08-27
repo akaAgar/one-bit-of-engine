@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Asterion.Video;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -19,8 +20,7 @@ namespace Asterion.Menus
         
         public int Tilemap { get; set; } = 0;
 
-        public int ZOrder { get { return _ZOrder; } set { _ZOrder = value; Page.UpdateControlsZOrder(); } }
-        private int _ZOrder = 0;
+        public int ZOrder = 0;
 
         public MenuControl() { }
 
@@ -29,5 +29,7 @@ namespace Asterion.Menus
         internal virtual void Render() { }
 
         internal void Dispose() { }
+
+        internal abstract void SetTiles(VBO vbo);
     }
 }
