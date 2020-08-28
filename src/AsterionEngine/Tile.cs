@@ -2,6 +2,8 @@
 {
     public struct Tile
     {
+        public static Tile Empty { get; } = new Tile(0, RGBColor.Black);
+
         public int TileIndex { get; }
         public RGBColor Color { get; }
         public int Tilemap { get; }
