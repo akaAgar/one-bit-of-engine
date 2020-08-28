@@ -49,6 +49,16 @@ namespace Asterion
             Height = Math.Max(0, size.Height);
         }
 
+        public bool Contains(int x, int y)
+        {
+            return Contains(new Position(x, y));
+        }
+
+        public bool Contains(Position position)
+        {
+            return new Area(Position.Zero, this).Contains(position);
+        }
+
         public static bool operator ==(Dimension p1, Dimension p2) { return p1.Equals(p2); }
         public static bool operator !=(Dimension p1, Dimension p2) { return !p1.Equals(p2); }
         public static Dimension operator +(Dimension p1, Dimension p2) { return new Dimension(p1.Width + p2.Width, p1.Height + p2.Height); }
