@@ -19,14 +19,18 @@ namespace Asterion.UI
 
         public AsterionGame Game { get; private set; }
 
+        public UICursor Cursor { get; private set; }
+
         internal UIEnvironment(AsterionGame game)
         {
             Game = game;
+            Cursor = new UICursor();
         }
 
         internal void OnLoad()
         {
             TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX, Game.Tiles.TileCountY);
+            Cursor.OnLoad(Game);
         }
 
         public void ShowPage<T>(params object[] parameters) where T : UIPage, new()

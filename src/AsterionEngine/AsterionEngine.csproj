@@ -55,6 +55,7 @@
     <Compile Include="Board\TileBoard.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\UIFrame.cs" />
     <Compile Include="UI\UITextBox.cs" />
     <Compile Include="UI\UILabel.cs" />

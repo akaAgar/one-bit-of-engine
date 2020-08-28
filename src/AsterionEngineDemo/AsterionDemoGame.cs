@@ -59,6 +59,7 @@ namespace Asterion.Demo
             if (true)
             {
                 UI.ShowPage<TestMenuPage>();
+                UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
             }
             else
             {
@@ -91,13 +92,13 @@ namespace Asterion.Demo
         /// <param name="tile">Currently hovered tile</param>
         public override void OnMouseMove(Position tile)
         {
-            //if (tile.X == -1)
-            //    GUI.CursorVisible = false;
-            //else
-            //{
-            //    GUI.MoveCursorTo(tile);
-            //    GUI.CursorVisible = true;
-            //}
+            if (tile.X == -1)
+                UI.Cursor.Visible = false;
+            else
+            {
+                UI.Cursor.MoveTo(tile);
+                UI.Cursor.Visible = true;
+            }
         }
 
         /// <summary>

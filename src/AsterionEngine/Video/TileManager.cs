@@ -86,6 +86,7 @@ namespace Asterion.Video
             Game.Scene.OnRenderFrame();
             Game.Board.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
+            Game.UI.Cursor.Render();
         }
 
         internal void OnResize()
