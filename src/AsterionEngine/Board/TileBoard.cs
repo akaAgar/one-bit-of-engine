@@ -23,15 +23,9 @@ namespace Asterion.Board
 
         private VBO TilesBoardVBO = null;
 
-        private readonly AsterionGame Game = null;
-
-        private bool VBOUpdateRequired = false;
-
-        internal TileBoard(AsterionGame game)
+        internal TileBoard(Size tileCount)
         {
-            Game = game;
-
-            Viewport = new Rectangle(0, 0, Game.Tiles.TilemapCountX, Game.Tiles.TilemapCountY);
+            Viewport = new Rectangle(0, 0, tileCount.Width, tileCount.Height);
         }
 
         internal void OnRenderFrame()
@@ -46,9 +40,9 @@ namespace Asterion.Board
             TilesBoardVBO.Dispose();
         }
 
-        internal void OnLoad()
+        internal void OnLoad(AsterionGame game)
         {
-            TilesBoardVBO = new VBO(Game.Tiles, 0, 0);
+            TilesBoardVBO = new VBO(game.Tiles, 0, 0);
             RecreateVBO();
         }
 

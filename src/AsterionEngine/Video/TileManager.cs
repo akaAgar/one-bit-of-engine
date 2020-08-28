@@ -85,6 +85,7 @@ namespace Asterion.Video
             Game.GUI.RenderInterface();
             Game.Menu.Render();
             Game.Scene.OnRenderFrame();
+            Game.Board.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
             Game.GUI.RenderCursor();
         }
@@ -151,7 +152,5 @@ namespace Asterion.Video
         {
             // TODO
         }
-
-        
     }
 }
