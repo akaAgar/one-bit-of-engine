@@ -51,7 +51,6 @@
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Area.cs" />
     <Compile Include="RGBColor.cs" />
-    <Compile Include="UI\GUIEnvironment_OLD.cs" />
     <Compile Include="Board\TileBoard.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
@@ -90,8 +89,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
-    <EmbeddedResource Include="TilesShader.frag" />
-    <EmbeddedResource Include="TilesShader.vert" />
+    <EmbeddedResource Include="Shaders\TilesShader.frag" />
+    <EmbeddedResource Include="Shaders\TilesShader.vert" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
