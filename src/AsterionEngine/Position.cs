@@ -27,9 +27,19 @@ namespace Asterion
     public struct Position : ICloneable, IEquatable<Position>
     {
         /// <summary>
-        /// An instance of Position with both coordinates set to zero.
+        /// An instance of Position with both coordinates set to 0.
         /// </summary>
         public static Position Zero { get; } = new Position(0, 0);
+
+        /// <summary>
+        /// An instance of Position with both coordinates set to 1.
+        /// </summary>
+        public static Position One { get; } = new Position(1, 1);
+
+        /// <summary>
+        /// An instance of Position with both coordinates set to -1.
+        /// </summary>
+        public static Position NegativeOne { get; } = new Position(-1, -1);
 
         /// <summary>
         /// The X coordinate.

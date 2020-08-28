@@ -16,7 +16,7 @@ namespace Asterion.Demo
             MenuLabel label = AddControl<MenuLabel>();
             label.Text = "Hello world";
             label.Color = RGBColor.CornflowerBlue;
-            label.Position = new Point(3, 3);
+            label.Position = new Position(3, 3);
             label.ZOrder = 2;
 
             MenuFrame frame = AddControl<MenuFrame>();

@@ -25,7 +25,7 @@ namespace Asterion.Board
     /// </summary>
     public sealed class TileBoard
     {
-        public Rectangle Viewport { get; private set; } = Rectangle.Zero;
+        public Area Viewport { get; private set; } = Area.Zero;
 
         public bool Visible { get; set; } = false;
 
@@ -38,7 +38,7 @@ namespace Asterion.Board
 
         public void ResizeViewport(int x, int y, int width, int height)
         {
-            Viewport = new Rectangle(x, y, width, height);
+            Viewport = new Area(x, y, width, height);
 
             if (TilesBoardVBO != null)
                 RecreateVBO();

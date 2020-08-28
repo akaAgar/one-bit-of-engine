@@ -13,8 +13,8 @@ namespace Asterion.Scene
 
         public Map Map { get; private set; }
 
-        public Rectangle Viewport { get { return _Viewport; } set { _Viewport = value; if (Tiles != null) RecreateVBO(); } }
-        private Rectangle _Viewport = Rectangle.Empty;
+        public Area Viewport { get { return _Viewport; } set { _Viewport = value; if (Tiles != null) RecreateVBO(); } }
+        private Area _Viewport = Area.Zero;
 
         public bool Visible { get; set; } = true;
         public bool Created { get; private set; } = false;
@@ -36,7 +36,7 @@ namespace Asterion.Scene
             
             GameWindowTileCount = new Size(game.Tiles.TileCountX, game.Tiles.TileCountY);
 
-            Viewport = new Rectangle(0, 0, GameWindowTileCount.Width, GameWindowTileCount.Height);
+            Viewport = new Area(0, 0, GameWindowTileCount.Width, GameWindowTileCount.Height);
         }
 
         public bool IsCellFree(Point cell, int layer = 0) { return IsCellFree(cell.X, cell.Y, layer); }

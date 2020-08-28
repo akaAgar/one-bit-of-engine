@@ -46,7 +46,7 @@ namespace Asterion.Demo
         /// <summary>
         /// Positions of the various walls
         /// </summary>
-        private readonly Point[] Walls = new Point[] { new Point(6, 9), new Point(34, 2), new Point(6, 11), new Point(29, 7), new Point(30, 10), new Point(17, 9), new Point(17, 6), new Point(33, 12), new Point(1, 13), new Point(25, 2), new Point(30, 9), new Point(14, 5), new Point(29, 3), new Point(30, 6), new Point(21, 11), new Point(28, 7), new Point(12, 14), new Point(16, 12), new Point(13, 5) };
+        //private readonly Position[] Walls = new Point[] { new Point(6, 9), new Point(34, 2), new Point(6, 11), new Point(29, 7), new Point(30, 10), new Point(17, 9), new Point(17, 6), new Point(33, 12), new Point(1, 13), new Point(25, 2), new Point(30, 9), new Point(14, 5), new Point(29, 3), new Point(30, 6), new Point(21, 11), new Point(28, 7), new Point(12, 14), new Point(16, 12), new Point(13, 5) };
 
         /// <summary>
         /// OnLoad() override, sets up all tiles.
@@ -64,7 +64,7 @@ namespace Asterion.Demo
             {
                 GUI.ClearTiles(new Tile(0, RGBColor.Black));
 
-                GUI.DrawFrame(new Rectangle(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, RGBColor.CornflowerBlue));
+                GUI.DrawFrame(new Area(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, RGBColor.CornflowerBlue));
                 GUI.DrawText(1, Tiles.TileCountY - 3, "Arrows: move, l-click: fire", new Tile((int)TileID.Font, RGBColor.White));
                 GUI.DrawText(1, Tiles.TileCountY - 2, "F: fullscreen, ESC: exit", new Tile((int)TileID.Font, RGBColor.White));
 
@@ -78,7 +78,7 @@ namespace Asterion.Demo
                 SkeletonEntity = Scene.AddEntity<Entity>(new Point(1, 1));
                 SkeletonEntity.Tile = new Tile((int)TileID.Skeleton, RGBColor.AntiqueWhite, true);
 
-                Scene.Viewport = new Rectangle(0, 0, Tiles.TileCountX, Tiles.TileCountY - 4);
+                Scene.Viewport = new Area(0, 0, Tiles.TileCountX, Tiles.TileCountY - 4);
             }
 
             //DrawWorld();
@@ -89,7 +89,7 @@ namespace Asterion.Demo
         /// OnMouseMove override. Moves the cursor to the currently hovered tile.
         /// </summary>
         /// <param name="tile">Currently hovered tile</param>
-        public override void OnMouseMove(Point tile)
+        public override void OnMouseMove(Position tile)
         {
             if (tile.X == -1)
                 GUI.CursorVisible = false;
@@ -131,7 +131,7 @@ namespace Asterion.Demo
         /// </summary>
         /// <param name="button">Mouse button</param>
         /// <param name="position">Currenly hovered tile</param>
-        public override void OnMouseDown(MouseButton button, Point position)
+        public override void OnMouseDown(MouseButton button, Position position)
         {
             //if (TileBoard.FX.InProgress) return; // Cannot fire another fireball while the fireball animation is in progress
             //if (button != MouseButton.Left) return; // Only the left button can be used to shoot fireballs

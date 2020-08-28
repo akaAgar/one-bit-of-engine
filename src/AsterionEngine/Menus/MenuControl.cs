@@ -12,9 +12,9 @@ namespace Asterion.Menus
     {
         internal MenuPage Page { get; private set; }
 
-        public Point Position { get; set; } = Point.Empty;
+        public Position Position { get; set; } = Position.Zero;
 
-        public Color Color { get; set; } = Color.White;
+        public RGBColor Color { get; set; } = RGBColor.White;
 
         public int Tile { get; set; } = 0;
         

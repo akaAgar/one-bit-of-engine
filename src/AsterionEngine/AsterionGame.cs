@@ -193,20 +193,20 @@ namespace Asterion
         /// </summary>
         /// <param name="button">Mouse button.</param>
         /// <param name="tile">Coordinates of the tile the mouse was hovering when the button was pressed, or (-1, -1) if none.</param>
-        public virtual void OnMouseDown(MouseButton button, Point tile) { }
+        public virtual void OnMouseDown(MouseButton button, Position tile) { }
 
         /// <summary>
         /// Called each time a mouse button is released.
         /// </summary>
         /// <param name="button">Mouse button.</param>
         /// <param name="tile">Coordinates of the tile the mouse was hovering when the button was pressed, or (-1, -1) if none.</param>
-        public virtual void OnMouseUp(MouseButton button, Point tile) { }
+        public virtual void OnMouseUp(MouseButton button, Position tile) { }
 
         /// <summary>
         /// Called each time the mouse hovers a new tile.
         /// </summary>
         /// <param name="tile">Coordinates of the hovered tile, or (-1, -1) if none.</param>
-        public virtual void OnMouseMove(Point tile) { }
+        public virtual void OnMouseMove(Position tile) { }
 
         /// <summary>
         /// Called each time the mouse wheel value changes.

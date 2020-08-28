@@ -117,7 +117,7 @@ namespace Asterion.Video
             Shader.SetProjection(Matrix4.CreateOrthographicOffCenter(quad.Left, quad.Right, quad.Bottom, quad.Top, 0, 1));
         }
 
-        public Point GetTileFromCursorPosition(int cursorX, int cursorY)
+        public Position GetTileFromCursorPosition(int cursorX, int cursorY)
         {
             float tileX = (cursorX - TileOffset.X) / (TileWidth * TileScale);
             float tileY = (cursorY - TileOffset.Y) / (TileHeight * TileScale);
@@ -126,9 +126,9 @@ namespace Asterion.Video
                 (tileX < 0) || (tileY < 0) ||
                 ((int)tileX >= TileCountX) || ((int)tileY >= TileCountY)
                 )
-                return new Point(-1, -1);
+                return Position.NegativeOne;
 
-            return new Point((int)tileX, (int)tileY);
+            return new Position((int)tileX, (int)tileY);
         }
 
         public bool SetTilemap(int index, Image tilemap)

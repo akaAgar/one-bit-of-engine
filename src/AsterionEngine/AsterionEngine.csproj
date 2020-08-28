@@ -49,7 +49,7 @@
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
     <Compile Include="Input\InputManager.cs" />
-    <Compile Include="Rectangle.cs" />
+    <Compile Include="Area.cs" />
     <Compile Include="RGBColor.cs" />
     <Compile Include="GUI\GUIEnvironment.cs" />
     <Compile Include="Board\TileBoard.cs" />

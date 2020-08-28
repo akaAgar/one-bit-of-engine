@@ -38,7 +38,7 @@ namespace Asterion
         /// <summary>
         /// Last tile hovered by the mouse.
         /// </summary>
-        private Point LastHoveredTile = new Point(-1, -1);
+        private Position LastHoveredTile = Position.NegativeOne;
 
         /// <summary>
         /// Constructor.
@@ -98,7 +98,7 @@ namespace Asterion
         {
             if (!Game.MouseCursorVisible) return;
 
-            Point tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
             Game.OnMouseDown((Asterion.Input.MouseButton)e.Button, tile);
         }
 
@@ -110,7 +110,7 @@ namespace Asterion
         {
             if (!Game.MouseCursorVisible) return;
 
-            Point tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
             Game.OnMouseUp((Asterion.Input.MouseButton)e.Button, tile);
         }
 
@@ -131,7 +131,7 @@ namespace Asterion
         {
             if (!Game.MouseCursorVisible) return;
 
-            Point tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
             if (LastHoveredTile == tile) return;
             LastHoveredTile = tile;
             Game.OnMouseMove(tile);

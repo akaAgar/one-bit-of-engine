@@ -10,7 +10,7 @@ namespace Asterion.Menus
 {
     public class MenuFrame : MenuControl
     {
-        public Size Size { get; set; } = new Size(1, 1);
+        public Dimension Size { get; set; } = Dimension.One;
 
         public bool Filled { get; set; } = false;
 
@@ -22,7 +22,7 @@ namespace Asterion.Menus
             int frameTileIndex;
             Tile frameTile;
 
-            Rectangle rect = new Rectangle(Position, Size);
+            Area rect = new Area(Position, Size);
 
             for (x = rect.Left; x < rect.Right; x++)
                 for (y = rect.Top; y < rect.Bottom; y++)

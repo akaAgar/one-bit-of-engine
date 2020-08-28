@@ -51,7 +51,7 @@ namespace Asterion.GUI
             MoveCursorTo(newCursorPosition.X, newCursorPosition.Y);
         }
 
-        public void MoveCursorTo(Point pt) { MoveCursorTo(pt.X, pt.Y); }
+        public void MoveCursorTo(Position pt) { MoveCursorTo(pt.X, pt.Y); }
         public void MoveCursorTo(int x, int y)
         {
             x = Math.Max(0, Math.Min(Game.Tiles.TileCountX - 1, x));
@@ -74,10 +74,10 @@ namespace Asterion.GUI
 
         public void ClearTiles(Tile tile)
         {
-            ClearTiles(new Rectangle(0, 0, Game.Tiles.TileCountX, Game.Tiles.TileCountY), tile);
+            ClearTiles(new Area(0, 0, Game.Tiles.TileCountX, Game.Tiles.TileCountY), tile);
         }
 
-        public void ClearTiles(Rectangle region, Tile tile)
+        public void ClearTiles(Area region, Tile tile)
         {
             int x, y;
 
@@ -92,7 +92,7 @@ namespace Asterion.GUI
             TilesVBO.UpdateTileData(x, y, tile);
         }
 
-        public void DrawFrame(Rectangle rect, Tile tile)
+        public void DrawFrame(Area rect, Tile tile)
         {
             int x, y;
             int frameTileIndex;
