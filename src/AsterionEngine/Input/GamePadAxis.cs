@@ -18,23 +18,10 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 namespace Asterion.Input
 {
     /// <summary>
-    /// Enumerates all standard gamepad buttons.
+    /// Enumerates all gamepad stick axis.
     /// </summary>
-    public enum GamePadButton
+    public enum GamePadAxis
     {
-        A,
-        B,
-        Back,
-        DPadDown,
-        DPadLeft,
-        DPadRight,
-        DPadUp,
-        Home,
-        LeftShoulder,
-        LeftStick,
-        RightShoulder,
-        RightStick,
-        Start,
         X,
         Y
     }
