@@ -59,7 +59,7 @@ namespace Asterion.Video
             else
             {
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenGLPixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-                BitmapData bitmap_data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, WindowsPixelFormat.Format32bppArgb);
+                BitmapData bitmap_data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, WindowsPixelFormat.Format32bppArgb);
                 GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bitmap.Width, bitmap.Height, OpenGLPixelFormat.Bgra, PixelType.UnsignedByte, bitmap_data.Scan0);
                 bitmap.UnlockBits(bitmap_data);
             }

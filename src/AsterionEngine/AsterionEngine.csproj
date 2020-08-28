@@ -78,6 +78,7 @@
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Tile.cs" />
     <Compile Include="Video\TilemapTexture.cs" />
+    <None Include="packages.config" />
     <None Include="Video\TileBoard.cs" />
     <Compile Include="Video\TileShader.cs" />
     <Compile Include="Video\VBO.cs" />
@@ -92,7 +93,6 @@
   <ItemGroup />
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
-    <None Include="packages.config" />
     <EmbeddedResource Include="TilesShader.frag" />
     <EmbeddedResource Include="TilesShader.vert" />
   </ItemGroup>

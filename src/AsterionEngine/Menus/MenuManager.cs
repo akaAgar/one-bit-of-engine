@@ -69,7 +69,7 @@ namespace Asterion.Menus
 
             for (x = 0; x < Game.Tiles.TileCountX; x++)
                 for (y = 0; y < Game.Tiles.TileCountY; y++)
-                    TilesVBO.UpdateTileData(x, y, new Tile(0, Color.Black));
+                    TilesVBO.UpdateTileData(x, y, new Tile(0, RGBColor.Black));
         }
     }
 }

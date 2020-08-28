@@ -9,7 +9,7 @@ namespace Asterion.GUI
     {
         private readonly AsterionGame Game;
 
-        private Tile CursorTile = new Tile(0, Color.Black);
+        private Tile CursorTile = new Tile(0, RGBColor.Black);
         private Point CursorPosition = Point.Empty;
 
         private VBO TilesVBO, CursorVBO;

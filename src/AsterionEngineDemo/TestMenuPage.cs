@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -16,14 +15,14 @@ namespace Asterion.Demo
         {
             MenuLabel label = AddControl<MenuLabel>();
             label.Text = "Hello world";
-            label.Color = Color.CornflowerBlue;
+            label.Color = RGBColor.CornflowerBlue;
             label.Position = new Point(3, 3);
             label.ZOrder = 2;
 
             MenuFrame frame = AddControl<MenuFrame>();
             frame.Tile = (int)TileID.Font;
-            frame.Position = new Point(2, 2);
-            frame.Size = new Size(8, 8);
+            frame.Position = new Position(2, 2);
+            frame.Size = new Dimension(8, 8);
             frame.ZOrder = 0;
         }
     }

@@ -11,7 +11,7 @@ namespace Asterion.Menus
     {
         private List<MenuControl> Controls = new List<MenuControl>();
 
-        public Tile BackgroundTile { get; set; } = new Tile(0, Color.Black);
+        public Tile BackgroundTile { get; set; } = new Tile(0, RGBColor.Black);
 
         public MenuManager Menus { get; private set; }
 
