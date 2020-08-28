@@ -97,9 +97,8 @@ namespace Asterion
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-
             Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
-            Game.OnMouseDown((Asterion.Input.MouseButton)e.Button, tile);
+            Game.Input.OnMouseDownInternal((Input.MouseButton)e.Button, tile);
         }
 
         /// <summary>
@@ -109,9 +108,8 @@ namespace Asterion
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-
             Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
-            Game.OnMouseUp((Asterion.Input.MouseButton)e.Button, tile);
+            Game.Input.OnMouseUpInternal((Input.MouseButton)e.Button, tile);
         }
 
         /// <summary>
@@ -120,7 +118,7 @@ namespace Asterion
         /// <param name="e">OpenTK mouse event.</param>
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
-            Game.OnMouseWheel(e.DeltaPrecise);
+            Game.Input.OnMouseWheelInternal(e.DeltaPrecise);
         }
 
         /// <summary>
@@ -134,7 +132,7 @@ namespace Asterion
             Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
             if (LastHoveredTile == tile) return;
             LastHoveredTile = tile;
-            Game.OnMouseMove(tile);
+            Game.Input.OnMouseMoveInternal(tile);
         }
 
         /// <summary>
@@ -143,7 +141,7 @@ namespace Asterion
         /// <param name="e">OpenTK keyboard event.</param>
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            Game.OnKeyDown((KeyCode)e.Key, e.Shift, e.Control, e.Alt, e.IsRepeat);
+            Game.Input.OnKeyDownInternal((KeyCode)e.Key, e.Shift, e.Control, e.Alt, e.IsRepeat);
         }
 
         /// <summary>
@@ -152,7 +150,7 @@ namespace Asterion
         /// <param name="e">OpenTK keyboard event.</param>
         protected override void OnKeyUp(KeyboardKeyEventArgs e)
         {
-            Game.OnKeyUp((KeyCode)e.Key, e.Shift, e.Control, e.Alt);
+            Game.Input.OnKeyUpInternal((KeyCode)e.Key, e.Shift, e.Control, e.Alt, e.IsRepeat);
         }
     }
 }

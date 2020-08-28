@@ -86,6 +86,7 @@ namespace Asterion
         public UIEnvironment UI { get; private set; } = null;
 
         public TileManager Tiles { get; private set; } = null;
+        public InputManager Input { get; private set; } = null;
 
         /// <summary>
         /// Closes the game.
@@ -104,6 +105,7 @@ namespace Asterion
 
             Audio = new AudioPlayer();
             Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
+            Input = new InputManager();
 
             UI = new UIEnvironment(this);
             Scene = new SceneManager(this);
@@ -179,51 +181,6 @@ namespace Asterion
         protected virtual void OnDispose() { }
 
         /// <summary>
-        /// Called each time a mouse button is pressed.
-        /// </summary>
-        /// <param name="button">Mouse button.</param>
-        /// <param name="tile">Coordinates of the tile the mouse was hovering when the button was pressed, or (-1, -1) if none.</param>
-        public virtual void OnMouseDown(MouseButton button, Position tile) { }
-
-        /// <summary>
-        /// Called each time a mouse button is released.
-        /// </summary>
-        /// <param name="button">Mouse button.</param>
-        /// <param name="tile">Coordinates of the tile the mouse was hovering when the button was pressed, or (-1, -1) if none.</param>
-        public virtual void OnMouseUp(MouseButton button, Position tile) { }
-
-        /// <summary>
-        /// Called each time the mouse hovers a new tile.
-        /// </summary>
-        /// <param name="tile">Coordinates of the hovered tile, or (-1, -1) if none.</param>
-        public virtual void OnMouseMove(Position tile) { }
-
-        /// <summary>
-        /// Called each time the mouse wheel value changes.
-        /// </summary>
-        /// <param name="delta">The change in the mouse wheel value.</param>
-        public virtual void OnMouseWheel(float delta) { }
-
-        /// <summary>
-        /// Called each time a key is pressed.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="shift">Is the shift modifier key down?</param>
-        /// <param name="control">Is the ctrl modifier key down?</param>
-        /// <param name="alt">Is the alt modifier key down?</param>
-        /// <param name="isRepeat">Is this a repeat pressed (automatically generated when the key is held down)?</param>
-        public virtual void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { }
-
-        /// <summary>
-        /// Called each time a key is released.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="shift">Is the shift modifier key down?</param>
-        /// <param name="control">Is the ctrl modifier key down?</param>
-        /// <param name="alt">Is the alt modifier key down?</param>
-        public virtual void OnKeyUp(KeyCode key, bool shift, bool control, bool alt) { }
-
-        /// <summary>
         /// IDispose implementation. Closes and destroys the game.
         /// </summary>
         public void Dispose()
@@ -233,6 +190,7 @@ namespace Asterion
 
             Audio.Dispose();
             OpenTKWindow.Dispose();
+            Input.Dispose();
 
             OnDispose();
         }

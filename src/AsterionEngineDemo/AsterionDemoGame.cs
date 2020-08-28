@@ -60,6 +60,10 @@ namespace Asterion.Demo
             {
                 UI.ShowPage<TestMenuPage>();
                 UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
+
+                Input.OnMouseMove += OnMouseMove;
+                Input.OnKeyDown += OnKeyDown;
+                Input.OnMouseDown += OnMouseDown;
             }
             else
             {
@@ -86,30 +90,19 @@ namespace Asterion.Demo
             AdjustToTileScreenSize(2.0f);
         }
 
-        /// <summary>
-        /// OnMouseMove override. Moves the cursor to the currently hovered tile.
-        /// </summary>
-        /// <param name="tile">Currently hovered tile</param>
-        public override void OnMouseMove(Position tile)
+        private void OnMouseDown(MouseButton button, Position tile)
         {
-            if (tile.X == -1)
-                UI.Cursor.Visible = false;
-            else
-            {
-                UI.Cursor.MoveTo(tile);
-                UI.Cursor.Visible = true;
-            }
+            //if (TileBoard.FX.InProgress) return; // Cannot fire another fireball while the fireball animation is in progress
+            //if (button != MouseButton.Left) return; // Only the left button can be used to shoot fireballs
+
+            //TileBoard.FX.AddMovingFX("fireball", SkeletonPosition, position, 0.25f, (int)TileID.Fireball, Color.Orange);
+
+            //TileBoard.FX.AddStaticFX("fireballImpact", 0.1f,
+            //    new Point[] { position, Point.Add(position, new Size(1, 0)), Point.Add(position, new Size(-1, 0)), Point.Add(position, new Size(0, -1)), Point.Add(position, new Size(0, 1)) },
+            //    (int)TileID.FireballExplosion, Color.Orange, 3, 0);
         }
 
-        /// <summary>
-        /// OnKeyDown override. Used to check if the user presses the arrow keys to move the skeleton.
-        /// </summary>
-        /// <param name="key">Key code</param>
-        /// <param name="shift">Is shift down?</param>
-        /// <param name="control">Is control down?</param>
-        /// <param name="alt">Is alt down?</param>
-        /// <param name="isRepeat">Is this a repeat keystroke (key held down)?</param>
-        public override void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        private void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
         {
             switch (key)
             {
@@ -128,20 +121,18 @@ namespace Asterion.Demo
         }
 
         /// <summary>
-        /// OnMouseDown override. Used to know when the user pressed the left mouse button to throw a fireball.
+        /// Moves the cursor to the currently hovered tile.
         /// </summary>
-        /// <param name="button">Mouse button</param>
-        /// <param name="position">Currenly hovered tile</param>
-        public override void OnMouseDown(MouseButton button, Position position)
+        /// <param name="tile">Currently hovered tile</param>
+        private void OnMouseMove(Position tile)
         {
-            //if (TileBoard.FX.InProgress) return; // Cannot fire another fireball while the fireball animation is in progress
-            //if (button != MouseButton.Left) return; // Only the left button can be used to shoot fireballs
-
-            //TileBoard.FX.AddMovingFX("fireball", SkeletonPosition, position, 0.25f, (int)TileID.Fireball, Color.Orange);
-
-            //TileBoard.FX.AddStaticFX("fireballImpact", 0.1f,
-            //    new Point[] { position, Point.Add(position, new Size(1, 0)), Point.Add(position, new Size(-1, 0)), Point.Add(position, new Size(0, -1)), Point.Add(position, new Size(0, 1)) },
-            //    (int)TileID.FireballExplosion, Color.Orange, 3, 0);
+            if (tile.X == -1)
+                UI.Cursor.Visible = false;
+            else
+            {
+                UI.Cursor.MoveTo(tile);
+                UI.Cursor.Visible = true;
+            }
         }
 
         /// <summary>
