@@ -84,7 +84,6 @@
     <None Include="packages.config" />
     <Compile Include="Video\TileShader.cs" />
     <Compile Include="Video\VBO.cs" />
-    <Compile Include="Video\TileManager.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
   <ItemGroup />

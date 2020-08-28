@@ -59,11 +59,11 @@ namespace Asterion.Video
 
         //protected readonly TileBoard Screen;
 
-        internal VBO(TileManager tiles, int width, int height)
+        internal VBO(AsterionGame game, int width, int height)
         {
-            UVWidth = (float)tiles.TileWidth / tiles.TilemapWidth;
-            UVHeight = (float)tiles.TileHeight / tiles.TilemapHeight;
-            TilemapCountX = tiles.TilemapCountX;
+            UVWidth = (float)game.TileSize.Width / game.TilemapSize.Width;
+            UVHeight = (float)game.TileSize.Height / game.TilemapSize.Height;
+            TilemapCountX = game.TilemapCount.Width;
 
             Handle = GL.GenBuffer();
             CreateNewBuffer(width, height);

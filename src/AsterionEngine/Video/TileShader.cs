@@ -47,7 +47,7 @@ namespace Asterion.Video
         /// <summary>
         /// Pointers to the texture uniforms in the shader (one texture for each tilemap in TileScreen)
         /// </summary>
-        private readonly int[] UniformTexture = new int[TileManager.TILEMAP_COUNT];
+        private readonly int[] UniformTexture = new int[AsterionGame.TILEMAP_COUNT];
 
         /// <summary>
         /// Constructor.
@@ -73,11 +73,11 @@ namespace Asterion.Video
 
             UniformProjection = GL.GetUniformLocation(Handle, "projection");
             
-            for (i = 0; i < TileManager.TILEMAP_COUNT; i++)
+            for (i = 0; i < AsterionGame.TILEMAP_COUNT; i++)
                 UniformTexture[i] = GL.GetUniformLocation(Handle, $"texture{i}");
 
             GL.UseProgram(Handle);
-            for (i = 0; i < TileManager.TILEMAP_COUNT; i++)
+            for (i = 0; i < AsterionGame.TILEMAP_COUNT; i++)
                 GL.Uniform1(UniformTexture[i], i);
 
             GL.DeleteShader(vertexShader);

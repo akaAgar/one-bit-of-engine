@@ -34,7 +34,7 @@ namespace Asterion.Scene
             Game = game;
             Map = new Map(this);
             
-            GameWindowTileCount = new Size(game.Tiles.TileCountX, game.Tiles.TileCountY);
+            GameWindowTileCount = new Size(game.TileCount.Width, game.TileCount.Height);
 
             Viewport = new Area(0, 0, GameWindowTileCount.Width, GameWindowTileCount.Height);
         }
@@ -103,7 +103,7 @@ namespace Asterion.Scene
 
         internal void OnLoad()
         {
-            Tiles = new VBO(Game.Tiles, 0, 0);
+            Tiles = new VBO(Game, 0, 0);
             RecreateVBO();
         }
 

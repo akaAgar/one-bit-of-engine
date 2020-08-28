@@ -38,7 +38,7 @@ namespace Asterion.Demo
         /// Constructor.
         /// </summary>
         //public AsterionDemoGame() : base(new Size(16, 16), new Size(32, 18), new Size(512, 64)) { }
-        public AsterionDemoGame() : base(new Size(16, 16), new Size(32, 18), new Size(512, 64)) { }
+        public AsterionDemoGame() : base(new Dimension(16, 16), new Dimension(32, 18), new Dimension(512, 64)) { }
 
 
         private Entity SkeletonEntity;
@@ -54,7 +54,7 @@ namespace Asterion.Demo
         protected override void OnLoad()
         {
             Title = "OneBitOfEngine Demo Game";
-            Tiles.SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
+            SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
 
             if (true)
             {

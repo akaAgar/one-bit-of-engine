@@ -76,7 +76,7 @@ namespace Asterion
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            Game.Tiles.OnRenderFrame();
+            Game.OnRenderFrame();
             SwapBuffers();
         }
 
@@ -86,7 +86,7 @@ namespace Asterion
         /// <param name="e">Event arguments.</param>
         protected override void OnResize(EventArgs e)
         {
-            Game.Tiles.OnResize();
+            Game.OnResizeInternal();
             base.OnResize(e);
         }
 
@@ -97,7 +97,7 @@ namespace Asterion
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
             Game.Input.OnMouseDownInternal((Input.MouseButton)e.Button, tile);
         }
 
@@ -108,7 +108,7 @@ namespace Asterion
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
             Game.Input.OnMouseUpInternal((Input.MouseButton)e.Button, tile);
         }
 
@@ -129,7 +129,7 @@ namespace Asterion
         {
             if (!Game.MouseCursorVisible) return;
 
-            Position tile = Game.Tiles.GetTileFromCursorPosition(e.X, e.Y);
+            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
             if (LastHoveredTile == tile) return;
             LastHoveredTile = tile;
             Game.Input.OnMouseMoveInternal(tile);

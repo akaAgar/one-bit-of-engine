@@ -29,7 +29,7 @@ namespace Asterion.UI
 
         internal void OnLoad()
         {
-            TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX, Game.Tiles.TileCountY);
+            TilesVBO = new VBO(Game, Game.TileCount.Width, Game.TileCount.Height);
             Cursor.OnLoad(Game);
         }
 
@@ -71,8 +71,8 @@ namespace Asterion.UI
         {
             int x, y;
 
-            for (x = 0; x < Game.Tiles.TileCountX; x++)
-                for (y = 0; y < Game.Tiles.TileCountY; y++)
+            for (x = 0; x < Game.TileCount.Width; x++)
+                for (y = 0; y < Game.TileCount.Height; y++)
                     TilesVBO.UpdateTileData(x, y, new Tile(0, RGBColor.Black));
         }
     }

@@ -21,9 +21,9 @@ using Asterion.UI;
 using Asterion.Scene;
 using Asterion.Video;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
-using System.IO;
 
 namespace Asterion
 {
@@ -33,14 +33,26 @@ namespace Asterion
     public class AsterionGame : IDisposable
     {
         /// <summary>
+        /// Maximum number of tilemaps
+        /// </summary>
+        public const int TILEMAP_COUNT = 4;
+
+        /// <summary>
         /// Audio player.
         /// </summary>
         public AudioPlayer Audio { get; private set; }
 
         /// <summary>
-        /// Tileboard, handles the drawing of tiles.
+        /// Background color.
         /// </summary>
-        //public TileBoard TileBoard { get; private set; }
+        public Color BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; GL.ClearColor(value); } }
+        private Color _backgroundColor = Color.Black;
+
+        private float TileScale = 1.0f;
+        private Position TileOffset = Position.Zero;
+
+        private TileShader Shader = null;
+        private readonly TilemapTexture[] Tilemaps = new TilemapTexture[TILEMAP_COUNT];
 
         /// <summary>
         /// Gets or sets the width of the game window, in pixels.
@@ -77,6 +89,34 @@ namespace Asterion
         /// </summary>
         public bool MouseCursorVisible { get { return OpenTKWindow.CursorVisible; } set { OpenTKWindow.CursorVisible = value; } }
 
+        internal void OnResizeInternal()
+        {
+            GL.Viewport(0, 0, Width, Height);
+
+            TileScale = Math.Min((float)Width / (TileCount.Width * TileSize.Width), (float)Height / (TileCount.Height * TileSize.Height));
+
+            float resScale = (float)Width / Height;
+            float ratio = (float)(TileCount.Width * TileSize.Width) / (TileCount.Height * TileSize.Height);
+            RectangleF quad = new RectangleF(0, 0, TileCount.Width, TileCount.Height);
+
+            int tileOffsetX = 0, tileOffsetY = 0;
+            if (resScale > ratio)
+            {
+                quad.Width *= (resScale / ratio);
+                quad.X = (TileCount.Width - quad.Width) / 2;
+                tileOffsetX = (int)((Width - (TileCount.Width * TileSize.Width * TileScale)) * .5f);
+            }
+            else
+            {
+                quad.Height /= (resScale / ratio);
+                quad.Y = (TileCount.Height - quad.Height) / 2;
+                tileOffsetY = (int)((Height - (TileCount.Height * TileSize.Height * TileScale)) * .5f);
+            }
+            TileOffset = new Position(tileOffsetX, tileOffsetY);
+
+            Shader.SetProjection(Matrix4.CreateOrthographicOffCenter(quad.Left, quad.Right, quad.Bottom, quad.Top, 0, 1));
+        }
+
         /// <summary>
         /// Internal OpenTK window.
         /// </summary>
@@ -85,7 +125,7 @@ namespace Asterion
         public SceneManager Scene { get; private set; } = null;
         public UIEnvironment UI { get; private set; } = null;
 
-        public TileManager Tiles { get; private set; } = null;
+        //public TileManager Tiles { get; private set; } = null;
         public InputManager Input { get; private set; } = null;
 
         /// <summary>
@@ -93,18 +133,28 @@ namespace Asterion
         /// </summary>
         public void Close() { OpenTKWindow.Close(); }
 
+        public Dimension TileSize { get; } = Dimension.One;
+        public Dimension TileCount { get; } = Dimension.One;
+        public Dimension TilemapSize { get; } = Dimension.One;
+
+        public Dimension TilemapCount { get { return new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height); } }
+
         /// <summary>
         /// Creates a new Asterion Engine game.
         /// </summary>
         /// <param name="tileSize">Size of a each tile, in pixels.</param>
         /// <param name="tileCount">Number of tiles on the tile board.</param>
         /// <param name="tilemapSize">Size of the tilemaps, in pixels.</param>
-        public AsterionGame(Size tileSize, Size tileCount, Size tilemapSize)
+        public AsterionGame(Dimension tileSize, Dimension tileCount, Dimension tilemapSize)
         {
-            OpenTKWindow = new OpenTKWindow(this) { Title = "One Bit of Engine" };
+            OpenTKWindow = new OpenTKWindow(this) { Title = "Asterion Engine" };
+
+            TileSize = tileSize;
+            TileCount = tileCount;
+            TilemapSize = tilemapSize;
 
             Audio = new AudioPlayer();
-            Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
+            //Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
             Input = new InputManager();
 
             UI = new UIEnvironment(this);
@@ -116,7 +166,15 @@ namespace Asterion
         /// </summary>
         internal void OnLoadInternal()
         {
-            Tiles.OnLoad();
+            GL.ClearColor(_backgroundColor);
+            GL.Enable(EnableCap.Texture2D);
+            GL.Disable(EnableCap.DepthTest); // TODO: Remove?
+            GL.Enable(EnableCap.Blend);
+            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+            // TODO: Use texture arrays - https://community.khronos.org/t/how-do-you-implement-texture-arrays/75315
+            Shader = new TileShader();
+
             Scene.OnLoad();
             UI.OnLoad();
 
@@ -129,7 +187,6 @@ namespace Asterion
         /// <param name="elapsedSeconds">Number of seconds elapsed since the last update.</param>
         internal void OnUpdateInternal(float elapsedSeconds)
         {
-            Tiles.OnUpdate(elapsedSeconds);
             Scene.OnUpdate(elapsedSeconds);
             Input.OnUpdate();
             OnUpdate(elapsedSeconds);
@@ -154,8 +211,8 @@ namespace Asterion
         {
             OpenTKWindow.WindowState = OpenTK.WindowState.Normal;
             OpenTKWindow.Size = new Size(
-                (int)(Tiles.TileCountX * Tiles.TileWidth * scale),
-                (int)(Tiles.TileCountY * Tiles.TileHeight * scale));
+                (int)(TileCount.Width * TileSize.Width * scale),
+                (int)(TileCount.Height * TileSize.Height * scale));
         }
 
         /// <summary>
@@ -180,6 +237,51 @@ namespace Asterion
         /// Called when the game is disposed.
         /// </summary>
         protected virtual void OnDispose() { }
+
+        public Position GetTileFromMousePosition(int mouseX, int mouseY)
+        {
+            float tileX = (mouseX - TileOffset.X) / (TileSize.Width * TileScale);
+            float tileY = (mouseY - TileOffset.Y) / (TileSize.Height * TileScale);
+
+            if (
+                (tileX < 0) || (tileY < 0) ||
+                ((int)tileX >= TileCount.Width) || ((int)tileY >= TileCount.Height)
+                )
+                return Position.NegativeOne;
+
+            return new Position((int)tileX, (int)tileY);
+        }
+
+        internal void OnRenderFrame()
+        {
+            Shader.Use();
+
+            for (int i = 0; i < TILEMAP_COUNT; i++)
+                Tilemaps[i]?.Use(i);
+
+            GL.Disable(EnableCap.Blend);
+            UI.Render();
+            Scene.OnRenderFrame();
+            GL.Enable(EnableCap.Blend);
+            UI.Cursor.Render();
+        }
+
+        public bool SetTilemap(int index, Image tilemap)
+        {
+            if ((index < 0) || (index >= TILEMAP_COUNT)) return false;
+
+            DestroyTileMap(index);
+            Tilemaps[index] = new TilemapTexture(tilemap);
+            return true;
+        }
+
+        private void DestroyTileMap(int index)
+        {
+            if ((index < 0) || (index >= TILEMAP_COUNT)) return;
+            if (Tilemaps[index] == null) return;
+
+            Tilemaps[index].Dispose();
+        }
 
         /// <summary>
         /// IDispose implementation. Closes and destroys the game.
