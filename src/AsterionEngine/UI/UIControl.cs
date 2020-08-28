@@ -24,12 +24,12 @@ namespace Asterion.UI
 
         public UIControl() { }
 
-        internal void Initialize(UIPage page) { Page = page; }
+        internal virtual void Initialize(UIPage page) { Page = page; }
 
         internal virtual void Render() { }
 
         internal void Dispose() { }
 
-        internal abstract void SetTiles(VBO vbo);
+        internal abstract void UpdateVBOTiles(VBO vbo);
     }
 }

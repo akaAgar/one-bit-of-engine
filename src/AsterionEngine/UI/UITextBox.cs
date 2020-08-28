@@ -12,7 +12,7 @@ namespace Asterion.UI
     {
         public string Text { get; set; } = "";
 
-        internal override void SetTiles(VBO vbo)
+        internal override void UpdateVBOTiles(VBO vbo)
         {
 
         }

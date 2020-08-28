@@ -16,7 +16,7 @@ namespace Asterion.UI
 
         public int FillTile { get; set; } = 0;
 
-        internal override void SetTiles(VBO vbo)
+        internal override void UpdateVBOTiles(VBO vbo)
         {
             int x, y;
             int frameTileIndex;

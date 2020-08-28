@@ -14,7 +14,7 @@ namespace Asterion.UI
 
         public int MaxLength { get; set; } = 0;
 
-        internal override void SetTiles(VBO vbo)
+        internal override void UpdateVBOTiles(VBO vbo)
         {
             if (string.IsNullOrEmpty(Text)) return;
 
