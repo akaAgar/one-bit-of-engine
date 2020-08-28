@@ -62,21 +62,21 @@ namespace Asterion.Demo
             }
             else
             {
-                GUI.ClearTiles(new Tile(0, Color.Black));
+                GUI.ClearTiles(new Tile(0, RGBColor.Black));
 
-                GUI.DrawFrame(new Rectangle(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, Color.CornflowerBlue));
-                GUI.DrawText(1, Tiles.TileCountY - 3, "Arrows: move, l-click: fire", new Tile((int)TileID.Font, Color.White));
-                GUI.DrawText(1, Tiles.TileCountY - 2, "F: fullscreen, ESC: exit", new Tile((int)TileID.Font, Color.White));
+                GUI.DrawFrame(new Rectangle(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, RGBColor.CornflowerBlue));
+                GUI.DrawText(1, Tiles.TileCountY - 3, "Arrows: move, l-click: fire", new Tile((int)TileID.Font, RGBColor.White));
+                GUI.DrawText(1, Tiles.TileCountY - 2, "F: fullscreen, ESC: exit", new Tile((int)TileID.Font, RGBColor.White));
 
                 //TileBoard.FX.OnFXStart += OnFXStart;
 
-                GUI.SetCursor(new Tile((int)TileID.Cursor, Color.White));
+                GUI.SetCursor(new Tile((int)TileID.Cursor, RGBColor.White));
                 Scene.Create(128, 128);
-                Scene.Map.Clear(new MapCell(new Tile((int)TileID.Grass, Color.ForestGreen)));
-                for (int i = 0; i < 16; i++) Scene.Map[i * 2, i] = new MapCell(new Tile((int)TileID.Wall, Color.Gray));
+                Scene.Map.Clear(new MapCell(new Tile((int)TileID.Grass, RGBColor.ForestGreen)));
+                for (int i = 0; i < 16; i++) Scene.Map[i * 2, i] = new MapCell(new Tile((int)TileID.Wall, RGBColor.Gray));
 
                 SkeletonEntity = Scene.AddEntity<Entity>(new Point(1, 1));
-                SkeletonEntity.Tile = new Tile((int)TileID.Skeleton, Color.AntiqueWhite, true);
+                SkeletonEntity.Tile = new Tile((int)TileID.Skeleton, RGBColor.AntiqueWhite, true);
 
                 Scene.Viewport = new Rectangle(0, 0, Tiles.TileCountX, Tiles.TileCountY - 4);
             }

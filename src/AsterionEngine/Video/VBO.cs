@@ -69,6 +69,11 @@ namespace Asterion.Video
             CreateNewBuffer(width, height);
         }
 
+        internal void CreateNewBuffer(Dimension dimension)
+        {
+            CreateNewBuffer(dimension.Width, dimension.Height);
+        }
+
         internal void CreateNewBuffer(int width, int height)
         {
             Width = Math.Max(1, width);
@@ -88,7 +93,7 @@ namespace Asterion.Video
 
             float[] vertexData = new float[FLOATS_PER_VERTEX * 4];
 
-            Color4 color4 = tile.Color;
+            Color4 color4 = tile.Color.ToColor4();
 
             for (int i = 0; i < 4; i++)
                 Array.Copy(

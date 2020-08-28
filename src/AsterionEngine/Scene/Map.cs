@@ -12,7 +12,7 @@ namespace Asterion.Scene
     {
         private MapCell[,] Cells = new MapCell[0, 0];
 
-        public Tile DefaultTile { get; set; } = new Tile(0, Color.Black);
+        public Tile DefaultTile { get; set; } = new Tile(0, RGBColor.Black);
 
         public int Width { get { return Cells.GetLength(0); } }
         public int Height { get { return Cells.GetLength(1); } }
@@ -49,7 +49,7 @@ namespace Asterion.Scene
             height = Math.Max(1, height);
 
             Cells = new MapCell[width, height];
-            Clear(new MapCell(new Tile(0, Color.Black)));
+            Clear(new MapCell(new Tile(0, RGBColor.Black)));
         }
 
         public void Clear(MapCell cell)
