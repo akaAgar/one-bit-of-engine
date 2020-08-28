@@ -51,11 +51,11 @@
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Area.cs" />
     <Compile Include="RGBColor.cs" />
-    <Compile Include="Board\TileBoard.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
     <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\UIFrame.cs" />
+    <Compile Include="UI\UITileBoard.cs" />
     <Compile Include="UI\UITextBox.cs" />
     <Compile Include="UI\UILabel.cs" />
     <Compile Include="UI\UIControl.cs" />
@@ -84,9 +84,7 @@
     <Compile Include="Video\TileManager.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Menus\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <EmbeddedResource Include="Shaders\TilesShader.frag" />

@@ -16,7 +16,6 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 */
 
 using Asterion.Audio;
-using Asterion.Board;
 using Asterion.Input;
 using Asterion.UI;
 using Asterion.Scene;
@@ -87,8 +86,6 @@ namespace Asterion
         public UIEnvironment UI { get; private set; } = null;
 
         public TileManager Tiles { get; private set; } = null;
-        
-        public TileBoard Board { get; private set; } = null;
 
         /// <summary>
         /// Closes the game.
@@ -108,7 +105,6 @@ namespace Asterion
             Audio = new AudioPlayer();
             Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
 
-            Board = new TileBoard(tileCount);
             UI = new UIEnvironment(this);
             Scene = new SceneManager(this);
         }
@@ -119,7 +115,6 @@ namespace Asterion
         internal void OnLoadInternal()
         {
             Tiles.OnLoad();
-            Board.OnLoad(this);
             Scene.OnLoad();
             UI.OnLoad();
 
@@ -234,7 +229,6 @@ namespace Asterion
         public void Dispose()
         {
             UI.Dispose();
-            Board.Dispose();
             Scene.Dispose();
 
             Audio.Dispose();

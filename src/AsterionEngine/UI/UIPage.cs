@@ -13,7 +13,7 @@ namespace Asterion.UI
 
         public Tile BackgroundTile { get; set; } = new Tile(0, RGBColor.Black);
 
-        public UIEnvironment Menus { get; private set; }
+        public UIEnvironment UI { get; private set; }
 
         public UIPage() { }
 
@@ -24,15 +24,15 @@ namespace Asterion.UI
             T newControl = new T();
             newControl.Initialize(this);
             Controls.Add(newControl);
-            Menus.UpdateTiles();
+            UI.UpdateTiles();
             return newControl;
         }
 
         internal void Initialize(UIEnvironment menuManager, object[] parameters)
         {
-            Menus = menuManager;
+            UI = menuManager;
             OnInitialize(parameters);
-            Menus.UpdateTiles();
+            UI.UpdateTiles();
         }
 
         protected virtual void OnInitialize(object[] parameters) { }
@@ -50,7 +50,7 @@ namespace Asterion.UI
             Controls = Controls.OrderBy(x => x.ZOrder).ToList();
 
             foreach (UIControl control in Controls)
-                control.SetTiles(vbo);
+                control.UpdateVBOTiles(vbo);
         }
     }
 }
