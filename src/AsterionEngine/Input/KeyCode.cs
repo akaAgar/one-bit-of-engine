@@ -18,7 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 namespace Asterion.Input
 {
     /// <summary>
-    /// The available keyboard keys.
+    /// Enumerates all keyboard keys.
     /// </summary>
     public enum KeyCode
     {
