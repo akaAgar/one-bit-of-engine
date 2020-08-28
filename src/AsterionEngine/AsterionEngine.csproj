@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
+    <Compile Include="Input\InputManager.cs" />
     <Compile Include="KnownRGBColor.cs" />
     <Compile Include="RGBColor.cs" />
     <Compile Include="GUI\GUIEnvironment.cs" />
