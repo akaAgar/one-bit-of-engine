@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
+    <Compile Include="Input\GamePadButton.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Area.cs" />
     <Compile Include="RGBColor.cs" />

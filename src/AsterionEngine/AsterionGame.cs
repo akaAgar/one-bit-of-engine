@@ -131,6 +131,7 @@ namespace Asterion
         {
             Tiles.OnUpdate(elapsedSeconds);
             Scene.OnUpdate(elapsedSeconds);
+            Input.OnUpdate();
             OnUpdate(elapsedSeconds);
         }
 
