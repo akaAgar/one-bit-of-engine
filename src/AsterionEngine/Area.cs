@@ -19,9 +19,9 @@ using System;
 
 namespace Asterion
 {
-    public struct Rectangle : ICloneable, IEquatable<Rectangle>
+    public struct Area : ICloneable, IEquatable<Area>
     {
-        public static Rectangle Zero { get; } = new Rectangle(0, 0, 0, 0);
+        public static Area Zero { get; } = new Area(0, 0, 0, 0);
 
         public Position Position { get; }
         public Dimension Dimension { get; }
@@ -38,13 +38,13 @@ namespace Asterion
         public int Right { get { return Position.X + Dimension.Width; } }
         public int Bottom { get { return Position.Y + Dimension.Height; } }
 
-        public Rectangle(Position position, Dimension dimension)
+        public Area(Position position, Dimension dimension)
         {
             Position = position;
             Dimension = dimension;
         }
 
-        public Rectangle(int x, int y, int width, int height)
+        public Area(int x, int y, int width, int height)
         {
             Position = new Position(x, y);
             Dimension = new Dimension(width, height);
@@ -76,7 +76,7 @@ namespace Asterion
         /// <param name="r1">A rectangle</param>
         /// <param name="r2">Another rectangle</param>
         /// <returns>True if both rectangles have the same X, Y, Width and Height values</returns>
-        public static bool operator ==(Rectangle r1, Rectangle r2) { return r1.Equals(r2); }
+        public static bool operator ==(Area r1, Area r2) { return r1.Equals(r2); }
 
         /// <summary>
         /// != operator override. Returns true if both rectangles DO NOT have the same X, Y, Width and Height values.
@@ -84,14 +84,14 @@ namespace Asterion
         /// <param name="r1">A rectangle</param>
         /// <param name="r2">Another rectangle</param>
         /// <returns>True if both rectangles DO NOT have the same X, Y, Width and Height values</returns>
-        public static bool operator !=(Rectangle r1, Rectangle r2) { return r1.Equals(r2); }
+        public static bool operator !=(Area r1, Area r2) { return r1.Equals(r2); }
 
         /// <summary>
         /// Returns true if both rectangles have the same X, Y, Width and Height values.
         /// </summary>
         /// <param name="other">Another rectangle</param>
         /// <returns>True if both rectangles have the same X, Y, Width and Height values</returns>
-        public bool Equals(Rectangle other)
+        public bool Equals(Area other)
         {
             return (Position == other.Position) && (Dimension == other.Dimension);
         }
@@ -103,14 +103,14 @@ namespace Asterion
         /// <returns>True the other object is a reactangle and if both rectangles have the same X, Y, Width and Height values</returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Rectangle)) return false;
-            return Equals((Rectangle)obj);
+            if (!(obj is Area)) return false;
+            return Equals((Area)obj);
         }
 
         /// <summary>
         /// Creates a copy of this Rectangle object.
         /// </summary>
         /// <returns>A copy of this object</returns>
-        public object Clone() { return new Rectangle(Position, Dimension); }
+        public object Clone() { return new Area(Position, Dimension); }
     }
 }
