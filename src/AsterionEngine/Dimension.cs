@@ -23,14 +23,31 @@ namespace Asterion
 {
     public struct Dimension : ICloneable, IEquatable<Dimension>
     {
-        public static readonly Dimension Zero = new Dimension(0, 0);
+        public static Dimension Zero { get; } = new Dimension(0, 0);
+        public static Dimension One { get; } = new Dimension(1, 1);
 
-        public readonly int Width;
-        public readonly int Height;
+        public int Width { get; private set; }
 
-        public Dimension(int both) { Width = both; Height = both; }
-        public Dimension(int width, int height) { Width = width; Height = height; }
-        internal Dimension(Size size) { Width = size.Width; Height = size.Height; }
+        public int Height { get; private set; }
+
+        public Dimension(int both)
+        {
+            both = Math.Max(0, both);
+
+            Width = both; Height = both;
+        }
+        
+        public Dimension(int width, int height)
+        {
+            Width = Math.Max(0, width);
+            Height = Math.Max(0, height);
+        }
+        
+        internal Dimension(Size size)
+        {
+            Width = Math.Max(0, size.Width);
+            Height = Math.Max(0, size.Height);
+        }
 
         public static bool operator ==(Dimension p1, Dimension p2) { return p1.Equals(p2); }
         public static bool operator !=(Dimension p1, Dimension p2) { return !p1.Equals(p2); }
