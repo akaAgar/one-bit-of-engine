@@ -18,7 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 namespace Asterion.Input
 {
     /// <summary>
-    /// Enumerates all standard gamepad thumbsticks.
+    /// Indentifies a side (left or right) for gamepad thumbsticks and triggers.
     /// </summary>
     public enum GamePadSide
     {

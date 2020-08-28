@@ -17,6 +17,8 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using OpenTK.Input;
 
+using OTKMouseButton = OpenTK.Input.MouseButton;
+
 namespace Asterion.Input
 {
     /// <summary>
@@ -176,6 +178,21 @@ namespace Asterion.Input
         private bool IsValidGamePadIndex(int gamePadIndex)
         {
             return (gamePadIndex >= 0) && (gamePadIndex < MAX_GAMEPADS);
+        }
+
+        public bool IsKeyDown(KeyCode key)
+        {
+            return Keyboard.GetState().IsKeyDown((Key)key);
+        }
+
+        public bool IsAnyKeyDown()
+        {
+            return Keyboard.GetState().IsAnyKeyDown;
+        }
+
+        public bool IsMouseButtonDown(MouseButton button)
+        {
+            return Mouse.GetState().IsButtonDown((OTKMouseButton)button);
         }
 
         private void CheckGamePadButtonEvent(GamePadButton button, ButtonState buttonState, int gamePadIndex)
