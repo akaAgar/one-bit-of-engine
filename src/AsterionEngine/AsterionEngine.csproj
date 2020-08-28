@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
     <Compile Include="Input\InputManager.cs" />
+    <Compile Include="Rectangle.cs" />
     <Compile Include="RGBColor.cs" />
     <Compile Include="GUI\GUIEnvironment.cs" />
     <Compile Include="Board\TileBoard.cs" />
@@ -75,7 +76,7 @@
     <Compile Include="Scene\Map.cs" />
     <Compile Include="Scene\MapCell.cs" />
     <Compile Include="Scene\SceneManager.cs" />
-    <Compile Include="Video\Tile.cs" />
+    <Compile Include="Tile.cs" />
     <Compile Include="Video\TilemapTexture.cs" />
     <None Include="Video\TileBoard.cs" />
     <Compile Include="Video\TileShader.cs" />
