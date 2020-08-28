@@ -17,9 +17,8 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using Asterion.Audio;
 using Asterion.Board;
-using Asterion.GUI;
 using Asterion.Input;
-using Asterion.Menus;
+using Asterion.UI;
 using Asterion.Scene;
 using Asterion.Video;
 using OpenTK;
@@ -85,9 +84,7 @@ namespace Asterion
         private readonly OpenTKWindow OpenTKWindow = null;
 
         public SceneManager Scene { get; private set; } = null;
-        public GUIEnvironment GUI { get; private set; } = null;
-
-        public MenuManager Menu { get; private set; } = null;
+        public UIEnvironment UI { get; private set; } = null;
 
         public TileManager Tiles { get; private set; } = null;
         
@@ -112,9 +109,8 @@ namespace Asterion
             Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
 
             Board = new TileBoard(tileCount);
-            Menu = new MenuManager(this);
+            UI = new UIEnvironment(this);
             Scene = new SceneManager(this);
-            GUI = new GUIEnvironment(this);
         }
 
         /// <summary>
@@ -125,8 +121,7 @@ namespace Asterion
             Tiles.OnLoad();
             Board.OnLoad(this);
             Scene.OnLoad();
-            GUI.OnLoad();
-            Menu.OnLoad();
+            UI.OnLoad();
 
             OnLoad();
         }
@@ -238,7 +233,7 @@ namespace Asterion
         /// </summary>
         public void Dispose()
         {
-            Menu.Dispose();
+            UI.Dispose();
             Board.Dispose();
             Scene.Dispose();
 

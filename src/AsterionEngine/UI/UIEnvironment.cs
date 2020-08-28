@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Asterion.Video;
 using OpenTK.Graphics.ES30;
 
-namespace Asterion.Menus
+namespace Asterion.UI
 {
-    public sealed class MenuManager
+    public sealed class UIEnvironment
     {
-        private MenuPage Page = null;
+        private UIPage Page = null;
 
         private VBO TilesVBO;
 
@@ -19,7 +19,7 @@ namespace Asterion.Menus
 
         public AsterionGame Game { get; private set; }
 
-        internal MenuManager(AsterionGame game)
+        internal UIEnvironment(AsterionGame game)
         {
             Game = game;
         }
@@ -29,7 +29,7 @@ namespace Asterion.Menus
             TilesVBO = new VBO(Game.Tiles, Game.Tiles.TileCountX, Game.Tiles.TileCountY);
         }
 
-        public void ShowPage<T>(params object[] parameters) where T : MenuPage, new()
+        public void ShowPage<T>(params object[] parameters) where T : UIPage, new()
         {
             ClosePage();
             Page = new T();

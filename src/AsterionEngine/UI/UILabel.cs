@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Asterion.Menus
+namespace Asterion.UI
 {
-    public class MenuLabel : MenuControl
+    public class UILabel : UIControl
     {
         public string Text { get; set; } = "";
 

@@ -82,12 +82,10 @@ namespace Asterion.Video
                 Tilemaps[i]?.Use(i);
 
             GL.Disable(EnableCap.Blend);
-            Game.GUI.RenderInterface();
-            Game.Menu.Render();
+            Game.UI.Render();
             Game.Scene.OnRenderFrame();
             Game.Board.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
-            Game.GUI.RenderCursor();
         }
 
         internal void OnResize()

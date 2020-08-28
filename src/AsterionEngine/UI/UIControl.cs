@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Asterion.Menus
+namespace Asterion.UI
 {
-    public abstract class MenuControl
+    public abstract class UIControl
     {
-        internal MenuPage Page { get; private set; }
+        internal UIPage Page { get; private set; }
 
         public Position Position { get; set; } = Position.Zero;
 
@@ -22,9 +22,9 @@ namespace Asterion.Menus
 
         public int ZOrder = 0;
 
-        public MenuControl() { }
+        public UIControl() { }
 
-        internal void Initialize(MenuPage page) { Page = page; }
+        internal void Initialize(UIPage page) { Page = page; }
 
         internal virtual void Render() { }
 

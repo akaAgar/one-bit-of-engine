@@ -5,21 +5,21 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace Asterion.Menus
+namespace Asterion.UI
 {
-    public class MenuPage
+    public class UIPage
     {
-        private List<MenuControl> Controls = new List<MenuControl>();
+        private List<UIControl> Controls = new List<UIControl>();
 
         public Tile BackgroundTile { get; set; } = new Tile(0, RGBColor.Black);
 
-        public MenuManager Menus { get; private set; }
+        public UIEnvironment Menus { get; private set; }
 
-        public MenuPage() { }
+        public UIPage() { }
 
         internal void Dispose() { }
 
-        protected T AddControl<T>() where T : MenuControl, new()
+        protected T AddControl<T>() where T : UIControl, new()
         {
             T newControl = new T();
             newControl.Initialize(this);
@@ -28,7 +28,7 @@ namespace Asterion.Menus
             return newControl;
         }
 
-        internal void Initialize(MenuManager menuManager, object[] parameters)
+        internal void Initialize(UIEnvironment menuManager, object[] parameters)
         {
             Menus = menuManager;
             OnInitialize(parameters);
@@ -49,7 +49,7 @@ namespace Asterion.Menus
             // Order controls by Z-Order
             Controls = Controls.OrderBy(x => x.ZOrder).ToList();
 
-            foreach (MenuControl control in Controls)
+            foreach (UIControl control in Controls)
                 control.SetTiles(vbo);
         }
     }

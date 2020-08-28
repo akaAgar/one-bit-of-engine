@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Asterion.Menus
+namespace Asterion.UI
 {
-    public class MenuFrame : MenuControl
+    public class UIFrame : UIControl
     {
         public Dimension Size { get; set; } = Dimension.One;
 

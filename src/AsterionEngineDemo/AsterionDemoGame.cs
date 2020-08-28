@@ -58,27 +58,27 @@ namespace Asterion.Demo
 
             if (true)
             {
-                Menu.ShowPage<TestMenuPage>();
+                UI.ShowPage<TestMenuPage>();
             }
             else
             {
-                GUI.ClearTiles(new Tile(0, RGBColor.Black));
+                //GUI.ClearTiles(new Tile(0, RGBColor.Black));
 
-                GUI.DrawFrame(new Area(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, RGBColor.CornflowerBlue));
-                GUI.DrawText(1, Tiles.TileCountY - 3, "Arrows: move, l-click: fire", new Tile((int)TileID.Font, RGBColor.White));
-                GUI.DrawText(1, Tiles.TileCountY - 2, "F: fullscreen, ESC: exit", new Tile((int)TileID.Font, RGBColor.White));
+                //GUI.DrawFrame(new Area(0, Tiles.TileCountY - 4, Tiles.TileCountX, 4), new Tile((int)TileID.Frame, RGBColor.CornflowerBlue));
+                //GUI.DrawText(1, Tiles.TileCountY - 3, "Arrows: move, l-click: fire", new Tile((int)TileID.Font, RGBColor.White));
+                //GUI.DrawText(1, Tiles.TileCountY - 2, "F: fullscreen, ESC: exit", new Tile((int)TileID.Font, RGBColor.White));
 
-                //TileBoard.FX.OnFXStart += OnFXStart;
+                ////TileBoard.FX.OnFXStart += OnFXStart;
 
-                GUI.SetCursor(new Tile((int)TileID.Cursor, RGBColor.White));
-                Scene.Create(128, 128);
-                Scene.Map.Clear(new MapCell(new Tile((int)TileID.Grass, RGBColor.ForestGreen)));
-                for (int i = 0; i < 16; i++) Scene.Map[i * 2, i] = new MapCell(new Tile((int)TileID.Wall, RGBColor.Gray));
+                //GUI.SetCursor(new Tile((int)TileID.Cursor, RGBColor.White));
+                //Scene.Create(128, 128);
+                //Scene.Map.Clear(new MapCell(new Tile((int)TileID.Grass, RGBColor.ForestGreen)));
+                //for (int i = 0; i < 16; i++) Scene.Map[i * 2, i] = new MapCell(new Tile((int)TileID.Wall, RGBColor.Gray));
 
-                SkeletonEntity = Scene.AddEntity<Entity>(new Point(1, 1));
-                SkeletonEntity.Tile = new Tile((int)TileID.Skeleton, RGBColor.AntiqueWhite, true);
+                //SkeletonEntity = Scene.AddEntity<Entity>(new Point(1, 1));
+                //SkeletonEntity.Tile = new Tile((int)TileID.Skeleton, RGBColor.AntiqueWhite, true);
 
-                Scene.Viewport = new Area(0, 0, Tiles.TileCountX, Tiles.TileCountY - 4);
+                //Scene.Viewport = new Area(0, 0, Tiles.TileCountX, Tiles.TileCountY - 4);
             }
 
             //DrawWorld();
@@ -91,13 +91,13 @@ namespace Asterion.Demo
         /// <param name="tile">Currently hovered tile</param>
         public override void OnMouseMove(Position tile)
         {
-            if (tile.X == -1)
-                GUI.CursorVisible = false;
-            else
-            {
-                GUI.MoveCursorTo(tile);
-                GUI.CursorVisible = true;
-            }
+            //if (tile.X == -1)
+            //    GUI.CursorVisible = false;
+            //else
+            //{
+            //    GUI.MoveCursorTo(tile);
+            //    GUI.CursorVisible = true;
+            //}
         }
 
         /// <summary>

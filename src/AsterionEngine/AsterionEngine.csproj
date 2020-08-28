@@ -51,16 +51,16 @@
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Area.cs" />
     <Compile Include="RGBColor.cs" />
-    <Compile Include="GUI\GUIEnvironment.cs" />
+    <Compile Include="UI\GUIEnvironment_OLD.cs" />
     <Compile Include="Board\TileBoard.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
-    <Compile Include="Menus\MenuFrame.cs" />
-    <Compile Include="Menus\MenuTextBox.cs" />
-    <Compile Include="Menus\MenuLabel.cs" />
-    <Compile Include="Menus\MenuControl.cs" />
-    <Compile Include="Menus\MenuPage.cs" />
-    <Compile Include="Menus\MenuManager.cs" />
+    <Compile Include="UI\UIFrame.cs" />
+    <Compile Include="UI\UITextBox.cs" />
+    <Compile Include="UI\UILabel.cs" />
+    <Compile Include="UI\UIControl.cs" />
+    <Compile Include="UI\UIPage.cs" />
+    <Compile Include="UI\UIEnvironment.cs" />
     <Compile Include="OpenTKWindow.cs" />
     <Compile Include="AsterionGame.cs" />
     <Compile Include="Audio\AudioPlayer.cs" />
@@ -79,18 +79,14 @@
     <Compile Include="Tile.cs" />
     <Compile Include="Video\TilemapTexture.cs" />
     <None Include="packages.config" />
-    <None Include="Video\TileBoard.cs" />
     <Compile Include="Video\TileShader.cs" />
     <Compile Include="Video\VBO.cs" />
-    <Compile Include="Video\VBOCursor.cs" />
-    <Compile Include="Video\VBOFXAnimationType.cs" />
-    <Compile Include="Video\VBOFXAnimation.cs" />
-    <Compile Include="Video\VBOFX.cs" />
-    <Compile Include="Video\VBOTiles.cs" />
     <Compile Include="Video\TileManager.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Menus\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <EmbeddedResource Include="TilesShader.frag" />
