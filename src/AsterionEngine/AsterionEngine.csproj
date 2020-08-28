@@ -48,7 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
+    <Compile Include="KnownRGBColor.cs" />
+    <Compile Include="RGBColor.cs" />
     <Compile Include="GUI\GUIEnvironment.cs" />
+    <Compile Include="Board\TileBoard.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
     <Compile Include="Menus\MenuFrame.cs" />
@@ -63,6 +66,8 @@
     <Compile Include="Audio\AudioPlayerSource.cs" />
     <Compile Include="GameWindowBorder.cs" />
     <Compile Include="GameWindowState.cs" />
+    <Compile Include="Dimension.cs" />
+    <Compile Include="Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\ResourceArchive.cs" />
     <Compile Include="IO\ResourceArchiveIndex.cs" />
