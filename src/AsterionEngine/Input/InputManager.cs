@@ -17,7 +17,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using Asterion.Core;
 using OpenTK.Input;
-
+using System.Security.Cryptography;
 using OTKMouseButton = OpenTK.Input.MouseButton;
 
 namespace Asterion.Input
@@ -243,6 +243,19 @@ namespace Asterion.Input
                 case GamePadButton.X: return state.Buttons.X == ButtonState.Pressed;
                 case GamePadButton.Y: return state.Buttons.Y == ButtonState.Pressed;
             }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks the current status of a gamepad button on ANY of the current gamepads.
+        /// </summary>
+        /// <param name="button">The button</param>
+        /// <returns>True if the button is pressed on any gamepad, false if it is released</returns>
+        public bool IsAnyGamePadButtonDown(GamePadButton button)
+        {
+            for (int i = 0; i < MAX_GAMEPADS; i++)
+                if (IsGamePadButtonDown(i, button)) return true;
 
             return false;
         }
