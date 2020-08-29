@@ -1,4 +1,5 @@
-﻿using Asterion.Video;
+﻿using Asterion.Core;
+using Asterion.Video;
 
 namespace Asterion.UI
 {
@@ -11,7 +12,7 @@ namespace Asterion.UI
             {
                 _Dimension = value;
                 Tiles = new Tile[Dimension.Width, Dimension.Height];
-                Clear(Asterion.Tile.Empty);
+                Clear(Tile.Empty);
             }
         }
 
@@ -22,7 +23,7 @@ namespace Asterion.UI
         internal override void Initialize(UIPage page)
         {
             base.Initialize(page);
-            Clear(Asterion.Tile.Empty);
+            Clear(Tile.Empty);
         }
 
         public Tile this[Position position]
@@ -44,7 +45,7 @@ namespace Asterion.UI
 
         public Tile GetTile(int x, int y)
         {
-            if (!Dimension.Contains(x, y)) return Asterion.Tile.Empty;
+            if (!Dimension.Contains(x, y)) return Tile.Empty;
             return Tiles[x, y];
         }
 

@@ -19,7 +19,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 
-namespace Asterion
+namespace Asterion.Core
 {
     public struct Dimension : ICloneable, IEquatable<Dimension>
     {

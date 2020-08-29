@@ -1,10 +1,5 @@
-﻿using Asterion.Video;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Asterion.Core;
+using Asterion.Video;
 
 namespace Asterion.UI
 {
@@ -27,7 +22,7 @@ namespace Asterion.UI
             for (x = rect.Left; x < rect.Right; x++)
                 for (y = rect.Top; y < rect.Bottom; y++)
                 {
-                    frameTileIndex = Tile;
+                    frameTileIndex = TileID;
 
                     if (x == rect.Left)
                     {

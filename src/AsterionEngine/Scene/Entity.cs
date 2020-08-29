@@ -1,6 +1,4 @@
-﻿using Asterion.Video;
-using System;
-using System.Drawing;
+﻿using Asterion.Core;
 
 namespace Asterion.Scene
 {
@@ -8,7 +6,7 @@ namespace Asterion.Scene
     {
         public delegate void EntityEvent(Entity sender);
 
-        public Point Position { get; set; } = Point.Empty;
+        public Position Position { get; set; } = Position.Zero;
 
         public Tile Tile { get; set; } = new Tile();
         public int Layer { get; set; } = 0;
@@ -17,7 +15,7 @@ namespace Asterion.Scene
 
         public bool Removed { get; private set; } = false;
 
-        internal bool Initialize(SceneManager sceneManager, Point position, object[] parameters)
+        internal bool Initialize(SceneManager sceneManager, Position position, object[] parameters)
         {
             Scene = sceneManager;
             Position = position;
@@ -35,7 +33,7 @@ namespace Asterion.Scene
 
         public bool MoveBy(int deltaX, int deltaY)
         {
-            Point newPosition = Point.Add(Position, new Size(deltaX, deltaY));
+            Position newPosition = Position + new Position(deltaX, deltaY);
             if (!Scene.IsCellFree(newPosition, Layer)) return false;
             Position = newPosition;
             OnMove?.Invoke(this);

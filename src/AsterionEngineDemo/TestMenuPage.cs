@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using Asterion.Input;
+﻿using Asterion.Core;
 using Asterion.UI;
 
 namespace Asterion.Demo
@@ -20,7 +14,7 @@ namespace Asterion.Demo
             label.ZOrder = 2;
 
             UIFrame frame = AddControl<UIFrame>();
-            frame.Tile = (int)TileID.Font;
+            frame.TileID = (int)TileID.Font;
             frame.Position = new Position(2, 2);
             frame.Size = new Dimension(8, 8);
             frame.ZOrder = 0;

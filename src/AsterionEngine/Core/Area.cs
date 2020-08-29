@@ -17,33 +17,86 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using System;
 
-namespace Asterion
+namespace Asterion.Core
 {
+    /// <summary>
+    /// Describes a rectangular area from a set of X,Y coordinates, a width and and height.
+    /// </summary>
     public struct Area : ICloneable, IEquatable<Area>
     {
+        /// <summary>
+        /// An area with X, Y, Width and Height equals to zero.
+        /// </summary>
         public static Area Zero { get; } = new Area(0, 0, 0, 0);
 
-        public Position Position { get; }
-        public Dimension Dimension { get; }
-
+        /// <summary>
+        /// X coordinate of the left bound of the area.
+        /// </summary>
         public int X { get { return Position.X; } }
+
+        /// <summary>
+        /// Y coordinate of the top bound of the area.
+        /// </summary>
         public int Y { get { return Position.Y; } }
 
+        /// <summary>
+        /// Width of the area.
+        /// </summary>
         public int Width { get { return Dimension.Width; } }
+
+        /// <summary>
+        /// Height of the area.
+        /// </summary>
         public int Height { get { return Dimension.Height; } }
 
+        /// <summary>
+        /// X coordinate of the left bound of the area.
+        /// </summary>
         public int Left { get { return Position.X; } }
+        
+        /// <summary>
+        /// Y coordinate of the top bound of the area.
+        /// </summary>
         public int Top { get { return Position.Y; } }
 
+        /// <summary>
+        /// X coordinate of the right bound of the area.
+        /// </summary>
         public int Right { get { return Position.X + Dimension.Width; } }
+
+        /// <summary>
+        /// Y coordinate of the bottom bound of the area.
+        /// </summary>
         public int Bottom { get { return Position.Y + Dimension.Height; } }
 
+        /// <summary>
+        /// (Private) A position holding the X and Y coordinates of the upper-left corner of the area.
+        /// </summary>
+        private readonly Position Position;
+
+        /// <summary>
+        /// (Private) A dimension holding the width and height of the area.
+        /// </summary>
+        private readonly Dimension Dimension;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="position">Position of the upper-left corner of the area</param>
+        /// <param name="dimension">Dimension of the area</param>
         public Area(Position position, Dimension dimension)
         {
             Position = position;
             Dimension = dimension;
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="x">X coordinate of the left of the area</param>
+        /// <param name="y">Y coordinate of the top of the area</param>
+        /// <param name="width">Width of the area</param>
+        /// <param name="height">Height of the area</param>
         public Area(int x, int y, int width, int height)
         {
             Position = new Position(x, y);

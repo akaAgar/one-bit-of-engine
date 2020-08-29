@@ -1,4 +1,5 @@
-﻿using Asterion.Video;
+﻿using Asterion.Core;
+using Asterion.Video;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -27,7 +28,7 @@ namespace Asterion.UI
             {
                 if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
 
-                Tile charTile = new Tile(Tile + textBytes[i] - 32, Color, Tilemap);
+                Tile charTile = new Tile(TileID + textBytes[i] - 32, Color, Tilemap);
 
                 vbo.UpdateTileData(Position.X + i, Position.Y, charTile);
             }

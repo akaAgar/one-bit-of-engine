@@ -1,9 +1,9 @@
-﻿using Asterion.Video;
+﻿using Asterion.Core;
+using Asterion.Video;
 using OpenTK.Graphics.OpenGL4;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Asterion.Scene
 {
@@ -19,9 +19,9 @@ namespace Asterion.Scene
         public bool Visible { get; set; } = true;
         public bool Created { get; private set; } = false;
 
-        public Point CameraPosition { get; set; } = Point.Empty;
+        public Position CameraPosition { get; set; } = Position.Zero;
 
-        private Size GameWindowTileCount = Size.Empty;
+        private Dimension GameWindowTileCount = Dimension.Zero;
 
         private VBO Tiles = null;
 
@@ -34,14 +34,14 @@ namespace Asterion.Scene
             Game = game;
             Map = new Map(this);
             
-            GameWindowTileCount = new Size(game.TileCount.Width, game.TileCount.Height);
+            GameWindowTileCount = new Dimension(game.TileCount.Width, game.TileCount.Height);
 
             Viewport = new Area(0, 0, GameWindowTileCount.Width, GameWindowTileCount.Height);
         }
 
-        public bool IsCellFree(Point cell, int layer = 0) { return IsCellFree(cell.X, cell.Y, layer); }
+        public bool IsCellFree(Position cell, int layer = 0) { return IsCellFree(cell.X, cell.Y, layer); }
 
-        public bool IsCellOnMap(Point cell) { return IsCellOnMap(cell.X, cell.Y); }
+        public bool IsCellOnMap(Position cell) { return IsCellOnMap(cell.X, cell.Y); }
         public bool IsCellOnMap(int x, int y)
         {
             return !((x < 0) || (y < 0) || (x >= Map.Width) || (y >= Map.Height));
@@ -55,7 +55,7 @@ namespace Asterion.Scene
             return true;
         }
 
-        public T AddEntity<T>(Point position, params object[] parameters)  where T: Entity, new()
+        public T AddEntity<T>(Position position, params object[] parameters)  where T: Entity, new()
         {
             if (!Created) return null;
             
@@ -73,7 +73,7 @@ namespace Asterion.Scene
 
             Map.Create(width, height);
 
-            CameraPosition = Point.Empty;
+            CameraPosition = Position.Zero;
             Created = true;
         }
 
@@ -113,19 +113,19 @@ namespace Asterion.Scene
             UpdateVBO();
         }
 
-        public Entity[] GetEntitiesInCell(Point cell) { return GetEntitiesInCell(cell.X, cell.Y); }
+        public Entity[] GetEntitiesInCell(Position cell) { return GetEntitiesInCell(cell.X, cell.Y); }
         public Entity[] GetEntitiesInCell(int x, int y)
         {
-            return (from Entity e in Entities where e.Position == new Point(x, y) select e).ToArray();
+            return (from Entity e in Entities where e.Position == new Position(x, y) select e).ToArray();
         }
 
-        public Entity GetEntityInCell(Point cell, int layer) { return GetEntityInCell(cell.X, cell.Y, layer); }
+        public Entity GetEntityInCell(Position cell, int layer) { return GetEntityInCell(cell.X, cell.Y, layer); }
         public Entity GetEntityInCell(int x, int y, int layer)
         {
-            return (from Entity e in Entities where e.Position == new Point(x, y) && e.Layer == layer select e).SingleOrDefault();
+            return (from Entity e in Entities where e.Position == new Position(x, y) && e.Layer == layer select e).SingleOrDefault();
         }
 
-        private void UpdateVBO(params Point[] cellsToUpdate)
+        private void UpdateVBO(params Position[] cellsToUpdate)
         {
             if (cellsToUpdate.Length == 0) // no array of cells to update provided, update everything
             {
@@ -136,7 +136,7 @@ namespace Asterion.Scene
                 for (x = 0; x < _Viewport.Width; x++)
                     for (y = 0; y < _Viewport.Height; y++)
                     {
-                        Point? pt = GetScenePointFromTile(x + _Viewport.X, y + _Viewport.Y);
+                        Position? pt = GetScenePointFromTile(x + _Viewport.X, y + _Viewport.Y);
                         if (!pt.HasValue)
                         {
                             Tiles.UpdateTileData(x, y, _Viewport.X + x, _Viewport.Y + y, Map.DefaultTile);
@@ -177,22 +177,22 @@ namespace Asterion.Scene
         //    if (!Map.IsPointOnMap(sceneX, sceneY)) return;
         //}
 
-        public Point? GetScenePointFromTile(Point cell) { return GetScenePointFromTile(cell.X, cell.Y); }
-        public Point? GetScenePointFromTile(int x, int y)
+        public Position? GetScenePointFromTile(Position cell) { return GetScenePointFromTile(cell.X, cell.Y); }
+        public Position? GetScenePointFromTile(int x, int y)
         {
             if (!Created || !Visible || !IsTileInViewport(x, y)) return null;
 
             int sX = x - _Viewport.X - CameraPosition.X;
             int sY = y - _Viewport.Y - CameraPosition.Y;
 
-            Point scenePoint = new Point(sX, sY);
+            Position scenePoint = new Position(sX, sY);
 
             if (!IsCellOnMap(scenePoint)) return null;
 
             return scenePoint;
         }
 
-        public bool IsTileInViewport(Point cell) { return IsTileInViewport(cell.X, cell.Y); }
+        public bool IsTileInViewport(Position cell) { return IsTileInViewport(cell.X, cell.Y); }
         public bool IsTileInViewport(int x, int y) { return _Viewport.Contains(x, y); }
     }
 }

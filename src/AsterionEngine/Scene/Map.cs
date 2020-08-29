@@ -1,10 +1,5 @@
-﻿using Asterion.Video;
+﻿using Asterion.Core;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Asterion.Scene
 {

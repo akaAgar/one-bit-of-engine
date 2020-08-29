@@ -1,8 +1,7 @@
-﻿using Asterion.Input;
+﻿using Asterion.Core;
+using Asterion.Input;
 using Asterion.Video;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace Asterion.UI

@@ -1,4 +1,4 @@
-﻿namespace Asterion
+﻿namespace Asterion.Core
 {
     public struct Tile
     {

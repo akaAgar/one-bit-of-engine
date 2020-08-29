@@ -19,7 +19,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 
-namespace Asterion
+namespace Asterion.Core
 {
     /// <summary>
     /// Stores a pair of integer coordinates, one for the X-axis and one for the Y-axis.

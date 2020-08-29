@@ -1,10 +1,5 @@
-﻿using Asterion.Video;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Asterion.Core;
+using Asterion.Video;
 
 namespace Asterion.UI
 {
@@ -16,7 +11,7 @@ namespace Asterion.UI
 
         public RGBColor Color { get; set; } = RGBColor.White;
 
-        public int Tile { get; set; } = 0;
+        public int TileID { get; set; } = 0;
         
         public int Tilemap { get; set; } = 0;
 

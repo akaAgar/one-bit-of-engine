@@ -20,7 +20,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 
-namespace Asterion
+namespace Asterion.Core
 {
     /// <summary>
     /// Stores a R,G,B color 24-bit color.

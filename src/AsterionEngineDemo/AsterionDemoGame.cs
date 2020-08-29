@@ -15,12 +15,9 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+using Asterion.Core;
 using Asterion.Input;
 using Asterion.Scene;
-using Asterion.Video;
-using System.ComponentModel.Design;
-using System.Drawing;
-using System.Linq;
 
 namespace Asterion.Demo
 {

@@ -15,12 +15,12 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+using Asterion.Core;
 using Asterion.Input;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using System;
-using System.Drawing;
 
 namespace Asterion
 {

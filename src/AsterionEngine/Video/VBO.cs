@@ -15,6 +15,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+using Asterion.Core;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;

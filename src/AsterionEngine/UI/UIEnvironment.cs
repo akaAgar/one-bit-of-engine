@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Asterion.Core;
 using Asterion.Video;
-using OpenTK.Graphics.ES30;
 
 namespace Asterion.UI
 {

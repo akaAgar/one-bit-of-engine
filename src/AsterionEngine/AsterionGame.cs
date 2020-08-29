@@ -16,6 +16,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 */
 
 using Asterion.Audio;
+using Asterion.Core;
 using Asterion.Input;
 using Asterion.IO;
 using Asterion.UI;
