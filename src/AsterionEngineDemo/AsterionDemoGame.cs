@@ -53,8 +53,11 @@ namespace Asterion.Demo
         /// </summary>
         protected override void OnLoad()
         {
-            Title = "OneBitOfEngine Demo Game";
-            SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
+            Files.SetFolderAsFileSource(@"..\..\media\");
+
+            Title = "Asterion Engine Demo Game";
+            //SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
+            SetTilemap(0, "tilemap.png");
 
             if (true)
             {
@@ -166,8 +169,8 @@ namespace Asterion.Demo
         {
             switch (fxName)
             {
-                case "fireball": Audio.PlaySound("fire", "../../media/fire.wav"); return;
-                case "fireball_impact": Audio.PlaySound("impact", "../../media/impact.wav"); return;
+                case "fireball": Audio.PlaySound("fire.wav"); return;
+                case "fireball_impact": Audio.PlaySound("impact.wav"); return;
             }
         }
 

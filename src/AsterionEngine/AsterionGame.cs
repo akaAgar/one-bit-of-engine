@@ -17,6 +17,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using Asterion.Audio;
 using Asterion.Input;
+using Asterion.IO;
 using Asterion.UI;
 using Asterion.Scene;
 using Asterion.Video;
@@ -24,6 +25,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
+using System.IO;
 
 namespace Asterion
 {
@@ -128,6 +130,8 @@ namespace Asterion
         //public TileManager Tiles { get; private set; } = null;
         public InputManager Input { get; private set; } = null;
 
+        public FileSystem Files { get; private set; } = null;
+
         /// <summary>
         /// Closes the game.
         /// </summary>
@@ -153,7 +157,9 @@ namespace Asterion
             TileCount = tileCount;
             TilemapSize = tilemapSize;
 
-            Audio = new AudioPlayer();
+            Files = new FileSystem();
+
+            Audio = new AudioPlayer(Files);
             //Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
             Input = new InputManager();
 
@@ -266,12 +272,20 @@ namespace Asterion
             UI.Cursor.Render();
         }
 
-        public bool SetTilemap(int index, Image tilemap)
+        public bool SetTilemap(int index, string file)
         {
             if ((index < 0) || (index >= TILEMAP_COUNT)) return false;
+            if (!Files.FileExists(file)) return false;
 
             DestroyTileMap(index);
-            Tilemaps[index] = new TilemapTexture(tilemap);
+
+            using (Stream s = Files.GetFileAsStream(file))
+            {
+                if (s == null) return false;
+
+                Tilemaps[index] = new TilemapTexture(s);
+            }
+
             return true;
         }
 
