@@ -29,9 +29,19 @@ namespace Asterion.Audio
     public sealed class AudioPlayer
     {
         /// <summary>
-        /// Number of loop sound channels.
+        /// Number of channels for "one shot" sounds.
         /// </summary>
-        public const int LOOP_CHANNELS = 4;
+        public const int SINGLE_CHANNELS = 8;
+
+        /// <summary>
+        /// Number of channels for looping sounds.
+        /// </summary>
+        public const int LOOP_CHANNELS = 2;
+
+        /// <summary>
+        /// Total number of sound channels.
+        /// </summary>
+        public const int TOTAL_CHANNELS = SINGLE_CHANNELS + LOOP_CHANNELS;
 
         /// <summary>
         /// (Private) OpenAL context used by this audio player.
@@ -46,12 +56,13 @@ namespace Asterion.Audio
         /// <summary>
         /// (Private) Dictionary storing data for the cached sound files.
         /// </summary>
-        private readonly Dictionary<string, AudioPlayerSource> SoundCache = new Dictionary<string, AudioPlayerSource>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, AudioPlayerSound> SoundCache = new Dictionary<string, AudioPlayerSound>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
-        /// (Private) Channels for the looped sounds.
+        /// (Private) Sounds channels.
+        /// The first SOUND_CHANNELS channels are for "one shot" sounds, the last LOOP_CHANNELS are reserved for looping sounds.
         /// </summary>
-        private AudioPlayerSource[] LoopedSoundChannels = new AudioPlayerSource[LOOP_CHANNELS];
+        private readonly int[] SoundChannels = new int[TOTAL_CHANNELS];
 
         /// <summary>
         /// Is this AudioPlayer enabled? If not, you can enable it by calling the Enable() method.
@@ -66,8 +77,8 @@ namespace Asterion.Audio
         {
             Files = fileSystem;
 
-            for (int i = 0; i < 0; i++)
-                LoopedSoundChannels[i] = null;
+            for (int i = 0; i < TOTAL_CHANNELS; i++)
+                SoundChannels[i] = -1;
         }
 
         /// <summary>
@@ -93,51 +104,69 @@ namespace Asterion.Audio
         /// <returns>True if everything went correctly, false otherwise</returns>
         public bool PlaySound(string file, float volume = 1.0f, float pitch = 1.0f, float randomPitch = 0.0f)
         {
-            // No need to check Enabled, it is checked in PrecacheSound
-            if (!PrecacheSound(file)) return false;
+            if (!Enabled) return false;
 
-            AudioPlayerSource sound = SoundCache[file];
+            int freeChannel = -1;
+            for (int i = 0; i < SINGLE_CHANNELS; i++) // Look for an unused channel or a channel with a sound which is done playing
+            {
+                if (
+                    (SoundChannels[i] == -1) ||
+                    (AL.GetSourceState(SoundChannels[i]) != ALSourceState.Playing)
+                   )
+                {
+                    freeChannel = i;
+                    break;
+                }
+            }
+            if (freeChannel == -1) return false; // No available channel
 
             float realPitch = pitch + AsterionTools.RandomFloat(-randomPitch, randomPitch);
-
-            AL.Source(sound.Source, ALSourcef.Gain, AsterionTools.Clamp(0f, 10f, volume));
-            AL.Source(sound.Source, ALSourcef.Pitch, AsterionTools.Clamp(0.01f, 10f, realPitch));
-            AL.Source(sound.Source, ALSourcei.Buffer, sound.Buffer);
-            AL.Source(sound.Source, ALSourceb.Looping, false);
-            AL.SourcePlay(sound.Source);
-
+            PlaySoundInChannel(freeChannel, file, volume, realPitch, false);
             return true;
         }
 
-        public bool PlayLoopedSound(int channel, string file, float volume = 1.0f, float pitch = 1.0f)
+        /// <summary>
+        /// Stops all currently playing sounds.
+        /// </summary>
+        /// <param name="stopOneShotSounds">Should "one-shot" sounds be stopped?</param>
+        /// <param name="stopLoopingSounds">Should looping sounds be stopped?</param>
+        public void StopAllSounds(bool stopOneShotSounds = true, bool stopLoopingSounds = true)
         {
-            // No need to check Enabled, it is checked in PrecacheSound
-            if (!PrecacheSound(file)) return false;
-            if ((channel < 0) || (channel >= LOOP_CHANNELS)) return false;
+            for (int i = 0; i < TOTAL_CHANNELS; i++)
+            {
+                if (!stopOneShotSounds && (i < SINGLE_CHANNELS)) continue;
+                if (!stopLoopingSounds && (i >= SINGLE_CHANNELS)) continue;
 
-            StopLoopedSound(channel);
-
-            Loop = SoundCache[file];
-
-            AL.Source(sound.Source, ALSourcef.Gain, AsterionTools.Clamp(0f, 10f, volume));
-            AL.Source(sound.Source, ALSourcef.Pitch, AsterionTools.Clamp(0.01f, 10f, pitch));
-            AL.Source(sound.Source, ALSourcei.Buffer, sound.Buffer);
-            AL.Source(sound.Source, ALSourceb.Looping, true);
-            AL.SourcePlay(sound.Source);
-
-            return true;
+                StopSound(i);
+            }
         }
 
-        public bool StopLoopedSound(int channel)
+        /// <summary>
+        /// Loads a sound from the engine's FileSystem and plays it in an endless loop.
+        /// If the sound wasn't precached, it will be automatically before it is played.
+        /// Make sure the Enabled() method was called or no sound will be played.
+        /// </summary>
+        /// <param name="file">The sound file, as it appears in the file sourced used by FileSystem</param>
+        /// <param name="volume">Volume at which the sound should be played, 1.0 means normal, 0.5 means half volume, 2.0 means twice as loud</param>
+        /// <param name="pitch">Pitch at which the sound should be played. 1.0 means normal, 0.5 means 2x slower, 2.0 means 2x faster.</param>
+        /// <param name="channel">A looping sound channel between 0 and <see cref="LOOP_CHANNELS"/></param>
+        /// <returns></returns>
+        public bool PlayLoopingSound(string file, float volume = 1.0f, float pitch = 1.0f, int channel = 0)
         {
             if (!Enabled) return false;
-            if ((channel < 0) || (channel >= LOOP_CHANNELS)) return false;
-            if (LoopedSoundChannels[channel] == null) return true; // Channel was already stopped
+            if ((channel < 0) || (channel >= LOOP_CHANNELS)) return false; // Channel out of bounds
 
-            LoopedSoundChannels[channel].Dispose();
-            LoopedSoundChannels[channel] = null;
-
+            PlaySoundInChannel(channel, file, volume, pitch, true);
             return true;
+        }
+
+        /// <summary>
+        /// Stops playing a looping sound.
+        /// </summary>
+        /// <param name="channel">A looping sound channel between 0 and <see cref="LOOP_CHANNELS"/></param>
+        public void StopLoopingSound(int channel = 0)
+        {
+            StopSound(SINGLE_CHANNELS + channel);
         }
 
         /// <summary>
@@ -153,7 +182,7 @@ namespace Asterion.Audio
             
             byte[] waveFileBytes = Files.GetFile(file);
             if (waveFileBytes == null) return false;
-            AudioPlayerSource source = new AudioPlayerSource(waveFileBytes);
+            AudioPlayerSound source = new AudioPlayerSound(waveFileBytes);
             if (!source.IsValid) return false;
             SoundCache.Add(file, source);
 
@@ -167,8 +196,7 @@ namespace Asterion.Audio
         {
             if (!Enabled) return;
 
-            for (int i = 0; i < LOOP_CHANNELS; i++)
-                StopLoopedSound(i);
+            StopAllSounds();
 
             foreach (string k in SoundCache.Keys)
                 SoundCache[k].Dispose();
@@ -177,7 +205,7 @@ namespace Asterion.Audio
         }
 
         /// <summary>
-        /// (Internal) Stop all sounds, clears the sound cache and destroys the OpenAL context.
+        /// (Internal) Stops all sounds, clears the sound cache and destroys the OpenAL context.
         /// </summary>
         internal void Destroy()
         {
@@ -185,6 +213,49 @@ namespace Asterion.Audio
 
             ClearCache();
             Context.Dispose();
+        }
+
+        /// <summary>
+        /// (Private) Private method handling low-level OpenAL calls required to play a sound, used by PlaySound() and PlayLoopingSound().
+        /// </summary>
+        /// <param name="channel">The sound channel in which to play the sound</param>
+        /// <param name="file">The sound file, as it appears in the file sourced used by FileSystem</param>
+        /// <param name="volume">Volume at which the sound should be played, 1.0 means normal, 0.5 means half volume, 2.0 means twice as loud</param>
+        /// <param name="pitch">Pitch at which the sound should be played. 1.0 means normal, 0.5 means 2x slower, 2.0 means 2x faster.</param>
+        /// <param name="looping">Should the sound be looping?</param>
+        /// <returns>True if everything went well, false otherwise</returns>
+        private bool PlaySoundInChannel(int channel, string file, float volume, float pitch, bool looping)
+        {
+            if (!Enabled) return false;
+            if ((channel < 0) || (channel >= TOTAL_CHANNELS)) return false; // Channel index is out of bounds
+            if (!PrecacheSound(file)) return false; // Failed to precache the sound (wrong data or file do not exist)
+
+            AudioPlayerSound sound = SoundCache[file];
+
+            StopSound(channel);
+            SoundChannels[channel] = AL.GenSource();
+            AL.Source(SoundChannels[channel], ALSourcef.Gain, AsterionTools.Clamp(0f, 10f, volume));
+            AL.Source(SoundChannels[channel], ALSourcef.Pitch, AsterionTools.Clamp(0.01f, 10f, pitch));
+            AL.Source(SoundChannels[channel], ALSourcei.Buffer, sound.Buffer);
+            AL.Source(SoundChannels[channel], ALSourceb.Looping, looping);
+            AL.SourcePlay(SoundChannels[channel]);
+
+            return true;
+        }
+
+        /// <summary>
+        /// (Private) Private method handling low-level OpenAL calls required to stop a sound.
+        /// </summary>
+        /// <param name="channel">The sound channel to stop</param>
+        private void StopSound(int channel)
+        {
+            if (!Enabled) return;
+            if ((channel < 0) || (channel >= TOTAL_CHANNELS)) return; // Channel index is out of bounds
+            if (SoundChannels[channel] == -1) return; // Channel is not in use
+
+            AL.SourceStop(SoundChannels[channel]);
+            AL.DeleteSource(SoundChannels[channel]);
+            SoundChannels[channel] = -1;
         }
     }
 }
