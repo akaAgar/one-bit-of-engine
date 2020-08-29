@@ -95,7 +95,7 @@ namespace Asterion.Demo
             AdjustToTileScreenSize(2.0f);
         }
 
-        private void OnMouseDown(MouseButton button, Position tile)
+        private void OnMouseDown(MouseButton button, Position? tile)
         {
             //if (TileBoard.FX.InProgress) return; // Cannot fire another fireball while the fireball animation is in progress
             //if (button != MouseButton.Left) return; // Only the left button can be used to shoot fireballs
@@ -129,13 +129,13 @@ namespace Asterion.Demo
         /// Moves the cursor to the currently hovered tile.
         /// </summary>
         /// <param name="tile">Currently hovered tile</param>
-        private void OnMouseMove(Position tile)
+        private void OnMouseMove(Position? tile)
         {
-            if (tile.X == -1)
+            if (!tile.HasValue)
                 UI.Cursor.Visible = false;
             else
             {
-                UI.Cursor.MoveTo(tile);
+                UI.Cursor.MoveTo(tile.Value);
                 UI.Cursor.Visible = true;
             }
         }

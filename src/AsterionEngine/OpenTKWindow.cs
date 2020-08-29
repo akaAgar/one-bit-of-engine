@@ -36,9 +36,9 @@ namespace Asterion
         private readonly AsterionGame Game;
 
         /// <summary>
-        /// Last tile hovered by the mouse.
+        /// Last tile hovered by the mouse, or null if none.
         /// </summary>
-        private Position LastHoveredTile = Position.NegativeOne;
+        private Position? LastHoveredTile = null;
 
         /// <summary>
         /// Constructor.
@@ -97,7 +97,7 @@ namespace Asterion
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
+            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
             Game.Input.OnMouseDownInternal((Input.MouseButton)e.Button, tile);
         }
 
@@ -108,7 +108,7 @@ namespace Asterion
         protected override void OnMouseUp(MouseButtonEventArgs e)
         {
             if (!Game.MouseCursorVisible) return;
-            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
+            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
             Game.Input.OnMouseUpInternal((Input.MouseButton)e.Button, tile);
         }
 
@@ -129,7 +129,7 @@ namespace Asterion
         {
             if (!Game.MouseCursorVisible) return;
 
-            Position tile = Game.GetTileFromMousePosition(e.X, e.Y);
+            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
             if (LastHoveredTile == tile) return;
             LastHoveredTile = tile;
             Game.Input.OnMouseMoveInternal(tile);

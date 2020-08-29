@@ -244,7 +244,7 @@ namespace Asterion
         /// </summary>
         protected virtual void OnDispose() { }
 
-        public Position GetTileFromMousePosition(int mouseX, int mouseY)
+        public Position? GetTileFromMousePosition(int mouseX, int mouseY)
         {
             float tileX = (mouseX - TileOffset.X) / (TileSize.Width * TileScale);
             float tileY = (mouseY - TileOffset.Y) / (TileSize.Height * TileScale);
@@ -253,7 +253,7 @@ namespace Asterion
                 (tileX < 0) || (tileY < 0) ||
                 ((int)tileX >= TileCount.Width) || ((int)tileY >= TileCount.Height)
                 )
-                return Position.NegativeOne;
+                return null;
 
             return new Position((int)tileX, (int)tileY);
         }
@@ -307,7 +307,6 @@ namespace Asterion
 
             Audio.Destroy();
             OpenTKWindow.Dispose();
-            Input.Dispose();
 
             OnDispose();
         }
