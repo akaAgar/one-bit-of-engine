@@ -55,6 +55,8 @@ namespace Asterion.Demo
         {
             Files.SetFolderAsFileSource(@"..\..\media\");
 
+            Audio.Enable();
+
             Title = "Asterion Engine Demo Game";
             //SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
             SetTilemap(0, "tilemap.png");
