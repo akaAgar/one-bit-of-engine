@@ -22,15 +22,10 @@ using System.IO;
 namespace Asterion.Audio
 {
     /// <summary>
-    /// (Internal) Creates and stores an OpenAL sound source from a PCM Wave file.
+    /// (Internal) Creates and stores an OpenAL sound buffer from a PCM Wave file.
     /// </summary>
-    internal class AudioPlayerSource : IDisposable
+    internal class AudioPlayerSound : IDisposable
     {
-        /// <summary>
-        /// (Internal) OpenAL source handle.
-        /// </summary>
-        internal int Source { get; private set; }
-
         /// <summary>
         /// (Internal) OpenAL buffer handle.
         /// </summary>
@@ -45,10 +40,9 @@ namespace Asterion.Audio
         /// (Internal) Constructor.
         /// </summary>
         /// <param name="waveFileBytes">Bytes for a PCM Wave file to use for this sound</param>
-        internal AudioPlayerSource(byte[] waveFileBytes)
+        internal AudioPlayerSound(byte[] waveFileBytes)
         {
             Buffer = AL.GenBuffer();
-            Source = AL.GenSource();
             IsValid = true;
 
             using (MemoryStream ms = new MemoryStream(waveFileBytes))
@@ -128,20 +122,10 @@ namespace Asterion.Audio
         }
 
         /// <summary>
-        /// Stops the sound if it is playing.
-        /// </summary>
-        public void Stop()
-        {
-            AL.SourceStop(Source);
-        }
-
-        /// <summary>
-        /// IDispose implementation. Stops the sound and frees the OpenAL source/buffer handles.
+        /// IDispose implementation. Frees the OpenAL buffer handle.
         /// </summary>
         public void Dispose()
         {
-            AL.SourceStop(Source);
-            AL.DeleteSource(Source);
             AL.DeleteBuffer(Buffer);
         }
     }
