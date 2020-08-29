@@ -31,7 +31,8 @@ using System.IO;
 namespace Asterion
 {
     /// <summary>
-    /// The AsterionGame class contains everything required to create and run a game. Just override it.
+    /// The AsterionGame class contains everything required to create and run a game.
+    /// Override <see cref="OnLoad"/> and <see cref="OnUpdate(float)"/> and you're set.
     /// </summary>
     public class AsterionGame : IDisposable
     {
@@ -51,8 +52,17 @@ namespace Asterion
         public Color BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; GL.ClearColor(value); } }
         private Color _backgroundColor = Color.Black;
 
-        private float TileScale = 1.0f;
-        private Position TileOffset = Position.Zero;
+        /// <summary>
+        /// Scale of the tiles at the current window size.
+        /// Automatically updated when the game window is resized.
+        /// </summary>
+        public float TileScale { get; private set; } = 1.0f;
+
+        /// <summary>
+        /// Offset between the upper-left corner of the game window and the upper-leftmost tile.
+        /// Automatically updated when the game window is resized.
+        /// </summary>
+        public Position TileOffset { get; private set; } = Position.Zero;
 
         private TileShader Shader = null;
         private readonly TilemapTexture[] Tilemaps = new TilemapTexture[TILEMAP_COUNT];
@@ -83,7 +93,7 @@ namespace Asterion
         public GameWindowBorder WindowBorder { get { return (GameWindowBorder)OpenTKWindow.WindowBorder; } set { OpenTKWindow.WindowBorder = (WindowBorder)value; } }
 
         /// <summary>
-        /// Window state.
+        /// State of the game window.
         /// </summary>
         public GameWindowState WindowState { get { return (GameWindowState)OpenTKWindow.WindowState; } set { OpenTKWindow.WindowState = (WindowState)value; } }
 
@@ -128,15 +138,9 @@ namespace Asterion
         public SceneManager Scene { get; private set; } = null;
         public UIEnvironment UI { get; private set; } = null;
 
-        //public TileManager Tiles { get; private set; } = null;
         public InputManager Input { get; private set; } = null;
 
         public FileSystem Files { get; private set; } = null;
-
-        /// <summary>
-        /// Closes the game.
-        /// </summary>
-        public void Close() { OpenTKWindow.Close(); }
 
         public Dimension TileSize { get; } = Dimension.One;
         public Dimension TileCount { get; } = Dimension.One;
@@ -154,9 +158,9 @@ namespace Asterion
         {
             OpenTKWindow = new OpenTKWindow(this) { Title = "Asterion Engine" };
 
-            TileSize = tileSize;
-            TileCount = tileCount;
-            TilemapSize = tilemapSize;
+            TileSize = new Dimension(Math.Max(1, tileSize.Width), Math.Max(1, tileSize.Height));
+            TileCount = new Dimension(Math.Max(1, tileCount.Width), Math.Max(1, tileCount.Height));
+            TilemapSize = new Dimension(Math.Max(1, tilemapSize.Width), Math.Max(1, tilemapSize.Height));
 
             Files = new FileSystem();
 
@@ -311,5 +315,10 @@ namespace Asterion
 
             OnDispose();
         }
+
+        /// <summary>
+        /// Closes the game.
+        /// </summary>
+        public void Close() { OpenTKWindow.Close(); }
     }
 }
