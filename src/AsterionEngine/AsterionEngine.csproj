@@ -71,7 +71,7 @@
     <Compile Include="OpenTKWindow.cs" />
     <Compile Include="AsterionGame.cs" />
     <Compile Include="Audio\AudioPlayer.cs" />
-    <Compile Include="Audio\AudioPlayerSource.cs" />
+    <Compile Include="Audio\AudioPlayerSound.cs" />
     <Compile Include="GameWindowBorder.cs" />
     <Compile Include="GameWindowState.cs" />
     <Compile Include="Dimension.cs" />
