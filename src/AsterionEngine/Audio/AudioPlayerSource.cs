@@ -21,45 +21,74 @@ using System.IO;
 
 namespace Asterion.Audio
 {
-    internal struct AudioPlayerSource : IDisposable
+    /// <summary>
+    /// (Internal) Creates and stores an OpenAL sound source from a PCM Wave file.
+    /// </summary>
+    internal class AudioPlayerSource : IDisposable
     {
-        internal readonly int Source;
-        internal readonly int Buffer;
+        /// <summary>
+        /// (Internal) OpenAL source handle.
+        /// </summary>
+        internal int Source { get; private set; }
 
-        internal readonly bool IsValid;
+        /// <summary>
+        /// (Internal) OpenAL buffer handle.
+        /// </summary>
+        internal int Buffer { get; private set; }
 
-        internal AudioPlayerSource(byte[] soundFileBytes)
+        /// <summary>
+        /// (Internal) Does this sound source contains valid data?
+        /// </summary>
+        internal bool IsValid { get; private set; }
+
+        /// <summary>
+        /// (Internal) Constructor.
+        /// </summary>
+        /// <param name="waveFileBytes">Bytes for a PCM Wave file to use for this sound</param>
+        internal AudioPlayerSource(byte[] waveFileBytes)
         {
             Buffer = AL.GenBuffer();
             Source = AL.GenSource();
-            IsValid = false;
+            IsValid = true;
 
-            using (MemoryStream ms = new MemoryStream(soundFileBytes))
+            using (MemoryStream ms = new MemoryStream(waveFileBytes))
             {
-                byte[] soundData = LoadWave(ms, out int channels, out int bits_per_sample, out int sample_rate, out IsValid);
+                byte[] soundData = LoadWave(ms, out int channels, out int bitsPerSample, out int sampleRate);
+                if (soundData == null) { IsValid = false; Dispose(); return; }
 
-                AL.BufferData(Buffer, GetSoundFormat(channels, bits_per_sample), soundData, soundData.Length, sample_rate);
+                ALFormat? soundFormat = GetSoundFormat(channels, bitsPerSample);
+                if (!soundFormat.HasValue) { IsValid = false; Dispose(); return; }
+
+                AL.BufferData(Buffer, soundFormat.Value, soundData, soundData.Length, sampleRate);
             }
         }
 
-        private byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate, out bool isValid)
+        /// <summary>
+        /// (Private) Loads sound data from a PCM Wave file, using the file header to interpret the raw bytes.
+        /// </summary>
+        /// <param name="stream">Stream containing the raw bytes from a PCM Wave file</param>
+        /// <param name="channels">Number of channels</param>
+        /// <param name="bits">Number of bits per sample</param>
+        /// <param name="rate">Sample rate</param>
+        /// <returns>Sound data as a byte array, or null if data was invalid.</returns>
+        private byte[] LoadWave(Stream stream, out int channels, out int bits, out int rate)
         {
-            isValid = true; channels = 1; bits = 16; rate = 11025;
+            channels = 1; bits = 16; rate = 11025;
 
-            if (stream == null) { isValid = false; return new byte[0]; }
+            if (stream == null) return null;
 
             using (BinaryReader reader = new BinaryReader(stream))
             {
                 string signature = new string(reader.ReadChars(4));
-                if (signature != "RIFF") { isValid = false; return new byte[0]; }
+                if (signature != "RIFF") return null;
 
                 int riff_chunck_size = reader.ReadInt32();
 
                 string format = new string(reader.ReadChars(4));
-                if (format != "WAVE") { isValid = false; return new byte[0]; }
+                if (format != "WAVE") return null;
 
                 string format_signature = new string(reader.ReadChars(4));
-                if (format_signature != "fmt ") { isValid = false; return new byte[0]; }
+                if (format_signature != "fmt ") return null;
 
                 int format_chunk_size = reader.ReadInt32();
                 int audio_format = reader.ReadInt16();
@@ -70,7 +99,7 @@ namespace Asterion.Audio
                 int bits_per_sample = reader.ReadInt16();
 
                 string data_signature = new string(reader.ReadChars(4));
-                if (data_signature != "data") { isValid = false; return new byte[0]; }
+                if (data_signature != "data") return null;
 
                 int data_chunk_size = reader.ReadInt32();
 
@@ -82,16 +111,33 @@ namespace Asterion.Audio
             }
         }
 
-        private ALFormat GetSoundFormat(int channels, int bits)
+        /// <summary>
+        /// (Private, static) Converts a channels/bits per sample combination into a value from the ALFormat enum.
+        /// </summary>
+        /// <param name="channels">Number of channels</param>
+        /// <param name="bits">Number of bits per sample</param>
+        /// <returns>An ALFormat value, or null if the channels/bits combination isn't valid</returns>
+        private static ALFormat? GetSoundFormat(int channels, int bits)
         {
             switch (channels)
             {
                 case 1: return bits == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
                 case 2: return bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
-                default: throw new NotSupportedException("The specified sound format is not supported.");
+                default: return null;
             }
         }
 
+        /// <summary>
+        /// Stops the sound if it is playing.
+        /// </summary>
+        public void Stop()
+        {
+            AL.SourceStop(Source);
+        }
+
+        /// <summary>
+        /// IDispose implementation. Stops the sound and frees the OpenAL source/buffer handles.
+        /// </summary>
         public void Dispose()
         {
             AL.SourceStop(Source);
