@@ -61,8 +61,7 @@ namespace Asterion.IO
         public override byte[] GetFile(string file)
         {
             string fileWithPath = MakeFilePath(file);
-            if (!FileExists(fileWithPath)) return null;
-
+            if (!File.Exists(fileWithPath)) return null;
             return File.ReadAllBytes(fileWithPath);
         }
 

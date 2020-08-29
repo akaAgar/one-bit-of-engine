@@ -95,8 +95,9 @@ namespace Asterion.IO
         /// <returns>A stream if the file exists, null otherwise</returns>
         public Stream GetFileAsStream(string file)
         {
-            if (!Source.FileExists(file)) return null;
-            return new MemoryStream(Source.GetFile(file));
+            byte[] buffer = Source.GetFile(file);
+            if (buffer == null) return null;
+            return new MemoryStream(buffer);
         }
 
         /// <summary>
