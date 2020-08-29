@@ -15,6 +15,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+using Asterion.IO;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using System;
@@ -31,30 +32,32 @@ namespace Asterion.Audio
         private readonly AudioContext Context = null;
         private readonly Dictionary<string, AudioPlayerSource> SoundCache = new Dictionary<string, AudioPlayerSource>(StringComparer.InvariantCultureIgnoreCase);
 
+        private readonly FileSystem Files;
+
         /// <summary>
         /// Constructor.
         /// </summary>
-        internal AudioPlayer()
+        internal AudioPlayer(FileSystem files)
         {
+            Files = files;
             Context = new AudioContext();
         }
 
-        public bool PlaySound(string internalName, string waveFilePath, float volume = 1.0f, float pitch = 1.0f)
+        public bool PlaySound(string file, float volume = 1.0f, float pitch = 1.0f)
         {
-            if (string.IsNullOrEmpty(waveFilePath) || !File.Exists(waveFilePath)) return false;
-            return PlaySound(internalName, File.ReadAllBytes(waveFilePath), volume, pitch);
-        }
+            if (string.IsNullOrEmpty(file)) return false;
 
-        public bool PlaySound(string internalName, byte[] waveFileBytes, float volume = 1.0f, float pitch = 1.0f)
-        {
-            if (!SoundCache.ContainsKey(internalName))
+            if (!SoundCache.ContainsKey(file))
             {
+                byte[] waveFileBytes = Files.GetFile(file);
+                if (waveFileBytes == null) return false;
+
                 AudioPlayerSource source = new AudioPlayerSource(waveFileBytes);
                 if (!source.IsValid) return false;
-                SoundCache.Add(internalName, source);
+                SoundCache.Add(file, source);
             }
 
-            AudioPlayerSource sound = SoundCache[internalName];
+            AudioPlayerSource sound = SoundCache[file];
 
             AL.Source(sound.Source, ALSourcef.Gain, Math.Max(0.0f, Math.Min(10.0f, volume)));
             AL.Source(sound.Source, ALSourcef.Pitch, Math.Max(0.01f, Math.Min(10.0f, pitch)));
