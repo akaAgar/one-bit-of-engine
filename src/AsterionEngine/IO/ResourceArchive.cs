@@ -25,21 +25,21 @@ using System.Text;
 
 namespace Asterion.IO
 {
-/// <summary>
-/// Provides a class to read and store various resources to be used in your game in an encrypted archive file. Basically an encrypted WAD (as in "Doom WAD") file.
-/// </summary>
-    public sealed class ResourceArchive : IDisposable
+    /// <summary>
+    /// Provides a class to read and store various resources to be used in your game in an encrypted archive file. Basically an encrypted WAD (as in "Doom WAD") file.
+    /// </summary>
+    internal sealed class ResourceArchive
     {
         /// <summary>
         /// Maximul length of an entry name.
         /// </summary>
-        public const int MAX_ENTRY_NAME_LENGTH = 32;
+        internal const int MAX_ENTRY_NAME_LENGTH = 32;
 
         /// <summary>
         /// Length of each entry in the index.
         /// </summary>
         private const int INDEX_ENTRY_LENGTH = MAX_ENTRY_NAME_LENGTH + 4; // name + int32 length
-        
+
         /// <summary>
         /// Index of all entries stored in the file.
         /// </summary>
@@ -48,12 +48,12 @@ namespace Asterion.IO
         /// <summary>
         /// Path to the archive file.
         /// </summary>
-        public string FilePath { get; private set; } = null;
+        internal string FilePath { get; private set; } = null;
 
         /// <summary>
         /// Password to the file, if any.
         /// </summary>
-        public string Password { get; private set; } = null;
+        internal string Password { get; private set; } = null;
 
         /// <summary>
         /// Bytes to use as salt for the password.
@@ -63,19 +63,19 @@ namespace Asterion.IO
         /// <summary>
         /// Is the file password protected?
         /// </summary>
-        public bool PasswordProtected { get { return !string.IsNullOrEmpty(Password); } }
+        internal bool PasswordProtected { get { return !string.IsNullOrEmpty(Password); } }
 
         /// <summary>
         /// Total number of entries in the archive file.
         /// </summary>
-        public int EntriesCount { get { return Index.Count; } }
+        internal int EntriesCount { get { return Index.Count; } }
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="filePath">Path to the archive file</param>
         /// <param name="password">Password, if any</param>
-        public ResourceArchive(string filePath, string password = null)
+        internal ResourceArchive(string filePath, string password = null)
         {
             FilePath = filePath;
 
@@ -110,14 +110,14 @@ namespace Asterion.IO
         /// </summary>
         /// <param name="entry">The entry</param>
         /// <returns>Bytes of the entry, or null if the entry doesn't exist.</returns>
-        public byte[] this[string entry] { get { return GetEntry(entry); } }
+        internal byte[] this[string entry] { get { return GetEntry(entry); } }
 
         /// <summary>
         /// Returns the bytes of an entry.
         /// </summary>
         /// <param name="entry">Name of the entry</param>
         /// <returns>Bytes of the entry, or null if the entry doesn't exist.</returns>
-        public byte[] GetEntry(string entry)
+        internal byte[] GetEntry(string entry)
         {
             entry = entry?.ToLowerInvariant();
             if (!EntryExists(entry)) return null;
@@ -141,7 +141,7 @@ namespace Asterion.IO
         /// </summary>
         /// <param name="entry">Name of the entry</param>
         /// <returns>A stream, or null if the entry doesn't exist.</returns>
-        public Stream GetEntryAsStream(string entry)
+        internal Stream GetEntryAsStream(string entry)
         {
             if (!EntryExists(entry)) return null;
 
@@ -153,7 +153,7 @@ namespace Asterion.IO
         /// </summary>
         /// <param name="entry">Name of the entry</param>
         /// <returns>An image, or null if the entry doesn't exist.</returns>
-        public Image GetEntryAsImage(string entry)
+        internal Image GetEntryAsImage(string entry)
         {
             byte[] bytes = GetEntry(entry);
             if (bytes == null) return null;
@@ -172,7 +172,7 @@ namespace Asterion.IO
         /// <param name="entry">Name of the entry</param>
         /// <param name="textEncoding">Text encoding to use, or UTF-8 if no encoding is provided</param>
         /// <returns>An string, or null if the entry doesn't exist.</returns>
-        public string GetEntryAsText(string entry, Encoding textEncoding = null)
+        internal string GetEntryAsText(string entry, Encoding textEncoding = null)
         {
             if (textEncoding == null) textEncoding = Encoding.UTF8;
             byte[] bytes = GetEntry(entry);
@@ -184,14 +184,14 @@ namespace Asterion.IO
         /// <summary>
         /// Array of all entries in the file.
         /// </summary>
-        public string[] Entries { get { return Index.Keys.ToArray(); } }
+        internal string[] Entries { get { return Index.Keys.ToArray(); } }
 
         /// <summary>
         /// Does the entry exist?
         /// </summary>
         /// <param name="entry">Name of the entry</param>
         /// <returns>True if the entry exists, false otherwise</returns>
-        public bool EntryExists(string entry)
+        internal bool EntryExists(string entry)
         {
             entry = entry?.ToLowerInvariant();
             return Index.ContainsKey(entry);
@@ -204,7 +204,7 @@ namespace Asterion.IO
         /// <param name="password">Password to use, if any</param>
         /// <param name="filesToInclude">An array of paths to the file which must be included</param>
         /// <returns>True if everything went well, false otherwise</returns>
-        public static bool CreateArchive(string archiveFilePath, string password = null, params string[] filesToInclude)
+        internal static bool CreateArchive(string archiveFilePath, string password = null, params string[] filesToInclude)
         {
             try
             {
@@ -313,8 +313,11 @@ namespace Asterion.IO
         }
 
         /// <summary>
-        /// IDispose implementation.
+        /// Pseudo IDispose implementation
         /// </summary>
-        public void Dispose() { }
+        internal void Dispose()
+        {
+
+        }
     }
 }
