@@ -20,26 +20,26 @@ using System;
 namespace Asterion.IO
 {
     /// <summary>
-    /// Data for an index entry in the ResourceAchive class
+    /// (Internal) Data for an index entry in the FileSourceArchive class.
     /// </summary>
-    internal struct ResourceArchiveIndex
+    internal struct FileSourceArchiveIndex
     {
         /// <summary>
-        /// Offset (in bytes) from the beginning of the file at which the entry is stored.
+        /// (Internal) Offset (in bytes) from the beginning of the file at which the entry is stored.
         /// </summary>
-        internal readonly int Offset;
-        
-        /// <summary>
-        /// Length of the entry, in bytes.
-        /// </summary>
-        internal readonly int Length;
+        internal int Offset { get; private set; }
 
         /// <summary>
-        /// Constructor.
+        /// (Internal) Length of the entry, in bytes.
+        /// </summary>
+        internal int Length { get; private set; }
+
+        /// <summary>
+        /// (Internal) Constructor.
         /// </summary>
         /// <param name="offset">Offset (in bytes) from the beginning of the file at which the entry is stored</param>
         /// <param name="length">Length of the entry, in bytes</param>
-        internal ResourceArchiveIndex(int offset, int length)
+        internal FileSourceArchiveIndex(int offset, int length)
         {
             Offset = Math.Max(0, offset);
             Length = Math.Max(0, length);
