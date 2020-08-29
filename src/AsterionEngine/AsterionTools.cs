@@ -82,5 +82,10 @@ namespace Asterion
         {
             return RNG[useSeed ? 1 : 0].Next(minValue, maxValue);
         }
+
+        public static int EnumCount<T>() where T: Enum
+        {
+            return Enum.GetValues(typeof(T)).Length;
+        }
     }
 }
