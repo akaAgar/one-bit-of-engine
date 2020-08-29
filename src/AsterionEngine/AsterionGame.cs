@@ -305,7 +305,7 @@ namespace Asterion
             UI.Dispose();
             Scene.Dispose();
 
-            Audio.Dispose();
+            Audio.Destroy();
             OpenTKWindow.Dispose();
             Input.Dispose();
 
