@@ -17,6 +17,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using Asterion.Core;
 using OpenTK.Input;
+using System.Resources;
 using System.Security.Cryptography;
 using OTKMouseButton = OpenTK.Input.MouseButton;
 
@@ -31,6 +32,11 @@ namespace Asterion.Input
         /// Maximum number of gamepads.
         /// </summary>
         public const int MAX_GAMEPADS = 8;
+
+        /// <summary>
+        /// Maximum number of gamepads.
+        /// </summary>
+        public static readonly int MAX_GAMEPAD_BUTTONS = AsterionTools.EnumCount<GamePadButton>();
 
         /// <summary>
         /// (Private) Last gamepad states. Compared with the current gamepad states on each update to look for changes and raise events.
@@ -251,8 +257,8 @@ namespace Asterion.Input
         /// Checks the current status of a gamepad button on ANY of the current gamepads.
         /// </summary>
         /// <param name="button">The button</param>
-        /// <returns>True if the button is pressed on any gamepad, false if it is released</returns>
-        public bool IsAnyGamePadButtonDown(GamePadButton button)
+        /// <returns>True if the button is pressed on ANY gamepad, false otherwise</returns>
+        public bool IsGamePadButtonDownOnAnyGamePad(GamePadButton button)
         {
             for (int i = 0; i < MAX_GAMEPADS; i++)
                 if (IsGamePadButtonDown(i, button)) return true;
