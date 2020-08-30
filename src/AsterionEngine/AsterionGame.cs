@@ -131,10 +131,11 @@ namespace Asterion
             Files = new FileSystem();
             Renderer = new TileRenderer(Files, tileSize, tileCount, tilemapSize);
             Audio = new AudioPlayer(Files);
-            Input = new InputManager();
 
             UI = new UIEnvironment(this);
             Scene = new SceneManager(this);
+
+            Input = new InputManager(this);
         }
 
         /// <summary>
@@ -237,10 +238,10 @@ namespace Asterion
             Renderer.SetupFrame();
 
             GL.Disable(EnableCap.Blend);
-            UI.Render();
+            UI.OnRenderFrame();
             Scene.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
-            UI.Cursor.Render();
+            UI.Cursor.OnRenderFrame();
         }
 
         /// <summary>
@@ -248,7 +249,7 @@ namespace Asterion
         /// </summary>
         public void Dispose()
         {
-            UI.Dispose();
+            UI.Destroy();
             Scene.Dispose();
 
             Audio.Destroy();

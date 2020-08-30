@@ -132,7 +132,11 @@ namespace Asterion.Input
         /// <param name="control">Was the control modifier key down?</param>
         /// <param name="alt">Was the alt modifier key down?</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal void OnKeyDownInternal(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { OnKeyDown?.Invoke(key, shift, control, alt, isRepeat); }
+        internal void OnKeyDownInternal(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        {
+            Game.UI.OnKeyDown(key, shift, control, alt, isRepeat);
+            OnKeyDown?.Invoke(key, shift, control, alt, isRepeat);
+        }
 
         /// <summary>
         /// (Internal) Raises a OnKeyUp event.
@@ -171,10 +175,18 @@ namespace Asterion.Input
         internal void OnMouseWheelInternal(float wheelDelta) { OnMouseWheel?.Invoke(wheelDelta); }
 
         /// <summary>
+        /// (Private) The <see cref="AsterionGame"/> this <see cref="=InputManager"/> belongs to.
+        /// </summary>
+        private readonly AsterionGame Game;
+
+        /// <summary>
         /// (Internal) Constructor.
         /// </summary>
-        internal InputManager()
+        /// <param name="game">The <see cref="AsterionGame"/> this <see cref="=InputManager"/> belongs to</param>
+        internal InputManager(AsterionGame game)
         {
+            Game = game;
+
             for (int i = 0; i < MAX_GAMEPADS; i++)
                 LastGamepadState[i] = new GamePadState();
         }
