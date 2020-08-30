@@ -3,14 +3,46 @@ using Asterion.OpenGL;
 
 namespace Asterion.UI
 {
+    /// <summary>
+    /// A rectangular frame, s
+    /// </summary>
     public class UIFrame : UIControl
     {
-        public Dimension Size { get; set; } = Dimension.One;
+        /// <summary>
+        /// The tile to use for the frame.
+        /// Frame tile must follow one another on the tilemap (but can be on multiple rows) in this order:
+        /// upper-left corner, upper-right corner, lower-left corner, lower-right corner, top border, left border, bottom border, right border.
+        /// </summary>
+        public int FrameTile { get { return FrameTile_; } set { FrameTile_ = value; Page.UI.Invalidate(); } }
+        private int FrameTile_ = 0;
 
-        public bool Filled { get; set; } = false;
+        /// <summary>
+        /// Size of the control.
+        /// </summary>
+        public Dimension Size { get { return Size_; } set { Size_ = value; Page.UI.Invalidate(); } }
+        private Dimension Size_ = Dimension.One;
 
-        public int FillTile { get; set; } = 0;
+        /// <summary>
+        /// Width of the control.
+        /// </summary>
+        public int Width { get { return Size_.Width; } set { Size_ = new Dimension(value, Size_.Height); Page.UI.Invalidate(); } }
 
+        /// <summary>
+        /// Height of the control.
+        /// </summary>
+        public int Height { get { return Size_.Height; } set { Size_ = new Dimension(Size_.Width, value); Page.UI.Invalidate(); } }
+
+        /// <summary>
+        /// The tile to use to fill the frame background, or null if none.
+        /// If null, frame background will be transparent.
+        /// </summary>
+        public int? FillTile { get { return FillTile_; } set { FillTile_ = value; Page.UI.Invalidate(); } }
+        private int? FillTile_ = null;
+
+        /// <summary>
+        /// (Internal) Draws the control on the provided VBO.
+        /// </summary>
+        /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal override void UpdateVBOTiles(VBO vbo)
         {
             int x, y;
@@ -22,7 +54,7 @@ namespace Asterion.UI
             for (x = rect.Left; x < rect.Right; x++)
                 for (y = rect.Top; y < rect.Bottom; y++)
                 {
-                    frameTileIndex = TileID;
+                    frameTileIndex = FrameTile;
 
                     if (x == rect.Left)
                     {
@@ -38,8 +70,8 @@ namespace Asterion.UI
                     }
                     else if (y == rect.Top) frameTileIndex += 4;
                     else if (y == rect.Bottom - 1) frameTileIndex += 6;
-                    else if (Filled)
-                        frameTileIndex = FillTile;
+                    else if (FillTile.HasValue)
+                        frameTileIndex = FillTile.Value;
                     else
                         continue;
 
