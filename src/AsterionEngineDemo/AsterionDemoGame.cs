@@ -16,7 +16,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 */
 
 using Asterion.Core;
-using Asterion.Input;
+using Asterion.Demo.UIPages;
 using Asterion.Scene;
 
 namespace Asterion.Demo
@@ -37,8 +37,7 @@ namespace Asterion.Demo
         //public AsterionDemoGame() : base(new Size(16, 16), new Size(32, 18), new Size(512, 64)) { }
         public AsterionDemoGame() : base(new Dimension(16, 16), new Dimension(32, 18), new Dimension(512, 64)) { }
 
-
-        private Entity SkeletonEntity;
+        //private Entity SkeletonEntity;
 
         /// <summary>
         /// Positions of the various walls
@@ -62,9 +61,9 @@ namespace Asterion.Demo
                 UI.ShowPage<TestMenuPage>();
                 UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
 
-                Input.OnMouseMove += OnMouseMove;
-                Input.OnKeyDown += OnKeyDown;
-                Input.OnMouseDown += OnMouseDown;
+                //Input.OnMouseMove += OnMouseMove;
+                //Input.OnInputEvent += OnKeyDown;
+                //Input.OnMouseDown += OnMouseDown;
             }
             else
             {
@@ -91,35 +90,23 @@ namespace Asterion.Demo
             AdjustToTileScreenSize(2.0f);
         }
 
-        private void OnMouseDown(MouseButton button, Position? tile)
-        {
-            //if (TileBoard.FX.InProgress) return; // Cannot fire another fireball while the fireball animation is in progress
-            //if (button != MouseButton.Left) return; // Only the left button can be used to shoot fireballs
-
-            //TileBoard.FX.AddMovingFX("fireball", SkeletonPosition, position, 0.25f, (int)TileID.Fireball, Color.Orange);
-
-            //TileBoard.FX.AddStaticFX("fireballImpact", 0.1f,
-            //    new Point[] { position, Point.Add(position, new Size(1, 0)), Point.Add(position, new Size(-1, 0)), Point.Add(position, new Size(0, -1)), Point.Add(position, new Size(0, 1)) },
-            //    (int)TileID.FireballExplosion, Color.Orange, 3, 0);
-        }
-
-        private void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
-        {
-            //switch (key)
-            //{
-            //    case KeyCode.Up: SkeletonEntity.MoveBy(0, -1); break;
-            //    case KeyCode.Down: SkeletonEntity.MoveBy(0, 1); break;
-            //    case KeyCode.Left: SkeletonEntity.MoveBy(-1, 0); break;
-            //    case KeyCode.Right: SkeletonEntity.MoveBy(1, 0); break;
-            //    case KeyCode.F:
-            //        if (WindowState == GameWindowState.Normal)
-            //            WindowState = GameWindowState.Fullscreen;
-            //        else
-            //            WindowState = GameWindowState.Normal;
-            //        break;
-            //    case KeyCode.Escape: Close(); break;
-            //}
-        }
+        //private void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        //{
+        //    //switch (key)
+        //    //{
+        //    //    case KeyCode.Up: SkeletonEntity.MoveBy(0, -1); break;
+        //    //    case KeyCode.Down: SkeletonEntity.MoveBy(0, 1); break;
+        //    //    case KeyCode.Left: SkeletonEntity.MoveBy(-1, 0); break;
+        //    //    case KeyCode.Right: SkeletonEntity.MoveBy(1, 0); break;
+        //    //    case KeyCode.F:
+        //    //        if (WindowState == GameWindowState.Normal)
+        //    //            WindowState = GameWindowState.Fullscreen;
+        //    //        else
+        //    //            WindowState = GameWindowState.Normal;
+        //    //        break;
+        //    //    case KeyCode.Escape: Close(); break;
+        //    //}
+        //}
 
         /// <summary>
         /// Moves the cursor to the currently hovered tile.

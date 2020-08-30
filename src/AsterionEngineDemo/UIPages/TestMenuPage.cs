@@ -2,7 +2,7 @@
 using Asterion.UI;
 using Asterion.UI.Controls;
 
-namespace Asterion.Demo
+namespace Asterion.Demo.UIPages
 {
     public sealed class TestMenuPage : UIPage
     {
