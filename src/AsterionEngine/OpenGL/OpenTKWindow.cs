@@ -22,7 +22,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using System;
 
-namespace Asterion
+namespace Asterion.OpenGL
 {
     /// <summary>
     /// Internal implementation of OpenTK's GameWindow.
