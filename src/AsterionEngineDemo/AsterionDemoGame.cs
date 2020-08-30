@@ -105,20 +105,20 @@ namespace Asterion.Demo
 
         private void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
         {
-            switch (key)
-            {
-                case KeyCode.Up: SkeletonEntity.MoveBy(0, -1); break;
-                case KeyCode.Down: SkeletonEntity.MoveBy(0, 1); break;
-                case KeyCode.Left: SkeletonEntity.MoveBy(-1, 0); break;
-                case KeyCode.Right: SkeletonEntity.MoveBy(1, 0); break;
-                case KeyCode.F:
-                    if (WindowState == GameWindowState.Normal)
-                        WindowState = GameWindowState.Fullscreen;
-                    else
-                        WindowState = GameWindowState.Normal;
-                    break;
-                case KeyCode.Escape: Close(); break;
-            }
+            //switch (key)
+            //{
+            //    case KeyCode.Up: SkeletonEntity.MoveBy(0, -1); break;
+            //    case KeyCode.Down: SkeletonEntity.MoveBy(0, 1); break;
+            //    case KeyCode.Left: SkeletonEntity.MoveBy(-1, 0); break;
+            //    case KeyCode.Right: SkeletonEntity.MoveBy(1, 0); break;
+            //    case KeyCode.F:
+            //        if (WindowState == GameWindowState.Normal)
+            //            WindowState = GameWindowState.Fullscreen;
+            //        else
+            //            WindowState = GameWindowState.Normal;
+            //        break;
+            //    case KeyCode.Escape: Close(); break;
+            //}
         }
 
         /// <summary>

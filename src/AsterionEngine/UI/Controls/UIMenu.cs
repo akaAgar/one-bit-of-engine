@@ -1,6 +1,8 @@
 ﻿using Asterion.Core;
+using Asterion.Input;
 using Asterion.OpenGL;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Asterion.UI.Controls
 {
@@ -9,6 +11,13 @@ namespace Asterion.UI.Controls
     /// </summary>
     public class UIMenu : UIControl
     {
+        /// <summary>
+        /// UI Menu event
+        /// </summary>
+        /// <param name="selectedIndex">Index of the currently selected menu item</param>
+        /// <param name="selectedText">Text of the currently selected menu item</param>
+        public delegate void UIMenuEvent(int selectedIndex, string selectedText);
+
         /// <summary>
         /// (Private) Menu items
         /// </summary>
@@ -38,7 +47,10 @@ namespace Asterion.UI.Controls
         /// </summary>
         public int SelectedIndex { get { return SelectedIndex_; }
             set {
+                if (MenuItems.Count == 0) { SelectedIndex = 0; return; }
+
                 SelectedIndex_ = (MenuItems.Count > 0) ? AsterionTools.Clamp(value, 0, MenuItems.Count - 1) : 0;
+                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
                 Page.UI.Invalidate();
             }
         }
@@ -49,6 +61,37 @@ namespace Asterion.UI.Controls
         /// </summary>
         public int ItemsCount { get { return MenuItems.Count; } }
 
+        /// <summary>
+        /// An array of keys which, when pressed, will decrease this menu's selected item (aka move selection up).
+        /// </summary>
+        public KeyCode[] SelectionUpKeys { get; set; } = new KeyCode[] { KeyCode.Up };
+
+        /// <summary>
+        /// An array of keys which, when pressed, will increase this menu's selected item (aka move selection down).
+        /// </summary>
+        public KeyCode[] SelectionDownKeys { get; set; } = new KeyCode[] { KeyCode.Down };
+
+        /// <summary>
+        /// An array of keys which, when pressed, will raise an item validation event.
+        /// </summary>
+        public KeyCode[] ValidationKeys { get; set; } = new KeyCode[] { KeyCode.Space, KeyCode.Enter, KeyCode.KeypadEnter };
+
+        /// <summary>
+        /// If true, when the selected menu item reaches the top or the bottom of the list, it goes all the way to the other side.
+        /// If false, it stays there.
+        /// </summary>
+        public bool LoopItemSelection { get; set; } = true;
+
+        /// <summary>
+        /// Event raised when the selected menu item changes.
+        /// </summary>
+        public event UIMenuEvent OnSelectedItemChanged = null;
+
+        /// <summary>
+        /// Event raised when the selected menu item is validated.
+        /// </summary>
+        public event UIMenuEvent OnSelectedItemValidated = null;
+        
         /// <summary>
         /// Adds a new item to the menu.
         /// </summary>
@@ -74,14 +117,28 @@ namespace Asterion.UI.Controls
         }
 
         /// <summary>
-        /// Removes a menu item.
+        /// Removes a menu item. CAUTION: Will mess up the menu item indices.
         /// </summary>
         /// <param name="index">Index of the menu item to remove</param>
         public void RemoveMenuItem(int index)
         {
             if ((index < 0) || (index >= MenuItems.Count)) return;
             MenuItems.RemoveAt(index);
+            if (SelectedIndex_ >= MenuItems.Count)
+            {
+                SelectedIndex_ = MenuItems.Count - 1;
+                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+            }
+
             Page.UI.Invalidate();
+        }
+
+        /// <summary>
+        /// Raises a <see cref="OnSelectedItemValidated"/> event with the currently selected menu item.
+        /// </summary>
+        public void ValidateSelection()
+        {
+            OnSelectedItemValidated?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
         }
 
         /// <summary>
@@ -94,6 +151,38 @@ namespace Asterion.UI.Controls
                 DrawTextOnVBO(
                     vbo, MenuItems[i], Position.X, Position.Y + i, FontTile_,
                     (SelectedIndex == i) ? SelectedColor_ : Color);
+        }
+
+        /// <summary>
+        /// (Internal) Called whenever a key is pressed when this control is displayed.
+        /// </summary>
+        /// <param name="key">The key that raised the event</param>
+        /// <param name="shift">Was the shift modifier key down?</param>
+        /// <param name="control">Was the control modifier key down?</param>
+        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
+        internal override void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        {
+            if (MenuItems.Count == 0) return; // No menu items, no problems (and nothing to do)
+
+            if (SelectionUpKeys.Contains(key))
+            {
+                SelectedIndex_--;
+                if (SelectedIndex_ < 0) SelectedIndex_ = LoopItemSelection ? MenuItems.Count - 1 : 0;
+                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+                Page.UI.Invalidate();
+            }
+            else if (SelectionDownKeys.Contains(key))
+            {
+                SelectedIndex_++;
+                if (SelectedIndex_ >= MenuItems.Count) SelectedIndex_ = LoopItemSelection? 0 : MenuItems.Count - 1;
+                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+                Page.UI.Invalidate();
+            }
+            else if (ValidationKeys.Contains(key))
+            {
+                OnSelectedItemValidated?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+            }
         }
     }
 }
