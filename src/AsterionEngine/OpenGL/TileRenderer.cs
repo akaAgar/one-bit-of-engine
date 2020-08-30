@@ -14,14 +14,23 @@ namespace Asterion.OpenGL
     internal sealed class TileRenderer : IDisposable
     {
         /// <summary>
-        /// Maximum number of tilemaps
+        /// Maximum number of tilemaps.
         /// </summary>
-        public const int TILEMAP_COUNT = 4;
+        internal const int TILEMAP_COUNT = 4;
 
+        /// <summary>
+        /// The GLSL shader used to draw the tiles.
+        /// </summary>
         private TileShader Shader = null;
 
+        /// <summary>
+        /// An array of textures storing the tilemaps.
+        /// </summary>
         private readonly TilemapTexture[] Tilemaps = new TilemapTexture[TILEMAP_COUNT];
 
+        /// <summary>
+        /// Background color for the frame.
+        /// </summary>
         internal Color4 BackgroundColor { get; set; } = Color4.Black;
 
         /// <summary>
@@ -36,14 +45,32 @@ namespace Asterion.OpenGL
         /// </summary>
         private Position TileOffset = Position.Zero;
 
-        internal TileRenderer()
-        {
+        /// <summary>
+        /// Size of a each tile, in pixels.
+        /// </summary>
+        private readonly Dimension TileSize;
 
+        /// <summary>
+        /// Number of tiles on the tile board.
+        /// </summary>
+        private readonly Dimension TileCount;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="tileSize">Size of a each tile, in pixels.</param>
+        /// <param name="tileCount">Number of tiles on the tile board.</param>
+        internal TileRenderer(Dimension tileSize, Dimension tileCount)
+        {
+            TileSize = tileSize;
+            TileCount = tileCount;
         }
 
+        /// <summary>
+        /// Called before the first game loop.
+        /// </summary>
         internal void OnLoad()
         {
-            GL.ClearColor(BackgroundColor);
             GL.Enable(EnableCap.Texture2D);
             GL.Disable(EnableCap.DepthTest); // TODO: Remove?
             GL.Enable(EnableCap.Blend);
@@ -87,52 +114,66 @@ namespace Asterion.OpenGL
                 DestroyTileMap(i);
         }
 
-        internal void OnResize(AsterionGame game, int width, int height)
+        /// <summary>
+        /// Called each time the game window is resized, recomputes the scale and offset of the tiles.
+        /// </summary>
+        /// <param name="width">The width of the game window, in pixels</param>
+        /// <param name="height">The height of the game window, in pixels</param>
+        internal void OnResize(int width, int height)
         {
             GL.Viewport(0, 0, width, height);
 
             TileScale =
                 Math.Min((float)width /
-                (game.TileCount.Width * game.TileSize.Width), (float)height / (game.TileCount.Height * game.TileSize.Height));
+                (TileCount.Width * TileSize.Width), (float)height / (TileCount.Height * TileSize.Height));
 
             float resScale = (float)width / height;
-            float ratio = (float)(game.TileCount.Width * game.TileSize.Width) / (game.TileCount.Height * game.TileSize.Height);
-            RectangleF quad = new RectangleF(0, 0, game.TileCount.Width, game.TileCount.Height);
+            float ratio = (float)(TileCount.Width * TileSize.Width) / (TileCount.Height * TileSize.Height);
+            RectangleF quad = new RectangleF(0, 0, TileCount.Width, TileCount.Height);
 
             int tileOffsetX = 0, tileOffsetY = 0;
             if (resScale > ratio)
             {
                 quad.Width *= (resScale / ratio);
-                quad.X = (game.TileCount.Width - quad.Width) / 2;
-                tileOffsetX = (int)((width - (game.TileCount.Width * game.TileSize.Width * TileScale)) * .5f);
+                quad.X = (TileCount.Width - quad.Width) / 2;
+                tileOffsetX = (int)((width - (TileCount.Width * TileSize.Width * TileScale)) * .5f);
             }
             else
             {
                 quad.Height /= (resScale / ratio);
-                quad.Y = (game.TileCount.Height - quad.Height) / 2;
-                tileOffsetY = (int)((height - (game.TileCount.Height * game.TileSize.Height * TileScale)) * .5f);
+                quad.Y = (TileCount.Height - quad.Height) / 2;
+                tileOffsetY = (int)((height - (TileCount.Height * TileSize.Height * TileScale)) * .5f);
             }
             TileOffset = new Position(tileOffsetX, tileOffsetY);
 
             Shader.SetProjection(Matrix4.CreateOrthographicOffCenter(quad.Left, quad.Right, quad.Bottom, quad.Top, 0, 1));
         }
 
+        /// <summary>
+        /// Setups the rendering pipeline before rendering a new frame.
+        /// </summary>
         internal void SetupFrame()
         {
+            GL.ClearColor(BackgroundColor);
             Shader.Use();
 
             for (int i = 0; i < TILEMAP_COUNT; i++)
                 Tilemaps[i]?.Use(i);
         }
 
-        internal Position? GetTileFromMousePosition(AsterionGame game, Position mouse)
+        /// <summary>
+        /// Returns the coordinates of the tile currently hovered by the mouse cursor.
+        /// </summary>
+        /// <param name="mouse">The position of the cursor, in pixels from the top-left corner of the game window</param>
+        /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
+        internal Position? GetTileFromMousePosition(Position mouse)
         {
-            float tileX = (mouse.X - TileOffset.X) / (game.TileSize.Width * TileScale);
-            float tileY = (mouse.Y - TileOffset.Y) / (game.TileSize.Height * TileScale);
+            float tileX = (mouse.X - TileOffset.X) / (TileSize.Width * TileScale);
+            float tileY = (mouse.Y - TileOffset.Y) / (TileSize.Height * TileScale);
 
             if (
                 (tileX < 0) || (tileY < 0) ||
-                ((int)tileX >= game.TileCount.Width) || ((int)tileY >= game.TileCount.Height)
+                ((int)tileX >= TileCount.Width) || ((int)tileY >= TileCount.Height)
                 )
                 return null;
 

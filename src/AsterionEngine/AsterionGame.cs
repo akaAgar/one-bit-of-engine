@@ -84,7 +84,7 @@ namespace Asterion
 
         internal void OnResizeInternal()
         {
-            Renderer.OnResize(this, Width, Height);
+            Renderer.OnResize(Width, Height);
             OnResize(Width, Height);
         }
 
@@ -151,7 +151,7 @@ namespace Asterion
             TilemapCount = new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height);
 
             Files = new FileSystem();
-            Renderer = new TileRenderer();
+            Renderer = new TileRenderer(TileSize, TileCount);
             Audio = new AudioPlayer(Files);
             Input = new InputManager();
 
@@ -238,7 +238,7 @@ namespace Asterion
         /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
         public Position? GetTileFromMousePosition(int mouseX, int mouseY)
         {
-            return Renderer.GetTileFromMousePosition(this, new Position(mouseX, mouseY));
+            return Renderer.GetTileFromMousePosition(new Position(mouseX, mouseY));
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Asterion
         /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
         public Position? GetTileFromMousePosition(Position mouse)
         {
-            return Renderer.GetTileFromMousePosition(this, mouse);
+            return Renderer.GetTileFromMousePosition(mouse);
         }
 
         /// <summary>
