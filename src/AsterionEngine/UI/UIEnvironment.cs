@@ -1,73 +1,164 @@
-﻿using Asterion.Core;
+﻿/*
+==========================================================================
+This file is part of Asterion Engine, an OpenGL/OpenTK 1-bit graphic
+engine by @akaAgar (https://github.com/akaAgar/one-bit-of-engine)
+Asterion Engine is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+Asterion Engine is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with Asterion Engine. If not, see https://www.gnu.org/licenses/
+==========================================================================
+*/
+
+using Asterion.Core;
+using Asterion.Input;
 using Asterion.OpenGL;
+using System;
 
 namespace Asterion.UI
 {
+    /// <summary>
+    /// UIEnvironment. 
+    /// </summary>
     public sealed class UIEnvironment
     {
-        private UIPage Page = null;
+        /// <summary>
+        /// Is this UI currently active (aka "Is a menu page currently displayed?")
+        /// </summary>
+        public bool Active { get { return Page != null; } }
 
-        private VBO TilesVBO;
-
-        public bool InMenu { get { return Page != null; } }
-
+        /// <summary>
+        /// The Asterion game this UIEnvironment belongs to.
+        /// </summary>
         public AsterionGame Game { get; private set; }
 
+        /// <summary>
+        /// The cursor tile (not the mouse cursor)
+        /// </summary>
         public UICursor Cursor { get; private set; }
 
+        /// <summary>
+        /// (Private) The current displayed UIPage.
+        /// </summary>
+        private UIPage Page = null;
+
+        /// <summary>
+        /// (Private) The VBO used to draw this UI.
+        /// </summary>
+        private VBO UIVBO;
+
+        /// <summary>
+        /// Does the UI VBO requires an update?
+        /// </summary>
+        private bool Invalidated;
+
+        /// <summary>
+        /// (Internal) Constructor.
+        /// </summary>
+        /// <param name="game">The Asterion game this UIEnvironment belongs to</param>
         internal UIEnvironment(AsterionGame game)
         {
             Game = game;
             Cursor = new UICursor();
         }
 
+        /// <summary>
+        /// (Internal) Called before entering the main loop. Creates the UI and the Cursor VBOs.
+        /// </summary>
         internal void OnLoad()
         {
-            TilesVBO = new VBO(Game.Renderer, Game.Renderer.TileCount.Width, Game.Renderer.TileCount.Height);
-            Cursor.OnLoad(Game);
+            UIVBO = new VBO(Game.Renderer, Game.Renderer.TileCount.Width, Game.Renderer.TileCount.Height);
+            Cursor.OnLoad(Game.Renderer);
         }
 
+        /// <summary>
+        /// Displays a UIPage. If a page is already displayed, it is closed.
+        /// </summary>
+        /// <typeparam name="T">Type of page to display.</typeparam>
+        /// <param name="parameters">Parameters to pass the page will be handled by the <see cref="UIPage.OnInitialize(object[])"/> method.</param>
         public void ShowPage<T>(params object[] parameters) where T : UIPage, new()
         {
             ClosePage();
             Page = new T();
             Page.Initialize(this, parameters);
+            Invalidate();
         }
 
+        /// <summary>
+        /// Close the current UIPage.
+        /// </summary>
         public void ClosePage()
         {
             if (Page == null) return;
-            Page.Dispose();
+            Page.Destroy();
             Page = null;
+            Invalidate();
         }
 
-        internal void Dispose()
+        /// <summary>
+        /// Draws the current UIPage, if any.
+        /// </summary>
+        internal void OnRenderFrame()
         {
-            ClosePage();
+            if (Invalidated)
+            {
+                ClearTiles();
+                if (Active) Page.SetTiles(UIVBO);
+                Invalidated = false;
+            }
+
+            if (!Active) return;
+            UIVBO.Render();
         }
 
-        internal void Render()
+        /// <summary>
+        /// (Internal) Notifies the UI that its VBO needs to be redrawn. Should be called each time a page or control is changed.
+        /// </summary>
+        internal void Invalidate()
         {
-            if (!InMenu) return;
-
-            TilesVBO.Render();
+            Invalidated = true;
         }
 
-        internal void UpdateTiles()
-        {
-            ClearTiles();
-
-            if (InMenu)
-                Page.SetTiles(TilesVBO);
-        }
-
+        /// <summary>
+        /// (Private) Clears all tiles in the VBO.
+        /// </summary>
         private void ClearTiles()
         {
             int x, y;
 
             for (x = 0; x < Game.Renderer.TileCount.Width; x++)
                 for (y = 0; y < Game.Renderer.TileCount.Height; y++)
-                    TilesVBO.UpdateTileData(x, y, new Tile(0, RGBColor.Black));
+                    UIVBO.UpdateTileData(x, y, new Tile(0, RGBColor.Black));
+        }
+
+        /// <summary>
+        /// (Internal) Closes the UI, destroys the VBO and the cursor.
+        /// </summary>
+        internal void Destroy()
+        {
+            ClosePage();
+            UIVBO.Dispose();
+            Cursor.Destroy();
+        }
+
+        /// <summary>
+        /// (Internal) Called whenever a key is pressed down. Passes the key input to the current displayed page, if any.
+        /// </summary>
+        /// <param name="key">The key that raised the event</param>
+        /// <param name="shift">Was the shift modifier key down?</param>
+        /// <param name="control">Was the control modifier key down?</param>
+        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
+        internal void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        {
+            if (!Active) return;
+
+            Page.KeyDown(key, shift, control, alt, isRepeat);
         }
     }
 }
