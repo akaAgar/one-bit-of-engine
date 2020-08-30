@@ -40,16 +40,7 @@ namespace Asterion.UI
             string realText = Text_;
             if (MaxLength_ > 0) realText = Text.Substring(0, Math.Min(realText.Length, MaxLength_));
 
-            byte[] textBytes = Encoding.ASCII.GetBytes(realText);
-
-            for (int i = 0; i < textBytes.Length; i++)
-            {
-                if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
-
-                Tile charTile = new Tile(FontTile + textBytes[i] - 32, Color, Tilemap);
-
-                vbo.UpdateTileData(Position.X + i, Position.Y, charTile);
-            }
+            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_);
         }
     }
 }

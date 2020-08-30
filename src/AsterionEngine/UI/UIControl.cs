@@ -17,6 +17,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 using Asterion.Core;
 using Asterion.OpenGL;
+using System.Text;
 
 namespace Asterion.UI
 {
@@ -86,5 +87,21 @@ namespace Asterion.UI
         /// </summary>
         /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal abstract void UpdateVBOTiles(VBO vbo);
+
+        internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile)
+        {
+            if (string.IsNullOrEmpty(text)) return;
+
+            byte[] textBytes = Encoding.ASCII.GetBytes(text);
+
+            for (int i = 0; i < textBytes.Length; i++)
+            {
+                if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
+
+                Tile charTile = new Tile(tile + textBytes[i] - 32, Color, Tilemap);
+
+                vbo.UpdateTileData(x + i, y, charTile);
+            }
+        }
     }
 }
