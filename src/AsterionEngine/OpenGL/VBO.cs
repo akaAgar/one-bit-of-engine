@@ -20,65 +20,99 @@ using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
+using System.Drawing.Printing;
 
 namespace Asterion.OpenGL
 {
-    internal class VBO
+    /// <summary>
+    /// (Internal) A VertexBufferObject storing vertice data for a series of tiles.
+    /// </summary>
+    internal sealed class VBO : IDisposable
     {
-        protected const int SIZE_OF_FLOAT = sizeof(float);
-
-        protected const int FLOATS_PER_VERTEX = 8; // Vertex format is: x, y, r, g, b, u, v, tilemap
-        protected const int FLOATS_PER_TILE = FLOATS_PER_VERTEX * 4;
-        protected const int BYTES_PER_VERTEX = FLOATS_PER_VERTEX * SIZE_OF_FLOAT;
-        protected const int BYTES_PER_TILE = BYTES_PER_VERTEX * 4;
-
-        private readonly float UVWidth;
-        private readonly float UVHeight;
-        private readonly int TilemapCountX;
-
-        internal readonly int Handle;
+        /// <summary>
+        /// (Private) The memory size of a single-precision floating point number, in bytes.
+        /// </summary>
+        private const int SIZE_OF_FLOAT = sizeof(float);
 
         /// <summary>
-        /// Total number of floats (tiles × 4 × floats per vertex) in this VBO.
+        /// (Private) Number of floats per vertex.
+        /// Each vertex contains 8 floats, in this order: X,Y coordinates (2), R,G,B colors (3), U,V coordinates (2), and TILEMAP index (1).
+        /// </summary>
+        private const int FLOATS_PER_VERTEX = 8;
+
+        /// <summary>
+        /// (Private) Number of bytes per vertex. Basically FLOATS_PER_VERTEX × SIZE_OF_FLOAT.
+        /// </summary>
+        private const int BYTES_PER_VERTEX = FLOATS_PER_VERTEX * SIZE_OF_FLOAT;
+
+        /// <summary>
+        /// (Private) Number of bytes per tile. Equals to BYTES_PER_VERTEX × 4 because each tile, being a rectangle, consists of 4 vertices.
+        /// </summary>
+        private const int BYTES_PER_TILE = BYTES_PER_VERTEX * 4;
+
+        /// <summary>
+        /// (Private) OpenGL VBO Buffer handle.
+        /// </summary>
+        private readonly int Handle;
+
+        /// <summary>
+        /// (Internal) Total number of floats (<see cref="TileCount"/> × 4 × <see cref="FLOATS_PER_VERTEX"/>) in this VBO.
         /// </summary>
         internal int Length { get { return VertexCount * FLOATS_PER_VERTEX; } }
 
         /// <summary>
-        /// Total number of vertices (tiles × 4) in this VBO.
+        /// (Internal) Total number of vertices (<see cref="TileCount"/> × 4) in this VBO.
         /// </summary>
         internal int VertexCount { get { return TileCount * 4; } }
 
         /// <summary>
-        /// Total number of tiles in this VBO.
+        /// (Internal) Total number of tiles in this VBO. Always equalts to <see cref="Columns"/> × <see cref="Rows"/>.
         /// </summary>
-        internal int TileCount { get { return Width * Height; } }
+        internal int TileCount { get { return Columns * Rows; } }
 
-        internal int Width { get; private set; } = 0;
-        internal int Height { get; private set; } = 0;
+        /// <summary>
+        /// (Internal) Number of tile columns in this VBO.
+        /// </summary>
+        internal int Columns { get; private set; } = 0;
+        
+        /// <summary>
+        /// (Internal) Number of tile rows in this VBO.
+        /// </summary>
+        internal int Rows { get; private set; } = 0;
 
+        /// <summary>
+        /// (Private, static) Coordinates for all tile corners.
+        /// </summary>
         private static readonly PointF[] TILE_CORNERS = new PointF[] { new PointF(1, 0), new PointF(1, 1), new PointF(0, 1), new PointF(0, 0) };
 
-        //protected readonly TileBoard Screen;
+        /// <summary>
+        /// (Private) The tile renderer which will render these tiles.
+        /// </summary>
+        private readonly TileRenderer Renderer;
 
-        internal VBO(AsterionGame game, int width, int height)
+        /// <summary>
+        /// (Internal) Constructor.
+        /// </summary>
+        /// <param name="game">The tile renderer to use to render this VBO</param>
+        /// <param name="columns">Number of tile columns in this VBO</param>
+        /// <param name="rows">Number of tile rows in this VBO</param>
+        internal VBO(TileRenderer renderer, int columns, int rows)
         {
-            UVWidth = (float)game.TileSize.Width / game.TilemapSize.Width;
-            UVHeight = (float)game.TileSize.Height / game.TilemapSize.Height;
-            TilemapCountX = game.TilemapCount.Width;
+            Renderer = renderer;
 
             Handle = GL.GenBuffer();
-            CreateNewBuffer(width, height);
+            CreateNewBuffer(columns, rows);
         }
 
-        internal void CreateNewBuffer(Dimension dimension)
+        /// <summary>
+        /// (Internal) Creates a new buffer. Mostly used to resize the buffer. All data currently in the buffer will be lost.
+        /// </summary>
+        /// <param name="columns">Number of tile columns in this VBO</param>
+        /// <param name="rows">Number of tile rows in this VBO</param>
+        internal void CreateNewBuffer(int columns, int rows)
         {
-            CreateNewBuffer(dimension.Width, dimension.Height);
-        }
-
-        internal void CreateNewBuffer(int width, int height)
-        {
-            Width = Math.Max(1, width);
-            Height = Math.Max(1, height);
+            Columns = Math.Max(1, columns);
+            Rows = Math.Max(1, rows);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, Handle);
             GL.BufferData(BufferTarget.ArrayBuffer, SIZE_OF_FLOAT * Length, new float[Length], BufferUsageHint.DynamicDraw);
@@ -87,10 +121,10 @@ namespace Asterion.OpenGL
         internal void UpdateTileData(int x, int y, Tile tile) { UpdateTileData(x, y, x, y, tile); }
         internal void UpdateTileData(int x, int y, float xPos, float yPos, Tile tile)
         {
-            int index = y * Width + x;
+            int index = y * Columns + x;
 
-            int tileY = tile.TileIndex / TilemapCountX;
-            int tileX = tile.TileIndex - tileY * TilemapCountX;
+            int tileY = tile.TileIndex / Renderer.TilemapCount.Width;
+            int tileX = tile.TileIndex - tileY * Renderer.TilemapCount.Width;
 
             float[] vertexData = new float[FLOATS_PER_VERTEX * 4];
 
@@ -103,8 +137,8 @@ namespace Asterion.OpenGL
                         xPos + TILE_CORNERS[i].X,
                         yPos + TILE_CORNERS[i].Y,
                         color4.R, color4.G, color4.B,
-                        (tileX + TILE_CORNERS[i].X) * UVWidth,
-                        (tileY + TILE_CORNERS[i].Y) * UVHeight,
+                        (tileX + TILE_CORNERS[i].X) * Renderer.TileUV.Width,
+                        (tileY + TILE_CORNERS[i].Y) * Renderer.TileUV.Height,
                         tile.Tilemap
                     },
                     0, vertexData, FLOATS_PER_VERTEX * i, FLOATS_PER_VERTEX);
@@ -113,6 +147,9 @@ namespace Asterion.OpenGL
             GL.BufferSubData(BufferTarget.ArrayBuffer, (IntPtr)(index * BYTES_PER_TILE), BYTES_PER_TILE, vertexData);
         }
 
+        /// <summary>
+        /// (Internal) Draws the content of this VBO.
+        /// </summary>
         internal void Render()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, Handle);
@@ -123,7 +160,10 @@ namespace Asterion.OpenGL
             GL.DrawArrays(PrimitiveType.Quads, 0, VertexCount);
         }
 
-        internal virtual void Dispose()
+        /// <summary>
+        /// IDisposable implementation. Clears the data and deletes the OpenGL buffer handle to free memory.
+        /// </summary>
+        public void Dispose()
         {
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.DeleteBuffer(Handle);

@@ -26,24 +26,52 @@ using WindowsPixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Asterion.OpenGL
 {
+    /// <summary>
+    /// (Internal) Stores .
+    /// </summary>
     internal sealed class TilemapTexture : IDisposable
     {
+        /// <summary>
+        /// (Private) OpenGL texture handle.
+        /// </summary>
         private readonly int Handle;
 
+        /// <summary>
+        /// (Internal) Is the texture valid?
+        /// </summary>
+        internal bool IsValid { get; } = false;
+
+        /// <summary>
+        /// (Internal) Constructor.
+        /// </summary>
+        /// <param name="imageStream">A stream containing data for the System.Drawing.Image to use as a texture.</param>
         internal TilemapTexture(Stream imageStream)
         {
+            IsValid = true;
             Handle = GL.GenTexture();
-            using (Bitmap bitmap = new Bitmap(imageStream)) { LoadImage(bitmap); }
+
+            try
+            {
+                if (imageStream == null)
+                    LoadImage(null);
+                else
+                    using (Bitmap bitmap = new Bitmap(imageStream))
+                    {
+                        LoadImage(bitmap);
+                    }
+            }
+            catch (Exception)
+            {
+                IsValid = false;
+                GL.BindTexture(TextureTarget.Texture2D, 0);
+                GL.DeleteTexture(Handle);
+            }
         }
 
-        public TilemapTexture(Image image) : this((Bitmap)image) { }
-
-        public TilemapTexture(Bitmap bitmap)
-        {
-            Handle = GL.GenTexture();
-            LoadImage(bitmap);
-        }
-
+        /// <summary>
+        /// (Private) Loads the texture into memory and binds the data to the OpenGL texture handle.
+        /// </summary>
+        /// <param name="bitmap">The bitmap to use as a texture</param>
         private void LoadImage(Bitmap bitmap)
         {
             GL.BindTexture(TextureTarget.Texture2D, Handle);
@@ -59,7 +87,7 @@ namespace Asterion.OpenGL
             else
             {
                 GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bitmap.Width, bitmap.Height, 0, OpenGLPixelFormat.Bgra, PixelType.UnsignedByte, IntPtr.Zero);
-                BitmapData bitmap_data = bitmap.LockBits(new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, WindowsPixelFormat.Format32bppArgb);
+                BitmapData bitmap_data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, WindowsPixelFormat.Format32bppArgb);
                 GL.TexSubImage2D(TextureTarget.Texture2D, 0, 0, 0, bitmap.Width, bitmap.Height, OpenGLPixelFormat.Bgra, PixelType.UnsignedByte, bitmap_data.Scan0);
                 bitmap.UnlockBits(bitmap_data);
             }
@@ -67,14 +95,23 @@ namespace Asterion.OpenGL
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
 
+        /// <summary>
+        /// (Internal) Binds the texture to the provided OpenGL texture index.
+        /// </summary>
+        /// <param name="textureIndex">OpenGL texture index to which the texture should be bound</param>
         internal void Use(int textureIndex)
         {
             GL.ActiveTexture(TextureUnit.Texture0 + textureIndex);
             GL.BindTexture(TextureTarget.Texture2D, Handle);
         }
 
+        /// <summary>
+        /// IDisposable implementation. Deletes the texture to free memory.
+        /// </summary>
         public void Dispose()
         {
+            if (!IsValid) return;
+
             GL.BindTexture(TextureTarget.Texture2D, 0);
             GL.DeleteTexture(Handle);
         }
