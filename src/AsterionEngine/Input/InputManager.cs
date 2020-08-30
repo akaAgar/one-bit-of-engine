@@ -52,7 +52,7 @@ namespace Asterion.Input
         /// <summary>
         /// Maximum number of gamepads.
         /// </summary>
-        private const int GAMEPADS_COUNT = 4;
+        public const int GAMEPADS_COUNT = 4;
 
         /// <summary>
         /// Should gamepads be enabled. If false, no gamepad events will be raised and all gamepad-related methods will return default values.

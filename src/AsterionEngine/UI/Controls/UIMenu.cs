@@ -1,6 +1,7 @@
 ﻿using Asterion.Core;
 using Asterion.Input;
 using Asterion.OpenGL;
+using OpenTK.Input;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -64,17 +65,17 @@ namespace Asterion.UI.Controls
         /// <summary>
         /// An array of keys which, when pressed, will decrease this menu's selected item (aka move selection up).
         /// </summary>
-        public KeyCode[] SelectionUpKeys { get; set; } = new KeyCode[] { KeyCode.Up };
+        public KeyCode[] SelectionUpKeys { get; set; } = new KeyCode[] { KeyCode.Up, KeyCode.GamepadDPadUp, KeyCode.GamepadLeftStickUp, KeyCode.GamepadRightStickUp };
 
         /// <summary>
         /// An array of keys which, when pressed, will increase this menu's selected item (aka move selection down).
         /// </summary>
-        public KeyCode[] SelectionDownKeys { get; set; } = new KeyCode[] { KeyCode.Down };
+        public KeyCode[] SelectionDownKeys { get; set; } = new KeyCode[] { KeyCode.Down, KeyCode.GamepadDPadDown, KeyCode.GamepadLeftStickDown, KeyCode.GamepadRightStickDown };
 
         /// <summary>
         /// An array of keys which, when pressed, will raise an item validation event.
         /// </summary>
-        public KeyCode[] ValidationKeys { get; set; } = new KeyCode[] { KeyCode.Space, KeyCode.Enter, KeyCode.KeypadEnter };
+        public KeyCode[] ValidationKeys { get; set; } = new KeyCode[] { KeyCode.Space, KeyCode.Enter, KeyCode.KeypadEnter, KeyCode.GamepadA, KeyCode.GamepadX, KeyCode.GamepadY, KeyCode.GamepadLeftTrigger, KeyCode.GamepadRightTrigger };
 
         /// <summary>
         /// If true, when the selected menu item reaches the top or the bottom of the list, it goes all the way to the other side.
@@ -91,7 +92,12 @@ namespace Asterion.UI.Controls
         /// Event raised when the selected menu item is validated.
         /// </summary>
         public event UIMenuEvent OnSelectedItemValidated = null;
-        
+
+        /// <summary>
+        /// Are keyboard/gamepad input events enabled for this control?
+        /// </summary>
+        public override bool InputEnabled { get; set; } = true;
+
         /// <summary>
         /// Adds a new item to the menu.
         /// </summary>
@@ -154,13 +160,13 @@ namespace Asterion.UI.Controls
         }
 
         /// <summary>
-        /// (Internal) Called whenever a key is pressed when this control is displayed.
+        /// (Internal) Called whenever an input event is raised when this control is displayed.
         /// </summary>
         /// <param name="key">The key or gamepad button that raised the event</param>
         /// <param name="modifiers">Which modifier keys are down?</param>
         /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal override void OnKeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
+        internal override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
             if (MenuItems.Count == 0) return; // No menu items, no problems (and nothing to do)
 

@@ -156,7 +156,7 @@ namespace Asterion.UI
         {
             if (!Active) return;
 
-            Page.KeyDown(key, modifiers, gamepadIndex, isRepeat);
+            Page.OnInputEventInternal(key, modifiers, gamepadIndex, isRepeat);
         }
     }
 }

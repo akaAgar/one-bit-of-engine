@@ -18,6 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 using Asterion.Core;
 using Asterion.Input;
 using Asterion.OpenGL;
+using System.Linq;
 using System.Text;
 
 namespace Asterion.UI.Controls
@@ -89,6 +90,25 @@ namespace Asterion.UI.Controls
         /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal abstract void UpdateVBOTiles(VBO vbo);
 
+        /// <summary>
+        /// Are keyboard/gamepad input events enabled for this control?
+        /// </summary>
+        public virtual bool InputEnabled { get; set; } = false;
+
+        /// <summary>
+        /// Only gamepad with an index featured in this array will be able to raise input events for this control.
+        /// </summary>
+        public int[] AllowedGamepads { get; set; } = Enumerable.Range(0, InputManager.GAMEPADS_COUNT).ToArray();
+
+        /// <summary>
+        /// Draws font tiles on the provided VBO.
+        /// </summary>
+        /// <param name="vbo">VBO on which to draw</param>
+        /// <param name="text">Text to draw</param>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="tile">Font tile to use</param>
+        /// <param name="color">Text color</param>
         internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile, RGBColor color)
         {
             if (string.IsNullOrEmpty(text)) return;
@@ -106,13 +126,13 @@ namespace Asterion.UI.Controls
         }
 
         /// <summary>
-        /// (Internal) Called whenever a key is pressed when this control is displayed.
+        /// (Internal) Called whenever an input event is raised when this control is displayed.
         /// </summary>
         /// <param name="key">The key or gamepad button that raised the event</param>
         /// <param name="modifiers">Which modifier keys are down?</param>
         /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal virtual void OnKeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
+        internal virtual void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
 
         }

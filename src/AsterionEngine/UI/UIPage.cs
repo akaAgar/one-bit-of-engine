@@ -181,28 +181,32 @@ namespace Asterion.UI
         protected virtual void OnInitialize(object[] parameters) {  }
 
         /// <summary>
-        /// (Protected) Called whenever a key is pressed when this page is displayed.
+        /// (Protected) Called whenever an input event is while when this page is displayed.
         /// UIPage.OnKeyDown does nothing, so there's not need to call base.OnKeyDown.
         /// </summary>
         /// <param name="key">The key or gamepad button that raised the event</param>
         /// <param name="modifiers">Which modifier keys are down?</param>
         /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        protected virtual void OnKeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat) { }
+        protected virtual void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat) { }
 
         /// <summary>
-        /// (Internal) Called whenever a key is pressed when this page is displayed.
+        /// (Internal) Called whenever an input event is raised while this page is displayed.
         /// </summary>
         /// <param name="key">The key or gamepad button that raised the event</param>
         /// <param name="modifiers">Which modifier keys are down?</param>
         /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal void KeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
+        internal void OnInputEventInternal(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
             foreach (UIControl c in Controls)
-                c.OnKeyDown(key, modifiers, gamepadIndex, isRepeat);
+            {
+                if (!c.InputEnabled) continue;
+                if ((gamepadIndex >= 0) && (!c.AllowedGamepads.Contains(gamepadIndex))) continue;
+                c.OnInputEvent(key, modifiers, gamepadIndex, isRepeat);
+            }
 
-            OnKeyDown(key, modifiers, gamepadIndex, isRepeat);
+            OnInputEvent(key, modifiers, gamepadIndex, isRepeat);
         }
 
         /// <summary>
