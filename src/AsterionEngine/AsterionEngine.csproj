@@ -64,6 +64,7 @@
     <Compile Include="UI\UIControlRectangle.cs" />
     <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\UIFrame.cs" />
+    <Compile Include="UI\UIMenu.cs" />
     <Compile Include="UI\UITileBoard.cs" />
     <Compile Include="UI\UITextBox.cs" />
     <Compile Include="UI\UILabel.cs" />
