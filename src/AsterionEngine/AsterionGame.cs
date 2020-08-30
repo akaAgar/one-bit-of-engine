@@ -131,29 +131,56 @@ namespace Asterion
         }
 
         /// <summary>
-        /// Internal OpenTK window.
+        /// (Internal) OpenTK window.
         /// </summary>
         private readonly OpenTKWindow OpenTKWindow = null;
 
+        /// <summary>
+        /// Scene manager, used to draw the game world.
+        /// </summary>
         public SceneManager Scene { get; private set; } = null;
+        
+        /// <summary>
+        /// UI Environment, draws menus and UI controls.
+        /// </summary>
         public UIEnvironment UI { get; private set; } = null;
 
+        /// <summary>
+        /// Input manager. Handles keyboard, mouse and gamepad events.
+        /// </summary>
         public InputManager Input { get; private set; } = null;
 
+        /// <summary>
+        /// File system. Loads files from a folder or an archive.
+        /// </summary>
         public FileSystem Files { get; private set; } = null;
 
+        /// <summary>
+        /// Size of a each tile, in pixels.
+        /// </summary>
         public Dimension TileSize { get; } = Dimension.One;
-        public Dimension TileCount { get; } = Dimension.One;
-        public Dimension TilemapSize { get; } = Dimension.One;
-
-        public Dimension TilemapCount { get { return new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height); } }
 
         /// <summary>
-        /// Creates a new Asterion Engine game.
+        /// Number of tiles on the tile board.
+        /// </summary>
+        public Dimension TileCount { get; } = Dimension.One;
+
+        /// <summary>
+        /// Size of the tilemaps images to be loaded with <see cref="SetTilemap(int, string)"/>, in pixels.
+        /// </summary>
+        public Dimension TilemapSize { get; } = Dimension.One;
+
+        /// <summary>
+        /// Number of tiles on each tilemap.
+        /// </summary>
+        public Dimension TilemapCount { get; } = Dimension.Zero;
+
+        /// <summary>
+        /// Constructor.
         /// </summary>
         /// <param name="tileSize">Size of a each tile, in pixels.</param>
         /// <param name="tileCount">Number of tiles on the tile board.</param>
-        /// <param name="tilemapSize">Size of the tilemaps, in pixels.</param>
+        /// <param name="tilemapSize">Size of the tilemaps images to be loaded with <see cref="SetTilemap(int, string)"/>, in pixels.</param>
         public AsterionGame(Dimension tileSize, Dimension tileCount, Dimension tilemapSize)
         {
             OpenTKWindow = new OpenTKWindow(this) { Title = "Asterion Engine" };
@@ -161,11 +188,11 @@ namespace Asterion
             TileSize = new Dimension(Math.Max(1, tileSize.Width), Math.Max(1, tileSize.Height));
             TileCount = new Dimension(Math.Max(1, tileCount.Width), Math.Max(1, tileCount.Height));
             TilemapSize = new Dimension(Math.Max(1, tilemapSize.Width), Math.Max(1, tilemapSize.Height));
+            TilemapCount = new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height);
 
             Files = new FileSystem();
 
             Audio = new AudioPlayer(Files);
-            //Tiles = new TileManager(this, tileSize, tileCount, tilemapSize);
             Input = new InputManager();
 
             UI = new UIEnvironment(this);
@@ -193,7 +220,7 @@ namespace Asterion
         }
 
         /// <summary>
-        /// Internal OnUpdate method, called on each album cycle.
+        /// (Internal) Internal OnUpdate method, called on each update cycle.
         /// </summary>
         /// <param name="elapsedSeconds">Number of seconds elapsed since the last update.</param>
         internal void OnUpdateInternal(float elapsedSeconds)
@@ -227,32 +254,51 @@ namespace Asterion
         }
 
         /// <summary>
-        /// Called after the OpenGL context has been established, but before entering the main loop.
+        /// (Protected) Called just before the first update of the main loop.
+        /// Override with your initialization logic.
         /// </summary>
         protected virtual void OnLoad() { }
 
         /// <summary>
-        /// Called when this window is resized.
+        /// (Protected) Called when the game window is resized.
         /// </summary>
         /// <param name="width">The new width of the game window.</param>
         /// <param name="height">The new height of the game window.</param>
         protected virtual void OnResize(int width, int height) { }
 
         /// <summary>
-        /// Called when the frame is updated.
+        /// (Protected) Called on each frame update.
+        /// Override with your main loop logic.
         /// </summary>
         /// <param name="elapsedSeconds">How many seconds since the last frame?</param>
         protected virtual void OnUpdate(float elapsedSeconds) { }
 
         /// <summary>
-        /// Called when the game is disposed.
+        /// (Protected) Called when the game is disposed.
+        /// Override with your closing/finalization logic.
         /// </summary>
         protected virtual void OnDispose() { }
 
+        /// <summary>
+        /// Returns the coordinates of the tile currently hovered by the mouse cursor.
+        /// </summary>
+        /// <param name="mouseX">The X position of the cursor, in pixels from the left of the game window</param>
+        /// <param name="mouseY">The Y position of the cursor, in pixels from the top of the game window</param>
+        /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
         public Position? GetTileFromMousePosition(int mouseX, int mouseY)
         {
-            float tileX = (mouseX - TileOffset.X) / (TileSize.Width * TileScale);
-            float tileY = (mouseY - TileOffset.Y) / (TileSize.Height * TileScale);
+            return GetTileFromMousePosition(new Position(mouseX, mouseY));
+        }
+
+        /// <summary>
+        /// Returns the coordinates of the tile currently hovered by the mouse cursor.
+        /// </summary>
+        /// <param name="mouse">The position of the cursor, in pixels from the top-left corner of the game window</param>
+        /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
+        public Position? GetTileFromMousePosition(Position mouse)
+        {
+            float tileX = (mouse.X - TileOffset.X) / (TileSize.Width * TileScale);
+            float tileY = (mouse.Y - TileOffset.Y) / (TileSize.Height * TileScale);
 
             if (
                 (tileX < 0) || (tileY < 0) ||
@@ -263,6 +309,9 @@ namespace Asterion
             return new Position((int)tileX, (int)tileY);
         }
 
+        /// <summary>
+        /// (Internal) Called on each new frame, draws the frame.
+        /// </summary>
         internal void OnRenderFrame()
         {
             Shader.Use();
@@ -277,6 +326,12 @@ namespace Asterion
             UI.Cursor.Render();
         }
 
+        /// <summary>
+        /// Sets the tilemap
+        /// </summary>
+        /// <param name="index">Index of the tilemap to load, from 0 to <see cref="TILEMAP_COUNT"/></param>
+        /// <param name="file">The name of the image file, as it appears in this game's filesystem</param>
+        /// <returns></returns>
         public bool SetTilemap(int index, string file)
         {
             if ((index < 0) || (index >= TILEMAP_COUNT)) return false;
@@ -294,6 +349,10 @@ namespace Asterion
             return true;
         }
 
+        /// <summary>
+        /// (Private) Removes a tilemap from memory.
+        /// </summary>
+        /// <param name="index">Index of the tilemap to destroy, from 0 to <see cref="TILEMAP_COUNT"/></param>
         private void DestroyTileMap(int index)
         {
             if ((index < 0) || (index >= TILEMAP_COUNT)) return;
@@ -303,7 +362,7 @@ namespace Asterion
         }
 
         /// <summary>
-        /// IDispose implementation. Closes and destroys the game.
+        /// IDispose implementation.
         /// </summary>
         public void Dispose()
         {
@@ -317,7 +376,7 @@ namespace Asterion
         }
 
         /// <summary>
-        /// Closes the game.
+        /// Closes the game window.
         /// </summary>
         public void Close() { OpenTKWindow.Close(); }
     }
