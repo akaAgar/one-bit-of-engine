@@ -58,7 +58,7 @@ namespace Asterion.UI
         {
             if (!Dimension.Contains(x, y)) return;
             Tiles[x, y] = tile;
-            Page.UI.UpdateTiles();
+            Page.UI.Invalidate();
         }
 
         public void Clear(Tile tile)
@@ -69,7 +69,7 @@ namespace Asterion.UI
                 for (y = 0; y < Dimension.Height; y++)
                     Tiles[x, y] = tile;
 
-            Page.UI.UpdateTiles();
+            Page.UI.Invalidate();
         }
 
         internal override void UpdateVBOTiles(VBO vbo)

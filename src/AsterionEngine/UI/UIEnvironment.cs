@@ -108,7 +108,7 @@ namespace Asterion.UI
             if (Invalidated)
             {
                 ClearTiles();
-                if (Active) Page.SetTiles(UIVBO);
+                if (Active) Page.DrawTiles(UIVBO);
                 Invalidated = false;
             }
 

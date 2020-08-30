@@ -53,6 +53,11 @@ namespace Asterion.UI
         /// </summary>
         public UIPage() { }
 
+        /// <summary>
+        /// Adds a new <see cref="UIControl"/> to the page's controls.
+        /// </summary>
+        /// <typeparam name="T">The type of <see cref="UIControl"/> to create</typeparam>
+        /// <returns>The new <see cref="UIControl"/></returns>
         protected T AddControl<T>() where T : UIControl, new()
         {
             T newControl = new T();
@@ -60,6 +65,18 @@ namespace Asterion.UI
             Controls.Add(newControl);
             UI.Invalidate();
             return newControl;
+        }
+
+        /// <summary>
+        /// Removes a control from the page. The control will be destroyed and should not be used anymore after it has been removed.
+        /// </summary>
+        /// <param name="control">The control to remove.</param>
+        protected void RemoveControl(UIControl control)
+        {
+            if (!Controls.Contains(control)) return;
+            Controls.Remove(control);
+            control.Destroy();
+            UI.Invalidate();
         }
 
         /// <summary>
@@ -105,15 +122,35 @@ namespace Asterion.UI
             OnKeyDown(key, shift, control, alt, isRepeat);
         }
 
-        internal void SetTiles(VBO vbo)
+        /// <summary>
+        /// (Internal) Draws the tiles of all controls on this page.
+        /// </summary>
+        /// <param name="vbo">The UI VBO on which the tiles must be drawn</param>
+        internal void DrawTiles(VBO vbo)
         {
-            // Order controls by Z-Order
-            Controls = Controls.OrderBy(x => x.ZOrder).ToList();
+            int x, y;
+            for (x = 0; x < vbo.Columns; x++)
+                for (y = 0; y < vbo.Rows; y++)
+                    vbo.UpdateTileData(x, y, BackgroundTile);
+            
+            Controls = Controls.OrderBy(c => c.ZOrder).ToList(); // Order controls by Z-Order
 
             foreach (UIControl control in Controls)
                 control.UpdateVBOTiles(vbo);
         }
 
-        internal void Destroy() { }
+        /// <summary>
+        /// (Protected) Called just before the page is closed.
+        /// UIPage.OnClose does nothing, so there's not need to call base.OnClose.
+        /// </summary>
+        protected virtual void OnClose() { }
+
+        /// <summary>
+        /// (Internal) Called just before the page is closed.
+        /// </summary>
+        internal void Destroy()
+        {
+            OnClose();
+        }
     }
 }
