@@ -19,7 +19,7 @@ using Asterion.Core;
 using Asterion.OpenGL;
 using System.Text;
 
-namespace Asterion.UI
+namespace Asterion.UI.Controls
 {
     /// <summary>
     /// An UIControl, Asterion.UI equivalent to a System.Windows.Forms control.

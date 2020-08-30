@@ -1,7 +1,7 @@
 ﻿using Asterion.Core;
 using Asterion.OpenGL;
 
-namespace Asterion.UI
+namespace Asterion.UI.Controls
 {
     public class UITileBoard : UIControl
     {

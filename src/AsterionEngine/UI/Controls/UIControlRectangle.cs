@@ -1,6 +1,6 @@
 ﻿using Asterion.Core;
 
-namespace Asterion.UI
+namespace Asterion.UI.Controls
 {
     /// <summary>
     /// A base abstract class for all rectangular controls (that is, controls with a width and an height).

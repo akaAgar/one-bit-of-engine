@@ -2,7 +2,7 @@
 using Asterion.OpenGL;
 using System.Collections.Generic;
 
-namespace Asterion.UI
+namespace Asterion.UI.Controls
 {
     /// <summary>
     /// A control offering a selection of items the user can scroll through and select.
@@ -16,7 +16,7 @@ namespace Asterion.UI
 
         /// <summary>
         /// The tile to use for this control's font.
-        /// Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.
+        /// Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.
         /// </summary>
         public int FontTile { get { return FontTile_; } set { FontTile_ = value; Page.UI.Invalidate(); } }
         private int FontTile_ = 0;
@@ -43,6 +43,46 @@ namespace Asterion.UI
             }
         }
         private int SelectedIndex_ = 0;
+
+        /// <summary>
+        /// Number of items in the menu
+        /// </summary>
+        public int ItemsCount { get { return MenuItems.Count; } }
+
+        /// <summary>
+        /// Adds a new item to the menu.
+        /// </summary>
+        /// <param name="text">Text of the new item</param>
+        /// <returns>The index of the new item</returns>
+        public int AddMenuItem(string text)
+        {
+            MenuItems.Add(text);
+            Page.UI.Invalidate();
+            return MenuItems.Count - 1;
+        }
+
+        /// <summary>
+        /// Changes the text of a menu item.
+        /// </summary>
+        /// <param name="index">Index of the menu item to change</param>
+        /// <param name="text">New text for the menu item</param>
+        public void ChangeMenuItemText(int index, string text)
+        {
+            if ((index < 0) || (index >= MenuItems.Count)) return;
+            MenuItems[index] = text;
+            Page.UI.Invalidate();
+        }
+
+        /// <summary>
+        /// Removes a menu item.
+        /// </summary>
+        /// <param name="index">Index of the menu item to remove</param>
+        public void RemoveMenuItem(int index)
+        {
+            if ((index < 0) || (index >= MenuItems.Count)) return;
+            MenuItems.RemoveAt(index);
+            Page.UI.Invalidate();
+        }
 
         /// <summary>
         /// (Internal) Draws the control on the provided VBO.

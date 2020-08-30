@@ -2,7 +2,7 @@
 using Asterion.OpenGL;
 using System;
 
-namespace Asterion.UI
+namespace Asterion.UI.Controls
 {
     /// <summary>
     /// A label control: a single line string of text
@@ -11,7 +11,7 @@ namespace Asterion.UI
     {
         /// <summary>
         /// The tile to use for this control's font.
-        /// Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.
+        /// Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.
         /// </summary>
         public int FontTile { get { return FontTile_; } set { FontTile_ = value; Page.UI.Invalidate(); } }
         private int FontTile_ = 0;
