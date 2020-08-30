@@ -1,4 +1,5 @@
 ﻿using Asterion.OpenGL;
+using System;
 
 namespace Asterion.UI.Controls
 {
@@ -27,6 +28,12 @@ namespace Asterion.UI.Controls
         internal override void UpdateVBOTiles(VBO vbo)
         {
             string[] lines = AsterionTools.WordWrap(Text_, Width);
+
+            if (lines.Length >= Height) // Too many lines
+            {
+                lines[Height - 1] = lines[Height - 1].Substring(0, Math.Min(lines[Height - 1].Length, Width - 4));
+                lines[Height - 1] += "...";
+            }
 
             for (int i = 0; i < lines.Length; i++)
             {
