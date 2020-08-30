@@ -60,6 +60,7 @@
     <Compile Include="Core\RGBColor.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
+    <Compile Include="OpenGL\TileRenderer.cs" />
     <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\UIFrame.cs" />
     <Compile Include="UI\UITileBoard.cs" />
@@ -83,15 +84,13 @@
     <Compile Include="Scene\MapCell.cs" />
     <Compile Include="Scene\SceneManager.cs" />
     <Compile Include="Core\Tile.cs" />
-    <Compile Include="Video\TilemapTexture.cs" />
+    <Compile Include="OpenGL\TilemapTexture.cs" />
     <None Include="packages.config" />
-    <Compile Include="Video\TileShader.cs" />
-    <Compile Include="Video\VBO.cs" />
+    <Compile Include="OpenGL\TileShader.cs" />
+    <Compile Include="OpenGL\VBO.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OpenGL\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <EmbeddedResource Include="Shaders\TilesShader.frag" />

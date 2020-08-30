@@ -37,11 +37,6 @@ namespace Asterion
     public class AsterionGame : IDisposable
     {
         /// <summary>
-        /// Maximum number of tilemaps
-        /// </summary>
-        public const int TILEMAP_COUNT = 4;
-
-        /// <summary>
         /// Audio player.
         /// </summary>
         public AudioPlayer Audio { get; private set; }
@@ -51,21 +46,6 @@ namespace Asterion
         /// </summary>
         public Color BackgroundColor { get { return _backgroundColor; } set { _backgroundColor = value; GL.ClearColor(value); } }
         private Color _backgroundColor = Color.Black;
-
-        /// <summary>
-        /// Scale of the tiles at the current window size.
-        /// Automatically updated when the game window is resized.
-        /// </summary>
-        public float TileScale { get; private set; } = 1.0f;
-
-        /// <summary>
-        /// Offset between the upper-left corner of the game window and the upper-leftmost tile.
-        /// Automatically updated when the game window is resized.
-        /// </summary>
-        public Position TileOffset { get; private set; } = Position.Zero;
-
-        private TileShader Shader = null;
-        private readonly TilemapTexture[] Tilemaps = new TilemapTexture[TILEMAP_COUNT];
 
         /// <summary>
         /// Gets or sets the width of the game window, in pixels.
@@ -104,30 +84,8 @@ namespace Asterion
 
         internal void OnResizeInternal()
         {
-            GL.Viewport(0, 0, Width, Height);
-
-            TileScale = Math.Min((float)Width / (TileCount.Width * TileSize.Width), (float)Height / (TileCount.Height * TileSize.Height));
-
-            float resScale = (float)Width / Height;
-            float ratio = (float)(TileCount.Width * TileSize.Width) / (TileCount.Height * TileSize.Height);
-            RectangleF quad = new RectangleF(0, 0, TileCount.Width, TileCount.Height);
-
-            int tileOffsetX = 0, tileOffsetY = 0;
-            if (resScale > ratio)
-            {
-                quad.Width *= (resScale / ratio);
-                quad.X = (TileCount.Width - quad.Width) / 2;
-                tileOffsetX = (int)((Width - (TileCount.Width * TileSize.Width * TileScale)) * .5f);
-            }
-            else
-            {
-                quad.Height /= (resScale / ratio);
-                quad.Y = (TileCount.Height - quad.Height) / 2;
-                tileOffsetY = (int)((Height - (TileCount.Height * TileSize.Height * TileScale)) * .5f);
-            }
-            TileOffset = new Position(tileOffsetX, tileOffsetY);
-
-            Shader.SetProjection(Matrix4.CreateOrthographicOffCenter(quad.Left, quad.Right, quad.Bottom, quad.Top, 0, 1));
+            Renderer.OnResize(this, Width, Height);
+            OnResize(Width, Height);
         }
 
         /// <summary>
@@ -175,6 +133,8 @@ namespace Asterion
         /// </summary>
         public Dimension TilemapCount { get; } = Dimension.Zero;
 
+        private readonly TileRenderer Renderer;
+
         /// <summary>
         /// Constructor.
         /// </summary>
@@ -191,7 +151,7 @@ namespace Asterion
             TilemapCount = new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height);
 
             Files = new FileSystem();
-
+            Renderer = new TileRenderer();
             Audio = new AudioPlayer(Files);
             Input = new InputManager();
 
@@ -204,18 +164,9 @@ namespace Asterion
         /// </summary>
         internal void OnLoadInternal()
         {
-            GL.ClearColor(_backgroundColor);
-            GL.Enable(EnableCap.Texture2D);
-            GL.Disable(EnableCap.DepthTest); // TODO: Remove?
-            GL.Enable(EnableCap.Blend);
-            GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-            // TODO: Use texture arrays - https://community.khronos.org/t/how-do-you-implement-texture-arrays/75315
-            Shader = new TileShader();
-
+            Renderer.OnLoad();
             Scene.OnLoad();
             UI.OnLoad();
-
             OnLoad();
         }
 
@@ -287,7 +238,7 @@ namespace Asterion
         /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
         public Position? GetTileFromMousePosition(int mouseX, int mouseY)
         {
-            return GetTileFromMousePosition(new Position(mouseX, mouseY));
+            return Renderer.GetTileFromMousePosition(this, new Position(mouseX, mouseY));
         }
 
         /// <summary>
@@ -297,16 +248,7 @@ namespace Asterion
         /// <returns>The coordinates of the tile, or null if the mouse cursor is not above a tile</returns>
         public Position? GetTileFromMousePosition(Position mouse)
         {
-            float tileX = (mouse.X - TileOffset.X) / (TileSize.Width * TileScale);
-            float tileY = (mouse.Y - TileOffset.Y) / (TileSize.Height * TileScale);
-
-            if (
-                (tileX < 0) || (tileY < 0) ||
-                ((int)tileX >= TileCount.Width) || ((int)tileY >= TileCount.Height)
-                )
-                return null;
-
-            return new Position((int)tileX, (int)tileY);
+            return Renderer.GetTileFromMousePosition(this, mouse);
         }
 
         /// <summary>
@@ -314,10 +256,7 @@ namespace Asterion
         /// </summary>
         internal void OnRenderFrame()
         {
-            Shader.Use();
-
-            for (int i = 0; i < TILEMAP_COUNT; i++)
-                Tilemaps[i]?.Use(i);
+            Renderer.SetupFrame();
 
             GL.Disable(EnableCap.Blend);
             UI.Render();
@@ -329,36 +268,25 @@ namespace Asterion
         /// <summary>
         /// Sets the tilemap
         /// </summary>
-        /// <param name="index">Index of the tilemap to load, from 0 to <see cref="TILEMAP_COUNT"/></param>
+        /// <param name="index">Index of the tilemap to load, from 0 to 3</param>
         /// <param name="file">The name of the image file, as it appears in this game's filesystem</param>
         /// <returns></returns>
         public bool SetTilemap(int index, string file)
         {
-            if ((index < 0) || (index >= TILEMAP_COUNT)) return false;
+            if ((index < 0) || (index >= TileRenderer.TILEMAP_COUNT)) return false;
             if (!Files.FileExists(file)) return false;
-
-            DestroyTileMap(index);
 
             using (Stream s = Files.GetFileAsStream(file))
             {
-                if (s == null) return false;
-
-                Tilemaps[index] = new TilemapTexture(s);
+                try
+                {
+                    return Renderer.SetTilemap(index, s);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
-
-            return true;
-        }
-
-        /// <summary>
-        /// (Private) Removes a tilemap from memory.
-        /// </summary>
-        /// <param name="index">Index of the tilemap to destroy, from 0 to <see cref="TILEMAP_COUNT"/></param>
-        private void DestroyTileMap(int index)
-        {
-            if ((index < 0) || (index >= TILEMAP_COUNT)) return;
-            if (Tilemaps[index] == null) return;
-
-            Tilemaps[index].Dispose();
         }
 
         /// <summary>
@@ -371,6 +299,7 @@ namespace Asterion
 
             Audio.Destroy();
             OpenTKWindow.Dispose();
+            Renderer.Dispose();
 
             OnDispose();
         }
