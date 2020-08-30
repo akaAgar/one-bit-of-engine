@@ -61,6 +61,7 @@
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="Input\MouseButton.cs" />
     <Compile Include="OpenGL\TileRenderer.cs" />
+    <Compile Include="UI\UIControlRectangle.cs" />
     <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\UIFrame.cs" />
     <Compile Include="UI\UITileBoard.cs" />

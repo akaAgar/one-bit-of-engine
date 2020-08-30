@@ -1,17 +1,13 @@
 ﻿using Asterion.OpenGL;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Asterion.UI
 {
-    public class UITextBox : UIControl
+    public class UITextBox : UIControlRectangle
     {
-        public string Text { get; set; } = "";
-
+        /// <summary>
+        /// (Internal) Draws the control on the provided VBO.
+        /// </summary>
+        /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal override void UpdateVBOTiles(VBO vbo)
         {
 

@@ -6,7 +6,7 @@ namespace Asterion.UI
     /// <summary>
     /// A rectangular frame, s
     /// </summary>
-    public class UIFrame : UIControl
+    public class UIFrame : UIControlRectangle
     {
         /// <summary>
         /// The tile to use for the frame.
@@ -15,22 +15,6 @@ namespace Asterion.UI
         /// </summary>
         public int FrameTile { get { return FrameTile_; } set { FrameTile_ = value; Page.UI.Invalidate(); } }
         private int FrameTile_ = 0;
-
-        /// <summary>
-        /// Size of the control.
-        /// </summary>
-        public Dimension Size { get { return Size_; } set { Size_ = value; Page.UI.Invalidate(); } }
-        private Dimension Size_ = Dimension.One;
-
-        /// <summary>
-        /// Width of the control.
-        /// </summary>
-        public int Width { get { return Size_.Width; } set { Size_ = new Dimension(value, Size_.Height); Page.UI.Invalidate(); } }
-
-        /// <summary>
-        /// Height of the control.
-        /// </summary>
-        public int Height { get { return Size_.Height; } set { Size_ = new Dimension(Size_.Width, value); Page.UI.Invalidate(); } }
 
         /// <summary>
         /// The tile to use to fill the frame background, or null if none.
