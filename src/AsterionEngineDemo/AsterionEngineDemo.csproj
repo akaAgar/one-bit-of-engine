@@ -44,12 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionDemoGame.cs" />
-    <Compile Include="UIPages\TestMenuPage.cs" />
+    <Compile Include="UIPages\PageAudioDemo.cs" />
+    <Compile Include="UIPages\PageDrawingBoard.cs" />
+    <Compile Include="UIPages\PageMainMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TileID.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="Resources\App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AsterionEngine\AsterionEngine.csproj">

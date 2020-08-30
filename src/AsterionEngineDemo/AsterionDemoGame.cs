@@ -45,10 +45,10 @@ namespace Asterion.Demo
             Title = "Asterion Engine Demo Game";
             Renderer.LoadTilemap(0, "tilemap.png");
 
-            UI.ShowPage<TestMenuPage>();
+            UI.ShowPage<PageMainMenu>();
             UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
          
-            AdjustToTileScreenSize();
+            AdjustToTileScreenSize(1.5f);
         }
 
         protected override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
@@ -60,9 +60,6 @@ namespace Asterion.Demo
                         WindowState = GameWindowState.Fullscreen;
                     else
                         WindowState = GameWindowState.Normal;
-                    break;
-                case KeyCode.Escape:
-                    Close();
                     break;
             }
         }
