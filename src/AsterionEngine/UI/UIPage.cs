@@ -54,21 +54,65 @@ namespace Asterion.UI
         public UIPage() { }
 
         /// <summary>
-        /// Adds a new <see cref="UIControl"/> to the page's controls.
+        /// (Private) Adds a new <see cref="UIControl"/> on the page.
         /// </summary>
         /// <typeparam name="T">The type of <see cref="UIControl"/> to create</typeparam>
         /// <returns>The new <see cref="UIControl"/></returns>
-        protected T AddControl<T>() where T : UIControl, new()
+        private T AddControl<T>(int x, int y, RGBColor color, int tilemap) where T : UIControl, new()
         {
-            T newControl = new T();
-            newControl.Initialize(this);
-            Controls.Add(newControl);
+            T control = new T();
+            control.Initialize(this);
+            Controls.Add(control);
+
+            control.Position = new Position(x, y);
+            control.Color = color;
+            control.Tilemap = tilemap;
+
             UI.Invalidate();
-            return newControl;
+            return control;
         }
 
         /// <summary>
-        /// Removes a control from the page. The control will be destroyed and should not be used anymore after it has been removed.
+        /// (Protected) Adds a new <see cref="UILabel"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="text">Text</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="color">Color</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns></returns>
+        protected UILabel AddLabel(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
+        {
+            UILabel control = AddControl<UILabel>(x, y, color, tilemap);
+            control.Text = text;
+            control.FontTile = fontTile;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UIFrame"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="width">Width of the frame</param>
+        /// <param name="height">Height of the frame</param>
+        /// <param name="frameTile">The tile to use for the frame. Frame tile must follow one another on the tilemap (but can be on multiple rows) in this order: upper-left corner, upper-right corner, lower-left corner, lower-right corner, top border, left border, bottom border, right border</param>
+        /// <param name="color">Color</param>
+        /// <param name="fillTile">The tile to use as a background for the frame, or null if none</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns></returns>
+        protected UIFrame AddFrame(int x, int y, int width, int height, int frameTile, RGBColor color, int? fillTile = null, int tilemap = 0)
+        {
+            UIFrame control = AddControl<UIFrame>(x, y, color, tilemap);
+            control.FrameTile = frameTile;
+            control.Size = new Dimension(width, height);
+            control.FillTile = fillTile;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Removes a control from the page. The control will be destroyed and should not be used anymore after it has been removed.
         /// </summary>
         /// <param name="control">The control to remove.</param>
         protected void RemoveControl(UIControl control)

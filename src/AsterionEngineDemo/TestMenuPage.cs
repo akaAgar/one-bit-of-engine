@@ -7,16 +7,10 @@ namespace Asterion.Demo
     {
         protected override void OnInitialize(object[] parameters)
         {
-            UILabel label = AddControl<UILabel>();
-            label.Text = "Hello world";
-            label.Color = RGBColor.CornflowerBlue;
-            label.Position = new Position(3, 3);
+            UILabel label = AddLabel(3, 3, "Hello world!", (int)TileID.Font, RGBColor.CornflowerBlue);
             label.ZOrder = 2;
 
-            UIFrame frame = AddControl<UIFrame>();
-            frame.TileID = (int)TileID.Font;
-            frame.Position = new Position(2, 2);
-            frame.Size = new Dimension(8, 8);
+            UIFrame frame = AddFrame(2, 2, 8, 8, (int)TileID.Frame, RGBColor.Goldenrod);
             frame.ZOrder = 0;
         }
     }
