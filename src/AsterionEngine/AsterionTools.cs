@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Asterion
 {
@@ -177,6 +178,39 @@ namespace Asterion
         public static int EnumCount<T>() where T: Enum
         {
             return Enum.GetValues(typeof(T)).Length;
+        }
+
+        /// <summary>
+        /// Splits a string into multiples lines of maximum length lineLength.
+        /// </summary>
+        /// <param name="text">The text to split in lines</param>
+        /// <param name="lineLength">Max length of each line</param>
+        /// <returns>An array of lines</returns>
+        public static string[] WordWrap(string text, int lineLength)
+        {
+            if (string.IsNullOrEmpty(text)) return new string[0];
+            lineLength = Math.Max(1, lineLength);
+
+            string[] words = text.Replace("\\n", "\n").Split(' ', '\t', '\n');
+            List<string> lines = new List<string>();
+            string currentLine = "";
+
+            foreach (string w in words)
+            {
+                if (currentLine.Length + w.Length >= lineLength)
+                {
+                    lines.Add(currentLine);
+                    currentLine = "";
+                }
+
+                if (currentLine.Length > 0) currentLine += " ";
+                currentLine += w;
+            }
+
+            // Add the last line
+            if (currentLine.Length > 0) lines.Add(currentLine);
+
+            return lines.ToArray();
         }
     }
 }
