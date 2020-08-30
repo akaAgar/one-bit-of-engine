@@ -69,12 +69,12 @@
     <Compile Include="UI\UIControl.cs" />
     <Compile Include="UI\UIPage.cs" />
     <Compile Include="UI\UIEnvironment.cs" />
-    <Compile Include="OpenTKWindow.cs" />
+    <Compile Include="OpenGL\OpenTKWindow.cs" />
     <Compile Include="AsterionGame.cs" />
     <Compile Include="Audio\AudioPlayer.cs" />
     <Compile Include="Audio\AudioPlayerSound.cs" />
-    <Compile Include="GameWindowBorder.cs" />
-    <Compile Include="GameWindowState.cs" />
+    <Compile Include="Core\GameWindowBorder.cs" />
+    <Compile Include="Core\GameWindowState.cs" />
     <Compile Include="Core\Dimension.cs" />
     <Compile Include="Core\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -88,7 +88,7 @@
     <None Include="packages.config" />
     <Compile Include="OpenGL\TileShader.cs" />
     <Compile Include="OpenGL\VBO.cs" />
-    <Compile Include="VSync.cs" />
+    <Compile Include="Core\VSync.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

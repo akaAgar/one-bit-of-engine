@@ -15,7 +15,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
-namespace Asterion
+namespace Asterion.Core
 {
     /// <summary>
     /// Enumerates available window borders.

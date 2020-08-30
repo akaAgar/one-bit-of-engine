@@ -15,24 +15,28 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
-namespace Asterion
+namespace Asterion.Core
 {
     /// <summary>
-    /// Enumerates available VSync modes.
+    /// Enumerates available window states.
     /// </summary>
-    public enum VSync
+    public enum GameWindowState
     {
         /// <summary>
-        /// Vsync disabled.
+        /// The window is in its normal state.
         /// </summary>
-        Off = 0,
+        Normal = 0,
         /// <summary>
-        /// VSync enabled.
+        /// The window is minimized to the taskbar (also known as 'iconified').
         /// </summary>
-        On = 1,
+        Minimized = 1,
         /// <summary>
-        /// VSync enabled, unless framerate falls below one half of target framerate. If no target framerate is specified, this behaves exactly like OpenTK.VSyncMode.On.
+        /// The window covers the whole working area, which includes the desktop but not the taskbar and/or panels.
         /// </summary>
-        Adaptive = 2
+        Maximized = 2,
+        /// <summary>
+        /// The window covers the whole screen, including all taskbars and/or panels.
+        /// </summary>
+        Fullscreen = 3
     }
 }
