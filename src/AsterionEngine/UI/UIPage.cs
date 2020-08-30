@@ -81,7 +81,7 @@ namespace Asterion.UI
         /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.</param>
         /// <param name="color">Color</param>
         /// <param name="tilemap">Font tile tilemap</param>
-        /// <returns></returns>
+        /// <returns>An UILabel control</returns>
         protected UILabel AddLabel(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
         {
             UILabel control = AddControl<UILabel>(x, y, color, tilemap);
@@ -101,13 +101,34 @@ namespace Asterion.UI
         /// <param name="color">Color</param>
         /// <param name="fillTile">The tile to use as a background for the frame, or null if none</param>
         /// <param name="tilemap">Font tile tilemap</param>
-        /// <returns></returns>
+        /// <returns>An UIFrame control</returns>
         protected UIFrame AddFrame(int x, int y, int width, int height, int frameTile, RGBColor color, int? fillTile = null, int tilemap = 0)
         {
             UIFrame control = AddControl<UIFrame>(x, y, color, tilemap);
             control.FrameTile = frameTile;
             control.Size = new Dimension(width, height);
             control.FillTile = fillTile;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UITextBox"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="width">Width of the textbox</param>
+        /// <param name="height">Height of the textbox</param>
+        /// <param name="text">Text</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="color">Color</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns>An UITextBox control</returns>
+        protected UITextBox AddTextBox(int x, int y, int width, int height, string text, int fontTile, RGBColor color, int tilemap = 0)
+        {
+            UITextBox control = AddControl<UITextBox>(x, y, color, tilemap);
+            control.Size = new Dimension(width, height);
+            control.FontTile = fontTile;
+            control.Text = text;
             return control;
         }
 
