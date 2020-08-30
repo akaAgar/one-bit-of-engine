@@ -1,5 +1,6 @@
 ﻿using Asterion.Core;
 using Asterion.UI;
+using Asterion.UI.Controls;
 
 namespace Asterion.Demo
 {
@@ -14,6 +15,10 @@ namespace Asterion.Demo
 
             UITextBox textBox = AddTextBox(3, 3, 14, 6, "", (int)TileID.Font, RGBColor.AntiqueWhite);
             textBox.Text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam bibendum vel augue vel consectetur. Praesent vel urna eros. Ut a blandit lacus, eget rutrum lacus.";
+
+            UIMenu menu = AddMenu(19, 2, (int)TileID.Font, RGBColor.White);
+            for (int i = 0; i < 3; i++)
+                menu.AddMenuItem($"Option #{i + 1}");
         }
     }
 }

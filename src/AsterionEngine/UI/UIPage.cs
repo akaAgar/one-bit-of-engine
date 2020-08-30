@@ -18,6 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 using Asterion.Core;
 using Asterion.Input;
 using Asterion.OpenGL;
+using Asterion.UI.Controls;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -78,7 +79,7 @@ namespace Asterion.UI
         /// <param name="x">X coordinate</param>
         /// <param name="y">Y coordinate</param>
         /// <param name="text">Text</param>
-        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
         /// <param name="color">Color</param>
         /// <param name="tilemap">Font tile tilemap</param>
         /// <returns>An UILabel control</returns>
@@ -119,7 +120,7 @@ namespace Asterion.UI
         /// <param name="width">Width of the textbox</param>
         /// <param name="height">Height of the textbox</param>
         /// <param name="text">Text</param>
-        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and handle all the ASCII character in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
         /// <param name="color">Color</param>
         /// <param name="tilemap">Font tile tilemap</param>
         /// <returns>An UITextBox control</returns>
@@ -129,6 +130,22 @@ namespace Asterion.UI
             control.Size = new Dimension(width, height);
             control.FontTile = fontTile;
             control.Text = text;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UIMenu"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="color">Color</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns></returns>
+        protected UIMenu AddMenu(int x, int y, int fontTile, RGBColor color, int tilemap = 0)
+        {
+            UIMenu control = AddControl<UIMenu>(x, y, color, tilemap);
+            control.FontTile = fontTile;
             return control;
         }
 
