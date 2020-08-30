@@ -55,8 +55,7 @@ namespace Asterion.Demo
             Audio.Enable();
 
             Title = "Asterion Engine Demo Game";
-            //SetTilemap(0, Image.FromFile("../../media/tilemap.png"));
-            SetTilemap(0, "tilemap.png");
+            Renderer.LoadTilemap(0, "tilemap.png");
 
             if (true)
             {

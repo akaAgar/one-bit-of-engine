@@ -16,7 +16,7 @@ namespace Asterion.UI
 
         internal void OnLoad(AsterionGame game)
         {
-            CursorVBO = new VBO(game, 1, 1);
+            CursorVBO = new VBO(game.Renderer, 1, 1);
             UpdateCursor();
         }
 

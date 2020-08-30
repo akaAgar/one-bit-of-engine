@@ -96,44 +96,27 @@ namespace Asterion
         /// <summary>
         /// Scene manager, used to draw the game world.
         /// </summary>
-        public SceneManager Scene { get; private set; } = null;
+        public SceneManager Scene { get; } = null;
         
         /// <summary>
         /// UI Environment, draws menus and UI controls.
         /// </summary>
-        public UIEnvironment UI { get; private set; } = null;
+        public UIEnvironment UI { get; } = null;
 
         /// <summary>
         /// Input manager. Handles keyboard, mouse and gamepad events.
         /// </summary>
-        public InputManager Input { get; private set; } = null;
+        public InputManager Input { get; } = null;
 
         /// <summary>
         /// File system. Loads files from a folder or an archive.
         /// </summary>
-        public FileSystem Files { get; private set; } = null;
+        public FileSystem Files { get; } = null;
 
         /// <summary>
-        /// Size of a each tile, in pixels.
+        /// Tile renderer.
         /// </summary>
-        public Dimension TileSize { get; } = Dimension.One;
-
-        /// <summary>
-        /// Number of tiles on the tile board.
-        /// </summary>
-        public Dimension TileCount { get; } = Dimension.One;
-
-        /// <summary>
-        /// Size of the tilemaps images to be loaded with <see cref="SetTilemap(int, string)"/>, in pixels.
-        /// </summary>
-        public Dimension TilemapSize { get; } = Dimension.One;
-
-        /// <summary>
-        /// Number of tiles on each tilemap.
-        /// </summary>
-        public Dimension TilemapCount { get; } = Dimension.Zero;
-
-        private readonly TileRenderer Renderer;
+        public TileRenderer Renderer { get; } = null;
 
         /// <summary>
         /// Constructor.
@@ -145,13 +128,8 @@ namespace Asterion
         {
             OpenTKWindow = new OpenTKWindow(this) { Title = "Asterion Engine" };
 
-            TileSize = new Dimension(Math.Max(1, tileSize.Width), Math.Max(1, tileSize.Height));
-            TileCount = new Dimension(Math.Max(1, tileCount.Width), Math.Max(1, tileCount.Height));
-            TilemapSize = new Dimension(Math.Max(1, tilemapSize.Width), Math.Max(1, tilemapSize.Height));
-            TilemapCount = new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height);
-
             Files = new FileSystem();
-            Renderer = new TileRenderer(TileSize, TileCount);
+            Renderer = new TileRenderer(Files, tileSize, tileCount, tilemapSize);
             Audio = new AudioPlayer(Files);
             Input = new InputManager();
 
@@ -200,8 +178,8 @@ namespace Asterion
         {
             OpenTKWindow.WindowState = OpenTK.WindowState.Normal;
             OpenTKWindow.Size = new Size(
-                (int)(TileCount.Width * TileSize.Width * scale),
-                (int)(TileCount.Height * TileSize.Height * scale));
+                (int)(Renderer.TileCount.Width * Renderer.TileSize.Width * scale),
+                (int)(Renderer.TileCount.Height * Renderer.TileSize.Height * scale));
         }
 
         /// <summary>
@@ -263,30 +241,6 @@ namespace Asterion
             Scene.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
             UI.Cursor.Render();
-        }
-
-        /// <summary>
-        /// Sets the tilemap
-        /// </summary>
-        /// <param name="index">Index of the tilemap to load, from 0 to 3</param>
-        /// <param name="file">The name of the image file, as it appears in this game's filesystem</param>
-        /// <returns></returns>
-        public bool SetTilemap(int index, string file)
-        {
-            if ((index < 0) || (index >= TileRenderer.TILEMAP_COUNT)) return false;
-            if (!Files.FileExists(file)) return false;
-
-            using (Stream s = Files.GetFileAsStream(file))
-            {
-                try
-                {
-                    return Renderer.SetTilemap(index, s);
-                }
-                catch (Exception)
-                {
-                    return false;
-                }
-            }
         }
 
         /// <summary>

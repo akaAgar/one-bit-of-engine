@@ -1,6 +1,6 @@
 ﻿using Asterion.Core;
+using Asterion.IO;
 using OpenTK;
-using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
@@ -9,14 +9,19 @@ using System.IO;
 namespace Asterion.OpenGL
 {
     /// <summary>
-    /// (Internal) A class handling low-level OpenGL calls to draw the tiles.
+    /// A class handling low-level OpenGL calls to draw the tiles.
     /// </summary>
-    internal sealed class TileRenderer : IDisposable
+    public sealed class TileRenderer
     {
         /// <summary>
         /// Maximum number of tilemaps.
         /// </summary>
-        internal const int TILEMAP_COUNT = 4;
+        public const int TILEMAP_COUNT = 4;
+
+        /// <summary>
+        /// Background color for the frame.
+        /// </summary>
+        public RGBColor BackgroundColor { get; set; } = RGBColor.Black;
 
         /// <summary>
         /// The GLSL shader used to draw the tiles.
@@ -29,41 +34,65 @@ namespace Asterion.OpenGL
         private readonly TilemapTexture[] Tilemaps = new TilemapTexture[TILEMAP_COUNT];
 
         /// <summary>
-        /// Background color for the frame.
-        /// </summary>
-        internal Color4 BackgroundColor { get; set; } = Color4.Black;
-
-        /// <summary>
         /// Scale of the tiles at the current window size.
         /// Automatically updated when the game window is resized.
         /// </summary>
-        private float TileScale = 1.0f;
+        public float TileScale { get; private set; }
 
         /// <summary>
         /// Offset between the upper-left corner of the game window and the upper-leftmost tile.
         /// Automatically updated when the game window is resized.
         /// </summary>
-        private Position TileOffset = Position.Zero;
+        public Position TileOffset { get; private set; }
 
         /// <summary>
         /// Size of a each tile, in pixels.
         /// </summary>
-        private readonly Dimension TileSize;
+        public Dimension TileSize { get; }
 
         /// <summary>
         /// Number of tiles on the tile board.
         /// </summary>
-        private readonly Dimension TileCount;
+        public Dimension TileCount { get; }
 
         /// <summary>
-        /// Constructor.
+        /// Size of the tilemaps images to be loaded with <see cref="LoadTilemap(int, string)"/>, in pixels.
         /// </summary>
-        /// <param name="tileSize">Size of a each tile, in pixels.</param>
-        /// <param name="tileCount">Number of tiles on the tile board.</param>
-        internal TileRenderer(Dimension tileSize, Dimension tileCount)
+        public Dimension TilemapSize { get; }
+
+        /// <summary>
+        /// Number of tiles on each tilemap.
+        /// </summary>
+        public Dimension TilemapCount { get; }
+
+        /// <summary>
+        /// (Internal) UV size of each tile on a tilemap.
+        /// </summary>
+        internal SizeF TileUV { get; }
+
+        /// <summary>
+        /// (Private) The FileSystem from which tilemaps will be loaded.
+        /// </summary>
+        private readonly FileSystem Files = null;
+
+        /// <summary>
+        /// (Internal) Constructor.
+        /// </summary>
+        /// <param name="files">The FileSystem from which tilemaps will be loaded</param>
+        /// <param name="tileSize">Size of a each tile, in pixels</param>
+        /// <param name="tileCount">Number of tiles on the tile board</param>
+        /// <param name="tilemapSize">The size of the tilemaps, in pixels</param>
+        internal TileRenderer(FileSystem files, Dimension tileSize, Dimension tileCount, Dimension tilemapSize)
         {
-            TileSize = tileSize;
-            TileCount = tileCount;
+            Files = files;
+
+            TileSize = new Dimension(Math.Max(1, tileSize.Width), Math.Max(1, tileSize.Height));
+            TileCount = new Dimension(Math.Max(1, tileCount.Width), Math.Max(1, tileCount.Height));
+            TilemapSize = new Dimension(Math.Max(1, tilemapSize.Width), Math.Max(1, tilemapSize.Height));
+            TilemapCount = new Dimension(TilemapSize.Width / TileSize.Width, TilemapSize.Height / TileSize.Height);
+            TileUV = new SizeF(
+                (float)tileSize.Width / tilemapSize.Width,
+                (float)tileSize.Height / tilemapSize.Height);
         }
 
         /// <summary>
@@ -80,16 +109,30 @@ namespace Asterion.OpenGL
         }
 
         /// <summary>
-        /// (Internal) Sets the tilemap
+        /// Loads a tilemap from a file stored in the engine's filesytem.
         /// </summary>
         /// <param name="index">Index of the tilemap to load, from 0 to <see cref="TILEMAP_COUNT"/></param>
-        /// <param name="textureStream">A stream containing data for a System.Drawing.Image</param>
+        /// <param name="file">The name of the image file, as it appears in this game's filesystem</param>
         /// <returns>True if everything went right, false otherwise</returns>
-        public bool SetTilemap(int index, Stream textureStream)
+        public bool LoadTilemap(int index, string file)
         {
-            DestroyTileMap(index);
-            if (textureStream == null) return false;
-            Tilemaps[index] = new TilemapTexture(textureStream);
+            if ((index < 0) || (index >= TileRenderer.TILEMAP_COUNT)) return false;
+            if (!Files.FileExists(file)) return false;
+
+            using (Stream textureStream = Files.GetFileAsStream(file))
+            {
+                try
+                {
+                    UnloadTileMap(index);
+                    if (textureStream == null) return false;
+                    Tilemaps[index] = new TilemapTexture(textureStream);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 
@@ -97,7 +140,7 @@ namespace Asterion.OpenGL
         /// (Private) Removes a tilemap from memory.
         /// </summary>
         /// <param name="index">Index of the tilemap to destroy, from 0 to <see cref="TILEMAP_COUNT"/></param>
-        private void DestroyTileMap(int index)
+        private void UnloadTileMap(int index)
         {
             if ((index < 0) || (index >= TILEMAP_COUNT)) return;
             if (Tilemaps[index] == null) return;
@@ -111,7 +154,7 @@ namespace Asterion.OpenGL
         public void Dispose()
         {
             for (int i = 0; i < TILEMAP_COUNT; i++)
-                DestroyTileMap(i);
+                UnloadTileMap(i);
         }
 
         /// <summary>
@@ -154,7 +197,7 @@ namespace Asterion.OpenGL
         /// </summary>
         internal void SetupFrame()
         {
-            GL.ClearColor(BackgroundColor);
+            GL.ClearColor(BackgroundColor.ToColor4());
             Shader.Use();
 
             for (int i = 0; i < TILEMAP_COUNT; i++)
