@@ -76,6 +76,28 @@ namespace Asterion.OpenGL
         private readonly FileSystem Files = null;
 
         /// <summary>
+        /// The number of frames in each frame animation. Minimum is 1, maximum is 3, default is 3.
+        /// </summary>
+        public int TileAnimationFrames { get { return TileAnimationFrames_; } set { TileAnimationFrames_ = AsterionTools.Clamp(value, 1, 3); } }
+        private int TileAnimationFrames_ = 3;
+
+        /// <summary>
+        /// The duration (in seconds) of each frame of animated tiles. Minimum is 0.1, maximum is 10.0, default is 0.5.
+        /// </summary>
+        public float TileAnimationFrameDuration { get { return TileAnimationFrameDuration_; } set { TileAnimationFrameDuration_ = AsterionTools.Clamp(value, .1f, 10.0f); } }
+        private float TileAnimationFrameDuration_ = .5f;
+
+        /// <summary>
+        /// Current animation frame.
+        /// </summary>
+        private int CurrentAnimationFrame = 0;
+
+        /// <summary>
+        /// Time elapsed (in seconds) on the current animation frame.
+        /// </summary>
+        private float CurrentAnimationFrameTime = 0.0f;
+
+        /// <summary>
         /// (Internal) Constructor.
         /// </summary>
         /// <param name="files">The FileSystem from which tilemaps will be loaded</param>
@@ -134,6 +156,24 @@ namespace Asterion.OpenGL
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// (Internal) Called on each main loop update. Updates frame animations in the shader.
+        /// </summary>
+        /// <param name="elapsedSeconds">Seconds elapsed since the last update</param>
+        internal void OnUpdate(float elapsedSeconds)
+        {
+            if (TileAnimationFrames_ < 2) return; // No animation, no need to do anything
+
+            CurrentAnimationFrameTime += elapsedSeconds;
+
+            if (CurrentAnimationFrame >= TileAnimationFrameDuration_)
+            {
+                CurrentAnimationFrameTime = 0;
+                CurrentAnimationFrame++;
+                CurrentAnimationFrame %= TileAnimationFrames_;
+            }
         }
 
         /// <summary>

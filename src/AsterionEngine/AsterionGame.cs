@@ -155,6 +155,7 @@ namespace Asterion
         /// <param name="elapsedSeconds">Number of seconds elapsed since the last update.</param>
         internal void OnUpdateInternal(float elapsedSeconds)
         {
+            Renderer.OnUpdate(elapsedSeconds);
             Scene.OnUpdate(elapsedSeconds);
             Input.OnUpdate();
             OnUpdate(elapsedSeconds);
