@@ -36,11 +36,6 @@ namespace Asterion.OpenGL
         private readonly AsterionGame Game;
 
         /// <summary>
-        /// Last tile hovered by the mouse, or null if none.
-        /// </summary>
-        private Position? LastHoveredTile = null;
-
-        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="game">Instance of OBoEOpenTKWindow which created this game window.</param>
@@ -91,66 +86,12 @@ namespace Asterion.OpenGL
         }
 
         /// <summary>
-        /// OnMouseDown override. If the mouse cursor is enabled, calls Game.OnMouseDown.
-        /// </summary>
-        /// <param name="e">OpenTK mouse event.</param>
-        protected override void OnMouseDown(MouseButtonEventArgs e)
-        {
-            if (!Game.MouseCursorVisible) return;
-            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
-            Game.Input.OnMouseDownInternal((Input.MouseButton)e.Button, tile);
-        }
-
-        /// <summary>
-        /// OnMouseUp override. If the mouse cursor is enabled, calls Game.OnMouseUp.
-        /// </summary>
-        /// <param name="e">OpenTK mouse event.</param>
-        protected override void OnMouseUp(MouseButtonEventArgs e)
-        {
-            if (!Game.MouseCursorVisible) return;
-            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
-            Game.Input.OnMouseUpInternal((Input.MouseButton)e.Button, tile);
-        }
-
-        /// <summary>
-        /// OnMouseWheel override. Basically just calls Game.OnMouseWheel.
-        /// </summary>
-        /// <param name="e">OpenTK mouse event.</param>
-        protected override void OnMouseWheel(MouseWheelEventArgs e)
-        {
-            Game.Input.OnMouseWheelInternal(e.DeltaPrecise);
-        }
-
-        /// <summary>
-        /// OnMouseMove override. If the mouse cursor is enabled, calls Game.OnMouseMove.
-        /// </summary>
-        /// <param name="e">OpenTK mouse events.</param>
-        protected override void OnMouseMove(MouseMoveEventArgs e)
-        {
-            if (!Game.MouseCursorVisible) return;
-
-            Position? tile = Game.GetTileFromMousePosition(e.X, e.Y);
-            if (LastHoveredTile == tile) return;
-            LastHoveredTile = tile;
-            Game.Input.OnMouseMoveInternal(tile);
-        }
-
-        /// <summary>
         /// OnKeyDown override. Basically just calls Game.OnKeyDown.
         /// </summary>
         /// <param name="e">OpenTK keyboard event.</param>
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
-            Game.Input.OnKeyDownInternal((KeyCode)e.Key, e.Shift, e.Control, e.Alt, e.IsRepeat);
-        }
-
-        /// <summary>
-        /// OnKeyUp override. Basically just calls Game.OnKeyUp.
-        /// </summary>
-        /// <param name="e">OpenTK keyboard event.</param>
-        protected override void OnKeyUp(KeyboardKeyEventArgs e)
-        {
-            Game.Input.OnKeyUpInternal((KeyCode)e.Key, e.Shift, e.Control, e.Alt, e.IsRepeat);
+            Game.OnInputEventInternal((KeyCode)e.Key, (ModifierKeys)e.Modifiers, -1, e.IsRepeat);
         }
     }
 }

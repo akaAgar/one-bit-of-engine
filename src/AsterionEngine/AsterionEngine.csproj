@@ -48,18 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
-    <Compile Include="Input\GamePadSide.cs" />
-    <Compile Include="Input\GamePadAxis.cs" />
-    <Compile Include="Input\GamePadButton.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Area.cs" />
+    <Compile Include="Input\ModifierKeys.cs" />
     <Compile Include="IO\FileSourceArchive.cs" />
     <Compile Include="IO\FileSourceFolder.cs" />
     <Compile Include="IO\FileSystem.cs" />
     <Compile Include="IO\FileSource.cs" />
     <Compile Include="Core\RGBColor.cs" />
     <Compile Include="Input\KeyCode.cs" />
-    <Compile Include="Input\MouseButton.cs" />
     <Compile Include="OpenGL\TileRenderer.cs" />
     <Compile Include="UI\Controls\UIControlRectangle.cs" />
     <Compile Include="UI\UICursor.cs" />

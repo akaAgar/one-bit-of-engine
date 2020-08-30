@@ -184,27 +184,25 @@ namespace Asterion.UI
         /// (Protected) Called whenever a key is pressed when this page is displayed.
         /// UIPage.OnKeyDown does nothing, so there's not need to call base.OnKeyDown.
         /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="key">The key or gamepad button that raised the event</param>
+        /// <param name="modifiers">Which modifier keys are down?</param>
+        /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        protected virtual void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { }
+        protected virtual void OnKeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat) { }
 
         /// <summary>
         /// (Internal) Called whenever a key is pressed when this page is displayed.
         /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="key">The key or gamepad button that raised the event</param>
+        /// <param name="modifiers">Which modifier keys are down?</param>
+        /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal virtual void KeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        internal void KeyDown(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
             foreach (UIControl c in Controls)
-                c.OnKeyDown(key, shift, control, alt, isRepeat);
+                c.OnKeyDown(key, modifiers, gamepadIndex, isRepeat);
 
-            OnKeyDown(key, shift, control, alt, isRepeat);
+            OnKeyDown(key, modifiers, gamepadIndex, isRepeat);
         }
 
         /// <summary>

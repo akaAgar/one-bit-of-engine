@@ -94,6 +94,32 @@ namespace Asterion
         private readonly OpenTKWindow OpenTKWindow = null;
 
         /// <summary>
+        /// (Internal) Processes a InputEvent event.
+        /// </summary>
+        /// <param name="key">The key or gamepad button that raised the event</param>
+        /// <param name="modifiers">Which modifier keys are down?</param>
+        /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
+        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
+        internal void OnInputEventInternal(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
+        {
+            UI.OnInputEvent(key, modifiers, gamepadIndex, isRepeat);
+            OnInputEvent(key, modifiers, gamepadIndex, isRepeat);
+        }
+
+        /// <summary>
+        /// (Protected) Overridable method to perform custom logic after an input event is raised.
+        /// Base method doesn't do anything, so there is no need to call base.OnInputEvent.
+        /// </summary>
+        /// <param name="key">The key or gamepad button that raised the event</param>
+        /// <param name="modifiers">Which modifier keys are down?</param>
+        /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
+        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
+        protected virtual void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
+        {
+
+        }
+
+        /// <summary>
         /// Scene manager, used to draw the game world.
         /// </summary>
         public SceneManager Scene { get; } = null;
@@ -157,7 +183,7 @@ namespace Asterion
         {
             Renderer.OnUpdate(elapsedSeconds);
             Scene.OnUpdate(elapsedSeconds);
-            Input.OnUpdate();
+            Input.OnUpdate(elapsedSeconds);
             OnUpdate(elapsedSeconds);
         }
 

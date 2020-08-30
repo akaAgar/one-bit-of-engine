@@ -15,11 +15,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
-using Asterion.Core;
 using OpenTK.Input;
-using System.Resources;
-using System.Security.Cryptography;
-using OTKMouseButton = OpenTK.Input.MouseButton;
 
 namespace Asterion.Input
 {
@@ -29,19 +25,34 @@ namespace Asterion.Input
     public sealed class InputManager
     {
         /// <summary>
-        /// Maximum number of gamepads.
+        /// (Private) Delay (in seconds) before repeat button presses event begin to be raised when a gamepad button is kept down.
         /// </summary>
-        public const int MAX_GAMEPADS = 8;
+        private const float GAMEPAD_REPEAT_DELAY = 1.0f;
+
+        /// <summary>
+        /// (Private) Delay (in seconds) between repeat button events.
+        /// </summary>
+        private const float GAMEPAD_REPEAT_RATE = 0.1f;
+
+        /// <summary>
+        /// (Private) First gamepad button in the KeyCode enum.
+        /// </summary>
+        private const KeyCode FIRST_GAMEPAD_BUTTON = KeyCode.GamepadA;
+
+        /// <summary>
+        /// (Private) Last gamepad button in the KeyCode enum.
+        /// </summary>
+        private const KeyCode LAST_GAMEPAD_BUTTON = KeyCode.GamepadY;
+
+        /// <summary>
+        /// (Private) Total number of gamepad buttons.
+        /// </summary>
+        private const int TOTAL_GAMEPAD_BUTTONS = (int)LAST_GAMEPAD_BUTTON - (int)FIRST_GAMEPAD_BUTTON + 1;
 
         /// <summary>
         /// Maximum number of gamepads.
         /// </summary>
-        public static readonly int MAX_GAMEPAD_BUTTONS = AsterionTools.EnumCount<GamePadButton>();
-
-        /// <summary>
-        /// (Private) Last gamepad states. Compared with the current gamepad states on each update to look for changes and raise events.
-        /// </summary>
-        private readonly GamePadState[] LastGamepadState = new GamePadState[MAX_GAMEPADS];
+        private const int GAMEPADS_COUNT = 4;
 
         /// <summary>
         /// Should gamepads be enabled. If false, no gamepad events will be raised and all gamepad-related methods will return default values.
@@ -49,130 +60,18 @@ namespace Asterion.Input
         public bool EnableGamePads { get; set; } = false;
 
         /// <summary>
-        /// Mouse movement event.
+        /// Gamepad trigger activation threshold. If the trigger value (expressed on a 0 to 1 scale) is greater than this, the input manager will consider the trigger is pressed.
+        /// Default is 0.5.
         /// </summary>
-        /// <param name="tile">The tile the mouse cursor is currently hovering, or null if none</param>
-        public delegate void MouseEvent(Position? tile);
+        public float GamepadTriggerThreshold { get { return GamepadTriggerThreshold_; } set { GamepadTriggerThreshold_ = AsterionTools.Clamp(value, 0.01f, 0.99f); } }
+        private float GamepadTriggerThreshold_ = 0.5f;
 
         /// <summary>
-        /// Mouse button event.
+        /// Gamepad stick axis activation threshold. If the absolute stick value (expressed on a -1 to 1 scale, 0 being the center) is greater than this, the input manager will consider the stick is pointing in a direction.
+        /// Default is 0.25.
         /// </summary>
-        /// <param name="button">The button that raised the event</param>
-        /// <param name="tile">The tile the mouse cursor is currently hovering, or null if none</param>
-        public delegate void MouseButtonEvent(MouseButton button, Position? tile);
-
-        /// <summary>
-        /// Mouse wheel event.
-        /// </summary>
-        /// <param name="wheelDelta">Variation in the mouse wheel value since the last mouse wheel event</param>
-        public delegate void MouseWheelEvent(float wheelDelta);
-
-        /// <summary>
-        /// Keyboard event.
-        /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
-        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        public delegate void KeyboardEvent(KeyCode key, bool shift, bool control, bool alt, bool isRepeat);
-
-        /// <summary>
-        /// Gamepad button event.
-        /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad that raised the event</param>
-        /// <param name="button">Button that raised the event</param>
-        public delegate void GamepadButtonEvent(int gamePadIndex, GamePadButton button);
-
-        /// <summary>
-        /// Event raised when the mouse is moved from one tile to another.
-        /// </summary>
-        public event MouseEvent OnMouseMove = null;
-
-        /// <summary>
-        /// Event raised when a mouse button is pressed.
-        /// </summary>
-        public event MouseButtonEvent OnMouseDown = null;
-
-        /// <summary>
-        /// Event raised when a mouse button is released.
-        /// </summary>
-        public event MouseButtonEvent OnMouseUp = null;
-
-        /// <summary>
-        /// Event raised when the mouse wheel is scrolled.
-        /// </summary>
-        public event MouseWheelEvent OnMouseWheel = null;
-
-        /// <summary>
-        /// Event raised when a keyboard key is pressed.
-        /// </summary>
-        public event KeyboardEvent OnKeyDown = null;
-
-        /// <summary>
-        /// Event raised when a keyboard key is released.
-        /// </summary>
-        public event KeyboardEvent OnKeyUp = null;
-
-        /// <summary>
-        /// Event raised when a gamepad button is pressed.
-        /// </summary>
-        public event GamepadButtonEvent OnGamePadButtonDown = null;
-
-        /// <summary>
-        /// Event raised when a gamepad button is released.
-        /// </summary>
-        public event GamepadButtonEvent OnGamePadButtonUp = null;
-
-        /// <summary>
-        /// (Internal) Raises a OnKeyDown event.
-        /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
-        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal void OnKeyDownInternal(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
-        {
-            Game.UI.OnKeyDown(key, shift, control, alt, isRepeat);
-            OnKeyDown?.Invoke(key, shift, control, alt, isRepeat);
-        }
-
-        /// <summary>
-        /// (Internal) Raises a OnKeyUp event.
-        /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
-        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal void OnKeyUpInternal(KeyCode key, bool shift, bool control, bool alt, bool isRepeat) { OnKeyUp?.Invoke(key, shift, control, alt, isRepeat); }
-
-        /// <summary>
-        /// (Internal) Raises a OnMouseMove event.
-        /// </summary>
-        /// <param name="tile">The tile the mouse cursor is currently hovering, or null if none</param>
-        internal void OnMouseMoveInternal(Position? tile) { OnMouseMove?.Invoke(tile); }
-
-        /// <summary>
-        /// (Internal) Raises a OnMouseDown event.
-        /// </summary>
-        /// <param name="button">The button that raised the event</param>
-        /// <param name="tile">The tile the mouse cursor is currently hovering, or null if none</param>
-        internal void OnMouseDownInternal(MouseButton button, Position? tile) { OnMouseDown?.Invoke(button, tile); }
-
-        /// <summary>
-        /// (Internal) Raises a OnMouseUp event.
-        /// </summary>
-        /// <param name="button">The button that raised the event</param>
-        /// <param name="tile">The tile the mouse cursor is currently hovering, or null if none</param>
-        internal void OnMouseUpInternal(MouseButton button, Position? tile) { OnMouseUp?.Invoke(button, tile); }
-
-        /// <summary>
-        /// (Internal) Raises a OnMouseWheel event.
-        /// </summary>
-        /// <param name="wheelDelta">Variation in the mouse wheel value since the last mouse wheel event</param>
-        internal void OnMouseWheelInternal(float wheelDelta) { OnMouseWheel?.Invoke(wheelDelta); }
+        public float GamepadStickAxisThreshold { get { return GamepadStickAxisThreshold_; } set { GamepadStickAxisThreshold_ = AsterionTools.Clamp(value, 0.01f, 0.99f); } }
+        private float GamepadStickAxisThreshold_ = 0.25f;
 
         /// <summary>
         /// (Private) The <see cref="AsterionGame"/> this <see cref="=InputManager"/> belongs to.
@@ -186,225 +85,126 @@ namespace Asterion.Input
         internal InputManager(AsterionGame game)
         {
             Game = game;
-
-            for (int i = 0; i < MAX_GAMEPADS; i++)
-                LastGamepadState[i] = new GamePadState();
         }
+
+        /// <summary>
+        /// Stores the time during which each gamepad button has been held down.
+        /// </summary>
+        private readonly float[,] GamepadFirstPress = new float[GAMEPADS_COUNT, TOTAL_GAMEPAD_BUTTONS];
+
+        /// <summary>
+        /// Timer used to keep track of the repeat key pulses to send.
+        /// </summary>
+        private float RepeatKeyPressTimer = 0f;
 
         /// <summary>
         /// (Internal) Update loop, called on every update.
         /// Only used to check the gamepad state changes since the last frame.
         /// </summary>
-        internal void OnUpdate()
+        /// <param name="elapsedSeconds">Elapsed second since last update</param>
+        internal void OnUpdate(float elapsedSeconds)
         {
-            if (EnableGamePads)
+            if (!EnableGamePads) return;
+
+            int gamepad, button;
+
+            bool repeatFrame = false;
+            RepeatKeyPressTimer += elapsedSeconds;
+            if (RepeatKeyPressTimer >= GAMEPAD_REPEAT_RATE)
             {
-                for (int i = 0; i < MAX_GAMEPADS; i++)
+                RepeatKeyPressTimer = 0f;
+                repeatFrame = true;
+            }
+
+            for (gamepad = 0; gamepad < GAMEPADS_COUNT; gamepad++)
+            {
+                GamePadState state = GamePad.GetState(gamepad);
+
+                for (button = 0; button < TOTAL_GAMEPAD_BUTTONS; button++)
                 {
-                    GamePadState state = GamePad.GetState(i);
-                    if (!state.IsConnected) continue;
-                    if (state.PacketNumber == LastGamepadState[i].PacketNumber) continue;
+                    if (GetGamepadButtonStatus(state, FIRST_GAMEPAD_BUTTON + button)) // button is pressed
+                    {
+                        if (GamepadFirstPress[gamepad, button] == 0) // button has JUST been pressed, send an event
+                            Game.OnInputEventInternal(FIRST_GAMEPAD_BUTTON + button, 0, gamepad, false);
 
-                    if (state.Buttons.A != LastGamepadState[i].Buttons.A) CheckGamePadButtonEvent(GamePadButton.A, state.Buttons.A, i);
-                    if (state.Buttons.B != LastGamepadState[i].Buttons.B) CheckGamePadButtonEvent(GamePadButton.B, state.Buttons.B, i);
-                    if (state.Buttons.Back != LastGamepadState[i].Buttons.Back) CheckGamePadButtonEvent(GamePadButton.Back, state.Buttons.Back, i);
-                    if (state.Buttons.BigButton != LastGamepadState[i].Buttons.BigButton) CheckGamePadButtonEvent(GamePadButton.Home, state.Buttons.BigButton, i);
-                    if (state.Buttons.LeftShoulder != LastGamepadState[i].Buttons.LeftShoulder) CheckGamePadButtonEvent(GamePadButton.LeftShoulder, state.Buttons.LeftShoulder, i);
-                    if (state.Buttons.LeftStick != LastGamepadState[i].Buttons.LeftStick) CheckGamePadButtonEvent(GamePadButton.LeftStick, state.Buttons.LeftStick, i);
-                    if (state.Buttons.RightShoulder != LastGamepadState[i].Buttons.RightShoulder) CheckGamePadButtonEvent(GamePadButton.RightShoulder, state.Buttons.RightShoulder, i);
-                    if (state.Buttons.RightStick != LastGamepadState[i].Buttons.RightStick) CheckGamePadButtonEvent(GamePadButton.RightStick, state.Buttons.RightStick, i);
-                    if (state.Buttons.Start != LastGamepadState[i].Buttons.Start) CheckGamePadButtonEvent(GamePadButton.Start, state.Buttons.Start, i);
-                    if (state.Buttons.X != LastGamepadState[i].Buttons.X) CheckGamePadButtonEvent(GamePadButton.X, state.Buttons.X, i);
-                    if (state.Buttons.Y != LastGamepadState[i].Buttons.Y) CheckGamePadButtonEvent(GamePadButton.Y, state.Buttons.Y, i);
+                        GamepadFirstPress[gamepad, button] += elapsedSeconds;
 
-                    if (state.DPad.Down != LastGamepadState[i].DPad.Down) CheckGamePadButtonEvent(GamePadButton.DPadDown, state.DPad.Down, i);
-                    if (state.DPad.Left != LastGamepadState[i].DPad.Left) CheckGamePadButtonEvent(GamePadButton.DPadDown, state.DPad.Left, i);
-                    if (state.DPad.Right != LastGamepadState[i].DPad.Right) CheckGamePadButtonEvent(GamePadButton.DPadDown, state.DPad.Right, i);
-                    if (state.DPad.Up != LastGamepadState[i].DPad.Up) CheckGamePadButtonEvent(GamePadButton.DPadDown, state.DPad.Up, i);
-
-                    if (state.ThumbSticks.Left.X != LastGamepadState[i].ThumbSticks.Left.X)
-
-                    LastGamepadState[i] = state;
+                        if (repeatFrame && (GamepadFirstPress[gamepad, button] >= GAMEPAD_REPEAT_DELAY))
+                            Game.OnInputEventInternal(FIRST_GAMEPAD_BUTTON + button, 0, gamepad, true);
+                    }
+                    else // button is released
+                    {
+                        GamepadFirstPress[gamepad, button] = 0;
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Checks the current status of a gamepad button.
+        /// Returns the state (pressed or released) of a given gamepad button.
         /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
-        /// <param name="button">The button</param>
+        /// <param name="state">OpenInput gamepad state to read</param>
+        /// <param name="key">Button to check</param>
         /// <returns>True if the button is pressed, false if it is released</returns>
-        public bool IsGamePadButtonDown(int gamePadIndex, GamePadButton button)
+        private bool GetGamepadButtonStatus(GamePadState state, KeyCode key)
         {
-            if (!EnableGamePads) return false;
-            if (!IsValidGamePadIndex(gamePadIndex)) return false;
-
-            GamePadState state = GamePad.GetState(gamePadIndex);
             if (!state.IsConnected) return false;
-            
-            switch (button)
+
+            switch (key)
             {
-                case GamePadButton.A: return state.Buttons.A == ButtonState.Pressed;
-                case GamePadButton.B: return state.Buttons.B == ButtonState.Pressed;
-                case GamePadButton.Back: return state.Buttons.Back == ButtonState.Pressed;
-                case GamePadButton.DPadDown: return state.DPad.Down == ButtonState.Pressed;
-                case GamePadButton.DPadLeft: return state.DPad.Left == ButtonState.Pressed;
-                case GamePadButton.DPadRight: return state.DPad.Right == ButtonState.Pressed;
-                case GamePadButton.DPadUp: return state.DPad.Up == ButtonState.Pressed;
-                case GamePadButton.Home: return state.Buttons.BigButton == ButtonState.Pressed;
-                case GamePadButton.LeftShoulder: return state.Buttons.LeftShoulder == ButtonState.Pressed;
-                case GamePadButton.LeftStick: return state.Buttons.LeftStick == ButtonState.Pressed;
-                case GamePadButton.RightShoulder: return state.Buttons.RightShoulder == ButtonState.Pressed;
-                case GamePadButton.RightStick: return state.Buttons.RightStick == ButtonState.Pressed;
-                case GamePadButton.Start: return state.Buttons.Start == ButtonState.Pressed;
-                case GamePadButton.X: return state.Buttons.X == ButtonState.Pressed;
-                case GamePadButton.Y: return state.Buttons.Y == ButtonState.Pressed;
+                case KeyCode.GamepadA: return state.Buttons.A == ButtonState.Pressed;
+                case KeyCode.GamepadB: return state.Buttons.B == ButtonState.Pressed;
+                case KeyCode.GamepadBack: return state.Buttons.Back == ButtonState.Pressed;
+                case KeyCode.GamepadDPadDown: return state.DPad.Down == ButtonState.Pressed;
+                case KeyCode.GamepadDPadLeft: return state.DPad.Left == ButtonState.Pressed;
+                case KeyCode.GamepadDPadRight: return state.DPad.Right == ButtonState.Pressed;
+                case KeyCode.GamepadDPadUp: return state.DPad.Up == ButtonState.Pressed;
+                case KeyCode.GamepadHome: return state.Buttons.BigButton == ButtonState.Pressed;
+                case KeyCode.GamepadLeftShoulder: return state.Buttons.LeftShoulder == ButtonState.Pressed;
+                case KeyCode.GamepadLeftStickPress: return state.Buttons.LeftStick == ButtonState.Pressed;
+                case KeyCode.GamepadLeftStickDown: return state.ThumbSticks.Left.Y > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftStickLeft: return state.ThumbSticks.Left.X < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftStickRight: return state.ThumbSticks.Left.X > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftStickUp: return state.ThumbSticks.Left.Y < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftTrigger: return state.Triggers.Left > GamepadTriggerThreshold_;
+                case KeyCode.GamepadRightShoulder: return state.Buttons.RightShoulder == ButtonState.Pressed;
+                case KeyCode.GamepadRightStickPress: return state.Buttons.RightStick == ButtonState.Pressed;
+                case KeyCode.GamepadRightStickDown: return state.ThumbSticks.Right.Y > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightStickLeft: return state.ThumbSticks.Right.X < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightStickRight: return state.ThumbSticks.Right.X > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightStickUp: return state.ThumbSticks.Right.Y < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightTrigger: return state.Triggers.Right > GamepadTriggerThreshold_;
+                case KeyCode.GamepadStart: return state.Buttons.Start == ButtonState.Pressed;
+                case KeyCode.GamepadX: return state.Buttons.X == ButtonState.Pressed;
+                case KeyCode.GamepadY: return state.Buttons.Y == ButtonState.Pressed;
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Checks the current status of a gamepad button on ANY of the current gamepads.
-        /// </summary>
-        /// <param name="button">The button</param>
-        /// <returns>True if the button is pressed on ANY gamepad, false otherwise</returns>
-        public bool IsGamePadButtonDownOnAnyGamePad(GamePadButton button)
-        {
-            for (int i = 0; i < MAX_GAMEPADS; i++)
-                if (IsGamePadButtonDown(i, button)) return true;
-
-            return false;
-        }
-
-        /// <summary>
-        /// Gets the current value of an axis of a gamepad thumbstick.
-        /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
-        /// <param name="side">The stick side (left or right)</param>
-        /// <param name="axis">The stick axis (X or Y)</param>
-        /// <returns></returns>
-        public float GetGamePadThumbStick(int gamePadIndex, GamePadSide side, GamePadAxis axis)
-        {
-            if (!EnableGamePads) return 0;
-            if (!IsValidGamePadIndex(gamePadIndex)) return 0;
-
-            GamePadState state = GamePad.GetState(gamePadIndex);
-            if (!state.IsConnected) return 0;
-
-            if (side == GamePadSide.Left)
-            {
-                if (axis == GamePadAxis.X)
-                    return state.ThumbSticks.Left.X;
-                else
-                    return state.ThumbSticks.Left.Y;
-            }
-            else
-            {
-                if (axis == GamePadAxis.X)
-                    return state.ThumbSticks.Right.X;
-                else
-                    return state.ThumbSticks.Right.Y;
-            }
-        }
-
-        /// <summary>
-        /// Gets the current value of a gamepad trigger.
-        /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
-        /// <param name="side">The trigger side (left or right)</param>
-        /// <returns>A floating point value between 0.0 and 1.0.</returns>
-        public float GetGamePadTrigger(int gamePadIndex, GamePadSide side)
-        {
-            if (!EnableGamePads) return 0;
-            if (!IsValidGamePadIndex(gamePadIndex)) return 0;
-
-            GamePadState state = GamePad.GetState(gamePadIndex);
-            if (!state.IsConnected) return 0;
-
-            if (side == GamePadSide.Left)
-                return state.Triggers.Left;
-            else
-                return state.Triggers.Right;
         }
 
         /// <summary>
         /// Is a gamepad with this index currently connected?
         /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
+        /// <param name="gamepadIndex">Index of the gamepad to check, between 0 and <see cref="GAMEPADS_COUNT"/></param>
         /// <returns>True if a gamepad is connected, false otherwise</returns>
-        public bool IsGamePadConnected(int gamePadIndex)
+        public bool IsGamePadConnected(int gamepadIndex)
         {
             if (!EnableGamePads) return false;
-            if (!IsValidGamePadIndex(gamePadIndex)) return false;
-            GamePadState state = GamePad.GetState(gamePadIndex);
-            return state.IsConnected;
+            if ((gamepadIndex < 0) || (gamepadIndex >= GAMEPADS_COUNT)) return false;
+            return GamePad.GetState(gamepadIndex).IsConnected;
         }
 
         /// <summary>
         /// Gets the name of the gamepad with the provided index.
         /// </summary>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
+        /// <param name="gamepadIndex">Index of the gamepad to check, between 0 and <see cref="GAMEPADS_COUNT"/></param>
         /// <returns>The name of the gamepad, or null if no gamepad with this index exists</returns>
-        public string GetGamePadName(int gamePadIndex)
+        public string GetGamePadName(int gamepadIndex)
         {
             if (!EnableGamePads) return null;
-            if (!IsGamePadConnected(gamePadIndex)) return null;
-            return GamePad.GetName(gamePadIndex);
-        }
-
-        /// <summary>
-        /// Is a key currently down?
-        /// </summary>
-        /// <param name="key">The key to check</param>
-        /// <returns>True if the key is currently pressed, false if it is released</returns>
-        public bool IsKeyDown(KeyCode key)
-        {
-            return Keyboard.GetState().IsKeyDown((Key)key);
-        }
-
-        /// <summary>
-        /// Is any key currently down on the keyboard?
-        /// </summary>
-        /// <returns>True if any key is down, false otherwise</returns>
-        public bool IsAnyKeyDown()
-        {
-            return Keyboard.GetState().IsAnyKeyDown;
-        }
-
-        /// <summary>
-        /// Is a mouse button currently pressed?
-        /// </summary>
-        /// <param name="button">The mouse button</param>
-        /// <returns>True if the button is pressed, false if it is released</returns>
-        public bool IsMouseButtonDown(MouseButton button)
-        {
-            return Mouse.GetState().IsButtonDown((OTKMouseButton)button);
-        }
-
-        /// <summary>
-        /// (Private) Raises an event according to the state of a given gamepad button.
-        /// </summary>
-        /// <param name="button">The button</param>
-        /// <param name="buttonState">Current state of the button</param>
-        /// <param name="gamePadIndex">Index of the gamepad to check, between 0 and <see cref="MAX_GAMEPADS"/></param>
-        private void CheckGamePadButtonEvent(GamePadButton button, ButtonState buttonState, int gamePadIndex)
-        {
-            if (buttonState == ButtonState.Released)
-                OnGamePadButtonUp?.Invoke(gamePadIndex, button);
-            else
-                OnGamePadButtonDown?.Invoke(gamePadIndex, button);
-        }
-
-        /// <summary>
-        /// (Private) Checks if a gamepad index is between 0 and <see cref="MAX_GAMEPADS"/>.
-        /// </summary>
-        /// <param name="gamePadIndex">Gamepad index to check</param>
-        /// <returns>True if the index is valid, false otherwise</returns>
-        private bool IsValidGamePadIndex(int gamePadIndex)
-        {
-            return (gamePadIndex >= 0) && (gamePadIndex < MAX_GAMEPADS);
+            if ((gamepadIndex < 0) || (gamepadIndex >= GAMEPADS_COUNT)) return null;
+            if (!IsGamePadConnected(gamepadIndex)) return null;
+            return GamePad.GetName(gamepadIndex);
         }
     }
 }

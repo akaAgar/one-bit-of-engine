@@ -18,7 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 namespace Asterion.Input
 {
     /// <summary>
-    /// Enumerates all keyboard keys.
+    /// Enumerates all keyboard keys and gamepad buttons.
     /// </summary>
     public enum KeyCode
     {
@@ -613,6 +613,111 @@ namespace Asterion.Input
         /// <summary>
         /// The Command key.
         /// </summary>
-        Command = 132
+        Command = 132,
+
+        // =====================================
+        // GAMEPAD BUTTONS START HERE
+        // =====================================
+
+        /// <summary>
+        /// The gamepad A button.
+        /// </summary>
+        GamepadA = 1001,
+        /// <summary>
+        /// The gamepad B button.
+        /// </summary>
+        GamepadB = 1002,
+        /// <summary>
+        /// The gamepad Back button.
+        /// </summary>
+        GamepadBack = 1003,
+        /// <summary>
+        /// The gamepad D-Pad down direction.
+        /// </summary>
+        GamepadDPadDown = 1004,
+        /// <summary>
+        /// The gamepad D-Pad left direction.
+        /// </summary>
+        GamepadDPadLeft = 1005,
+        /// <summary>
+        /// The gamepad D-Pad right direction.
+        /// </summary>
+        GamepadDPadRight = 1006,
+        /// <summary>
+        /// The gamepad D-Pad up direction.
+        /// </summary>
+        GamepadDPadUp = 1008,
+        /// <summary>
+        /// The gamepad home ("big center button") button.
+        /// </summary>
+        GamepadHome = 1009,
+        /// <summary>
+        /// The gamepad left shoulder button.
+        /// </summary>
+        GamepadLeftShoulder = 1010,
+        /// <summary>
+        /// The gamepad left stick button (stick pressed down).
+        /// </summary>
+        GamepadLeftStickPress = 1011,
+        /// <summary>
+        /// The gamepad left stick up direction.
+        /// </summary>
+        GamepadLeftStickDown = 1012,
+        /// <summary>
+        /// The gamepad left stick left direction.
+        /// </summary>
+        GamepadLeftStickLeft = 1013,
+        /// <summary>
+        /// The gamepad left stick right direction.
+        /// </summary>
+        GamepadLeftStickRight = 1014,
+        /// <summary>
+        /// The gamepad left stick up direction.
+        /// </summary>
+        GamepadLeftStickUp = 1015,
+        /// <summary>
+        /// The gamepad left trigger.
+        /// </summary>
+        GamepadLeftTrigger = 1016,
+        /// <summary>
+        /// The gamepad right shoulder button.
+        /// </summary>
+        GamepadRightShoulder = 1017,
+        /// <summary>
+        /// The gamepad right stick button (stick pressed down).
+        /// </summary>
+        GamepadRightStickPress = 1018,
+        /// <summary>
+        /// The gamepad right stick down direction.
+        /// </summary>
+        GamepadRightStickDown = 1019,
+        /// <summary>
+        /// The gamepad right stick left direction.
+        /// </summary>
+        GamepadRightStickLeft = 1020,
+        /// <summary>
+        /// The gamepad right stick right direction.
+        /// </summary>
+        GamepadRightStickRight = 1021,
+        /// <summary>
+        /// The gamepad right stick up direction.
+        /// </summary>
+        GamepadRightStickUp = 1022,
+        /// <summary>
+        /// The gamepad right trigger.
+        /// </summary>
+        GamepadRightTrigger = 1023,
+        /// <summary>
+        /// The gamepad start button.
+        /// </summary>
+        GamepadStart = 1024,
+        /// <summary>
+        /// The gamepad X button.
+        /// </summary>
+        GamepadX = 1025,
+        /// <summary>
+        /// The gamepad Y button.
+        /// </summary>
+        GamepadY = 1026
     }
 }

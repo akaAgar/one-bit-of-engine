@@ -18,7 +18,6 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 using Asterion.Core;
 using Asterion.Input;
 using Asterion.OpenGL;
-using System;
 
 namespace Asterion.UI
 {
@@ -149,16 +148,15 @@ namespace Asterion.UI
         /// <summary>
         /// (Internal) Called whenever a key is pressed down. Passes the key input to the current displayed page, if any.
         /// </summary>
-        /// <param name="key">The key that raised the event</param>
-        /// <param name="shift">Was the shift modifier key down?</param>
-        /// <param name="control">Was the control modifier key down?</param>
-        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="key">The key or gamepad button that raised the event</param>
+        /// <param name="modifiers">Which modifier keys are down?</param>
+        /// <param name="gamepadIndex">Index of the gamepad that raised the event, if the key is a gamepad button, or -1 if it was a keyboard key</param>
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
-        internal void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        internal void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
             if (!Active) return;
 
-            Page.KeyDown(key, shift, control, alt, isRepeat);
+            Page.KeyDown(key, modifiers, gamepadIndex, isRepeat);
         }
     }
 }
