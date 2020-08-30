@@ -88,7 +88,7 @@ namespace Asterion.UI
         /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal abstract void UpdateVBOTiles(VBO vbo);
 
-        internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile)
+        internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile, RGBColor color)
         {
             if (string.IsNullOrEmpty(text)) return;
 
@@ -98,7 +98,7 @@ namespace Asterion.UI
             {
                 if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
 
-                Tile charTile = new Tile(tile + textBytes[i] - 32, Color, Tilemap);
+                Tile charTile = new Tile(tile + textBytes[i] - 32, color, Tilemap);
 
                 vbo.UpdateTileData(x + i, y, charTile);
             }

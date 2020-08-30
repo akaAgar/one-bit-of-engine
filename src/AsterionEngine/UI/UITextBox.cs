@@ -1,8 +1,10 @@
 ﻿using Asterion.OpenGL;
-using System;
 
 namespace Asterion.UI
 {
+    /// <summary>
+    /// A control displaying a multiline text in a given rectangle.
+    /// </summary>
     public class UITextBox : UIControlRectangle
     {
         /// <summary>
@@ -29,7 +31,7 @@ namespace Asterion.UI
             for (int i = 0; i < lines.Length; i++)
             {
                 if (i >= Height) break;
-                DrawTextOnVBO(vbo, lines[i], Position.X, Position.Y + i, FontTile_);
+                DrawTextOnVBO(vbo, lines[i], Position.X, Position.Y + i, FontTile_, Color);
             }
         }
     }

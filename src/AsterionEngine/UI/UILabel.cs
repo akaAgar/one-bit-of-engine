@@ -1,7 +1,6 @@
 ﻿using Asterion.Core;
 using Asterion.OpenGL;
 using System;
-using System.Text;
 
 namespace Asterion.UI
 {
@@ -40,7 +39,7 @@ namespace Asterion.UI
             string realText = Text_;
             if (MaxLength_ > 0) realText = Text.Substring(0, Math.Min(realText.Length, MaxLength_));
 
-            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_);
+            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_, Color);
         }
     }
 }
