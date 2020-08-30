@@ -16,6 +16,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 */
 
 using Asterion.Core;
+using Asterion.Input;
 using Asterion.OpenGL;
 using System.Text;
 
@@ -102,6 +103,19 @@ namespace Asterion.UI.Controls
 
                 vbo.UpdateTileData(x + i, y, charTile);
             }
+        }
+
+        /// <summary>
+        /// (Internal) Called whenever a key is pressed when this control is displayed.
+        /// </summary>
+        /// <param name="key">The key that raised the event</param>
+        /// <param name="shift">Was the shift modifier key down?</param>
+        /// <param name="control">Was the control modifier key down?</param>
+        /// <param name="alt">Was the alt modifier key down?</param>
+        /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
+        internal virtual void OnKeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
+        {
+
         }
     }
 }

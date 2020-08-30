@@ -201,6 +201,9 @@ namespace Asterion.UI
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
         internal virtual void KeyDown(KeyCode key, bool shift, bool control, bool alt, bool isRepeat)
         {
+            foreach (UIControl c in Controls)
+                c.OnKeyDown(key, shift, control, alt, isRepeat);
+
             OnKeyDown(key, shift, control, alt, isRepeat);
         }
 
