@@ -21,7 +21,7 @@ using Asterion.Input;
 using Asterion.IO;
 using Asterion.UI;
 using Asterion.Scene;
-using Asterion.Video;
+using Asterion.OpenGL;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;

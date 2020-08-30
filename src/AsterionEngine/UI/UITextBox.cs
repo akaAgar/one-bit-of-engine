@@ -1,4 +1,4 @@
-﻿using Asterion.Video;
+﻿using Asterion.OpenGL;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

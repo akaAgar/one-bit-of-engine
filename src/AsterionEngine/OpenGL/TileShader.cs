@@ -22,7 +22,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 
-namespace Asterion.Video
+namespace Asterion.OpenGL
 {
     /// <summary>
     /// The OpenGL shader used to render the tiles.

@@ -21,7 +21,7 @@ using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
 
-namespace Asterion.Video
+namespace Asterion.OpenGL
 {
     internal class VBO
     {

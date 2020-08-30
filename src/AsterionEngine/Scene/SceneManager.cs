@@ -1,5 +1,5 @@
 ﻿using Asterion.Core;
-using Asterion.Video;
+using Asterion.OpenGL;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Linq;

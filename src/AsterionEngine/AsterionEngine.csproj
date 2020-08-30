@@ -89,7 +89,9 @@
     <Compile Include="Video\VBO.cs" />
     <Compile Include="VSync.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="OpenGL\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
     <EmbeddedResource Include="Shaders\TilesShader.frag" />

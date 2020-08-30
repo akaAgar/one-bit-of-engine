@@ -24,7 +24,7 @@ using System.IO;
 using OpenGLPixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 using WindowsPixelFormat = System.Drawing.Imaging.PixelFormat;
 
-namespace Asterion.Video
+namespace Asterion.OpenGL
 {
     internal sealed class TilemapTexture : IDisposable
     {
