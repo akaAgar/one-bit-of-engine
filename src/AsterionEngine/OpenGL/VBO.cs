@@ -117,9 +117,26 @@ namespace Asterion.OpenGL
             GL.BufferData(BufferTarget.ArrayBuffer, SIZE_OF_FLOAT * Length, new float[Length], BufferUsageHint.DynamicDraw);
         }
 
+        /// <summary>
+        /// (Internal) Updates the VBO data for a given tile.
+        /// </summary>
+        /// <param name="x">Tile X index in the VBO *AND* X position on the screen</param>
+        /// <param name="y">Tile Y index in the VBO *AND* Y position on the screen</param>
+        /// <param name="tile">Tile data</param>
         internal void UpdateTileData(int x, int y, Tile tile) { UpdateTileData(x, y, x, y, tile); }
+
+        /// <summary>
+        /// (Internal) Updates the VBO data for a given tile.
+        /// </summary>
+        /// <param name="x">Tile X INDEX (not position) in the VBO</param>
+        /// <param name="y">Tile Y INDEX (not position) in the VBO</param>
+        /// <param name="xPos">Tile X POSITION (not index) on the screen</param>
+        /// <param name="yPos">Tile Y POSITION (not index) on the screen</param>
+        /// <param name="tile">Tile data</param>
         internal void UpdateTileData(int x, int y, float xPos, float yPos, Tile tile)
         {
+            if ((x < 0) || (y < 0) || (x >= Columns) || (y >= Rows)) return; // Tile index is out of bounds
+
             int index = y * Columns + x;
 
             int tileY = tile.TileIndex / Renderer.TilemapCount.Width;
