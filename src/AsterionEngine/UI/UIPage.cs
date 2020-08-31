@@ -92,6 +92,24 @@ namespace Asterion.UI
         }
 
         /// <summary>
+        /// (Protected) Adds a new <see cref="UIInputBox"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="text">Text</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="color">Color</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns>An <see cref="UIInputBox"/> control</returns>
+        protected UIInputBox AddInputBox(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
+        {
+            UIInputBox control = AddControl<UIInputBox>(x, y, color, tilemap);
+            control.Text = text;
+            control.FontTile = fontTile;
+            return control;
+        }
+
+        /// <summary>
         /// (Protected) Adds a new <see cref="UIFrame"/> control on the page.
         /// </summary>
         /// <param name="x">X coordinate</param>
