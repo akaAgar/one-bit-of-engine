@@ -21,8 +21,8 @@ namespace Asterion.Demo.UIPages
             menu.SelectedColor = RGBColor.Yellow;
             menu.AddMenuItem("Play an explosion");
             menu.AddMenuItem("Play an fireball sound");
+            menu.AddMenuItem("Play a looping fireball sound");
             menu.OnSelectedItemValidated += OnMenuItemValidated;
-
 
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "[F]: fullscreen toggle, [ESC]: back", (int)TileID.Font, RGBColor.PaleGoldenrod);
         }
@@ -33,6 +33,7 @@ namespace Asterion.Demo.UIPages
             {
                 case 0: UI.Game.Audio.PlaySound("impact.wav"); return;
                 case 1: UI.Game.Audio.PlaySound("fire.wav"); return;
+                case 2: UI.Game.Audio.PlayLoopingSound("fire.wav"); return;
             }
         }
 
