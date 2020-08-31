@@ -113,6 +113,27 @@ namespace Asterion.UI
         }
 
         /// <summary>
+        /// (Protected) Adds a new <see cref="UIImage"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="width">Width of the frame</param>
+        /// <param name="height">Height of the frame</param>
+        /// <param name="tile">The tile to draw, or the upper-left tile to draw for composite images</param>
+        /// <param name="color">Color</param>
+        /// <param name="composite">Is this image a composite image, made multiple adjacent tiles on the tilemap?</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns>An <see cref="UIImage"/> control</returns>
+        protected UIImage AddImage(int x, int y, int width, int height, int tile, RGBColor color, bool composite = false, int tilemap = 0)
+        {
+            UIImage control = AddControl<UIImage>(x, y, color, tilemap);
+            control.Tile = tile;
+            control.Size = new Dimension(width, height);
+            control.Composite = composite;
+            return control;
+        }
+
+        /// <summary>
         /// (Protected) Adds a new <see cref="UITextBox"/> control on the page.
         /// </summary>
         /// <param name="x">X coordinate</param>
