@@ -234,8 +234,8 @@ namespace Asterion.Audio
 
             StopSound(channel);
             SoundChannels[channel] = AL.GenSource();
-            AL.Source(SoundChannels[channel], ALSourcef.Gain, AsterionTools.Clamp(0f, 10f, volume));
-            AL.Source(SoundChannels[channel], ALSourcef.Pitch, AsterionTools.Clamp(0.01f, 10f, pitch));
+            AL.Source(SoundChannels[channel], ALSourcef.Gain, AsterionTools.Clamp(volume, 0f, 10f));
+            AL.Source(SoundChannels[channel], ALSourcef.Pitch, AsterionTools.Clamp(pitch, 0.01f, 10f));
             AL.Source(SoundChannels[channel], ALSourcei.Buffer, sound.Buffer);
             AL.Source(SoundChannels[channel], ALSourceb.Looping, looping);
             AL.SourcePlay(SoundChannels[channel]);
