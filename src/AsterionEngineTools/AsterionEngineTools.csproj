@@ -45,6 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AsterionEngine\IO\FileSource.cs">
+      <Link>Imports\FileSource.cs</Link>
+    </Compile>
+    <Compile Include="..\AsterionEngine\IO\FileSourceArchive.cs">
+      <Link>Imports\FileSourceArchive.cs</Link>
+    </Compile>
+    <Compile Include="..\AsterionEngine\IO\FileSourceArchiveIndex.cs">
+      <Link>Imports\FileSourceArchiveIndex.cs</Link>
+    </Compile>
     <Compile Include="AsterionTools.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
