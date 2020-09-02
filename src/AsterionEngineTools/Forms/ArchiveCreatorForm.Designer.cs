@@ -30,16 +30,16 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveCreatorForm));
             this.ArchiveTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.ArchiveFilesGroupBox = new System.Windows.Forms.GroupBox();
-            this.ArchiveFilesListBox = new System.Windows.Forms.ListBox();
             this.ArchiveButtonAddFiles = new System.Windows.Forms.Button();
             this.ArchiveButtonCreateArchive = new System.Windows.Forms.Button();
             this.ArchivePasswordGroupBox = new System.Windows.Forms.GroupBox();
             this.ArchivePasswordTextBox = new System.Windows.Forms.TextBox();
             this.ArchiveInfoTextBox = new System.Windows.Forms.TextBox();
+            this.ArchiveFilesListBox = new System.Windows.Forms.ListBox();
+            this.ArchiveFilesGroupBox = new System.Windows.Forms.GroupBox();
             this.ArchiveTableLayoutPanel.SuspendLayout();
-            this.ArchiveFilesGroupBox.SuspendLayout();
             this.ArchivePasswordGroupBox.SuspendLayout();
+            this.ArchiveFilesGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // ArchiveTableLayoutPanel
@@ -61,40 +61,13 @@
             this.ArchiveTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
             this.ArchiveTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.ArchiveTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
-            this.ArchiveTableLayoutPanel.Size = new System.Drawing.Size(784, 561);
+            this.ArchiveTableLayoutPanel.Size = new System.Drawing.Size(624, 441);
             this.ArchiveTableLayoutPanel.TabIndex = 1;
-            // 
-            // ArchiveFilesGroupBox
-            // 
-            this.ArchiveFilesGroupBox.Controls.Add(this.ArchiveFilesListBox);
-            this.ArchiveFilesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveFilesGroupBox.Location = new System.Drawing.Point(2, 2);
-            this.ArchiveFilesGroupBox.Margin = new System.Windows.Forms.Padding(2);
-            this.ArchiveFilesGroupBox.Name = "ArchiveFilesGroupBox";
-            this.ArchiveFilesGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.ArchiveTableLayoutPanel.SetRowSpan(this.ArchiveFilesGroupBox, 4);
-            this.ArchiveFilesGroupBox.Size = new System.Drawing.Size(588, 557);
-            this.ArchiveFilesGroupBox.TabIndex = 0;
-            this.ArchiveFilesGroupBox.TabStop = false;
-            this.ArchiveFilesGroupBox.Text = "Files to include in the archive";
-            // 
-            // ArchiveFilesListBox
-            // 
-            this.ArchiveFilesListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveFilesListBox.FormattingEnabled = true;
-            this.ArchiveFilesListBox.Location = new System.Drawing.Point(2, 15);
-            this.ArchiveFilesListBox.Margin = new System.Windows.Forms.Padding(2);
-            this.ArchiveFilesListBox.Name = "ArchiveFilesListBox";
-            this.ArchiveFilesListBox.ScrollAlwaysVisible = true;
-            this.ArchiveFilesListBox.Size = new System.Drawing.Size(584, 540);
-            this.ArchiveFilesListBox.Sorted = true;
-            this.ArchiveFilesListBox.TabIndex = 0;
-            this.ArchiveFilesListBox.Click += new System.EventHandler(this.ArchiveFilesListBox_DoubleClick);
             // 
             // ArchiveButtonAddFiles
             // 
             this.ArchiveButtonAddFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveButtonAddFiles.Location = new System.Drawing.Point(594, 450);
+            this.ArchiveButtonAddFiles.Location = new System.Drawing.Point(434, 330);
             this.ArchiveButtonAddFiles.Margin = new System.Windows.Forms.Padding(2);
             this.ArchiveButtonAddFiles.Name = "ArchiveButtonAddFiles";
             this.ArchiveButtonAddFiles.Size = new System.Drawing.Size(188, 28);
@@ -106,7 +79,7 @@
             // ArchiveButtonCreateArchive
             // 
             this.ArchiveButtonCreateArchive.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveButtonCreateArchive.Location = new System.Drawing.Point(594, 531);
+            this.ArchiveButtonCreateArchive.Location = new System.Drawing.Point(434, 411);
             this.ArchiveButtonCreateArchive.Margin = new System.Windows.Forms.Padding(2);
             this.ArchiveButtonCreateArchive.Name = "ArchiveButtonCreateArchive";
             this.ArchiveButtonCreateArchive.Size = new System.Drawing.Size(188, 28);
@@ -119,7 +92,7 @@
             // 
             this.ArchivePasswordGroupBox.Controls.Add(this.ArchivePasswordTextBox);
             this.ArchivePasswordGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchivePasswordGroupBox.Location = new System.Drawing.Point(594, 482);
+            this.ArchivePasswordGroupBox.Location = new System.Drawing.Point(434, 362);
             this.ArchivePasswordGroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.ArchivePasswordGroupBox.Name = "ArchivePasswordGroupBox";
             this.ArchivePasswordGroupBox.Padding = new System.Windows.Forms.Padding(2);
@@ -143,29 +116,54 @@
             this.ArchiveInfoTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.ArchiveInfoTextBox.Cursor = System.Windows.Forms.Cursors.Arrow;
             this.ArchiveInfoTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ArchiveInfoTextBox.Location = new System.Drawing.Point(594, 2);
-            this.ArchiveInfoTextBox.Margin = new System.Windows.Forms.Padding(2);
+            this.ArchiveInfoTextBox.Location = new System.Drawing.Point(440, 8);
+            this.ArchiveInfoTextBox.Margin = new System.Windows.Forms.Padding(8);
             this.ArchiveInfoTextBox.Multiline = true;
             this.ArchiveInfoTextBox.Name = "ArchiveInfoTextBox";
             this.ArchiveInfoTextBox.ReadOnly = true;
-            this.ArchiveInfoTextBox.Size = new System.Drawing.Size(188, 444);
+            this.ArchiveInfoTextBox.Size = new System.Drawing.Size(176, 312);
             this.ArchiveInfoTextBox.TabIndex = 5;
             this.ArchiveInfoTextBox.Text = resources.GetString("ArchiveInfoTextBox.Text");
+            // 
+            // ArchiveFilesListBox
+            // 
+            this.ArchiveFilesListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ArchiveFilesListBox.FormattingEnabled = true;
+            this.ArchiveFilesListBox.Location = new System.Drawing.Point(3, 16);
+            this.ArchiveFilesListBox.Margin = new System.Windows.Forms.Padding(2);
+            this.ArchiveFilesListBox.Name = "ArchiveFilesListBox";
+            this.ArchiveFilesListBox.ScrollAlwaysVisible = true;
+            this.ArchiveFilesListBox.Size = new System.Drawing.Size(420, 416);
+            this.ArchiveFilesListBox.Sorted = true;
+            this.ArchiveFilesListBox.TabIndex = 0;
+            this.ArchiveFilesListBox.Click += new System.EventHandler(this.ArchiveFilesListBox_DoubleClick);
+            // 
+            // ArchiveFilesGroupBox
+            // 
+            this.ArchiveFilesGroupBox.Controls.Add(this.ArchiveFilesListBox);
+            this.ArchiveFilesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ArchiveFilesGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.ArchiveFilesGroupBox.Name = "ArchiveFilesGroupBox";
+            this.ArchiveTableLayoutPanel.SetRowSpan(this.ArchiveFilesGroupBox, 4);
+            this.ArchiveFilesGroupBox.Size = new System.Drawing.Size(426, 435);
+            this.ArchiveFilesGroupBox.TabIndex = 0;
+            this.ArchiveFilesGroupBox.TabStop = false;
+            this.ArchiveFilesGroupBox.Text = "Files to include in the archive";
             // 
             // ArchiveCreatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 561);
+            this.ClientSize = new System.Drawing.Size(624, 441);
             this.Controls.Add(this.ArchiveTableLayoutPanel);
             this.Name = "ArchiveCreatorForm";
             this.Text = "Asterion Engine Tools";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ArchiveTableLayoutPanel.ResumeLayout(false);
             this.ArchiveTableLayoutPanel.PerformLayout();
-            this.ArchiveFilesGroupBox.ResumeLayout(false);
             this.ArchivePasswordGroupBox.ResumeLayout(false);
             this.ArchivePasswordGroupBox.PerformLayout();
+            this.ArchiveFilesGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -173,12 +171,12 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel ArchiveTableLayoutPanel;
-        private System.Windows.Forms.GroupBox ArchiveFilesGroupBox;
-        private System.Windows.Forms.ListBox ArchiveFilesListBox;
         private System.Windows.Forms.Button ArchiveButtonAddFiles;
         private System.Windows.Forms.Button ArchiveButtonCreateArchive;
         private System.Windows.Forms.GroupBox ArchivePasswordGroupBox;
         private System.Windows.Forms.TextBox ArchivePasswordTextBox;
         private System.Windows.Forms.TextBox ArchiveInfoTextBox;
+        private System.Windows.Forms.GroupBox ArchiveFilesGroupBox;
+        private System.Windows.Forms.ListBox ArchiveFilesListBox;
     }
 }

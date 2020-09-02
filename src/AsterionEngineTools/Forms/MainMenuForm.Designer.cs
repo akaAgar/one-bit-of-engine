@@ -50,7 +50,7 @@
             this.MenuTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.MenuTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
             this.MenuTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.MenuTableLayoutPanel.Size = new System.Drawing.Size(624, 441);
+            this.MenuTableLayoutPanel.Size = new System.Drawing.Size(368, 201);
             this.MenuTableLayoutPanel.TabIndex = 0;
             // 
             // ArchiveCreatorButton
@@ -58,7 +58,7 @@
             this.ArchiveCreatorButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ArchiveCreatorButton.Location = new System.Drawing.Point(3, 3);
             this.ArchiveCreatorButton.Name = "ArchiveCreatorButton";
-            this.ArchiveCreatorButton.Size = new System.Drawing.Size(618, 34);
+            this.ArchiveCreatorButton.Size = new System.Drawing.Size(362, 34);
             this.ArchiveCreatorButton.TabIndex = 0;
             this.ArchiveCreatorButton.Text = "Archive creator";
             this.ArchiveCreatorButton.UseVisualStyleBackColor = true;
@@ -69,7 +69,7 @@
             this.TileMapEnumCreatorButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TileMapEnumCreatorButton.Location = new System.Drawing.Point(3, 43);
             this.TileMapEnumCreatorButton.Name = "TileMapEnumCreatorButton";
-            this.TileMapEnumCreatorButton.Size = new System.Drawing.Size(618, 34);
+            this.TileMapEnumCreatorButton.Size = new System.Drawing.Size(362, 34);
             this.TileMapEnumCreatorButton.TabIndex = 1;
             this.TileMapEnumCreatorButton.Text = "Tilemap enum creator";
             this.TileMapEnumCreatorButton.UseVisualStyleBackColor = true;
@@ -80,7 +80,7 @@
             this.TilemapAnimationMakerButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TilemapAnimationMakerButton.Location = new System.Drawing.Point(3, 83);
             this.TilemapAnimationMakerButton.Name = "TilemapAnimationMakerButton";
-            this.TilemapAnimationMakerButton.Size = new System.Drawing.Size(618, 34);
+            this.TilemapAnimationMakerButton.Size = new System.Drawing.Size(362, 34);
             this.TilemapAnimationMakerButton.TabIndex = 2;
             this.TilemapAnimationMakerButton.Text = "Tilemap animation maker creator";
             this.TilemapAnimationMakerButton.UseVisualStyleBackColor = true;
@@ -90,7 +90,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 441);
+            this.ClientSize = new System.Drawing.Size(368, 201);
             this.Controls.Add(this.MenuTableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
