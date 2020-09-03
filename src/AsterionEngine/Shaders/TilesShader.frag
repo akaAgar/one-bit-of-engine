@@ -17,6 +17,8 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 #version 330 core
 
+uniform int animationFrame;
+
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
@@ -39,6 +41,15 @@ void main()
   else
     color = texture(texture0, fragUV);
  
-  color *= vec4(fragColor, 1);
+  float brightness = 0;
+
+  switch (animationFrame)
+  {
+    default: brightness = color.r; break;
+    case 1: brightness = color.g; break;
+    case 2: brightness = color.b; break;
+  }
+
+  color = vec4(brightness, brightness, brightness, 1) * vec4(fragColor, 1);
   color.a = color.r;
 }

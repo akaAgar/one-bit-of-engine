@@ -43,6 +43,11 @@ namespace Asterion.OpenGL
         /// Pointer to the "projection" Matrix4 uniform in the shader.
         /// </summary>
         private readonly int UniformProjection;
+
+        /// <summary>
+        /// Pointer to the "animationFrame" int uniform in the shader.
+        /// </summary>
+        private readonly int UniformAnimationFrame;
         
         /// <summary>
         /// Pointers to the texture uniforms in the shader (one texture for each tilemap in TileScreen)
@@ -71,8 +76,11 @@ namespace Asterion.OpenGL
             GL.AttachShader(Handle, fragmentShader);
             GL.LinkProgram(Handle);
 
+            UniformAnimationFrame = GL.GetUniformLocation(Handle, "animationFrame");
+            GL.Uniform1(UniformAnimationFrame, 0);
+
             UniformProjection = GL.GetUniformLocation(Handle, "projection");
-            
+
             for (i = 0; i < TileRenderer.TILEMAP_COUNT; i++)
                 UniformTexture[i] = GL.GetUniformLocation(Handle, $"texture{i}");
 
@@ -138,6 +146,15 @@ namespace Asterion.OpenGL
 
             GL.DeleteProgram(Handle);
             GL.DeleteVertexArray(VAO);
+        }
+
+        /// <summary>
+        /// Sets the current animation frame in the shader.
+        /// </summary>
+        /// <param name="frameIndex">Index of the current frame</param>
+        internal void SetAnimationFrame(int frameIndex)
+        {
+            GL.Uniform1(UniformAnimationFrame, frameIndex);
         }
     }
 }

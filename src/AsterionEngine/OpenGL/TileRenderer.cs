@@ -76,16 +76,16 @@ namespace Asterion.OpenGL
         private readonly FileSystem Files = null;
 
         /// <summary>
-        /// The number of frames in each frame animation. Minimum is 1, maximum is 3, default is 3.
+        /// The number of frames in each frame animation. Minimum is 1, maximum is 3, default is 2.
         /// </summary>
-        public int TileAnimationFrames { get { return TileAnimationFrames_; } set { TileAnimationFrames_ = AsterionTools.Clamp(value, 1, 3); } }
-        private int TileAnimationFrames_ = 3;
+        public int TileAnimationFrames { get { return TileAnimationFrames_; } set { TileAnimationFrames_ = AsterionTools.Clamp(value, 1, 3); ResetAnimation(); } }
+        private int TileAnimationFrames_ = 2;
 
         /// <summary>
-        /// The duration (in seconds) of each frame of animated tiles. Minimum is 0.1, maximum is 10.0, default is 0.5.
+        /// The duration (in seconds) of each frame of animated tiles. Minimum is 0.1, maximum is 10.0, default is 1.0.
         /// </summary>
-        public float TileAnimationFrameDuration { get { return TileAnimationFrameDuration_; } set { TileAnimationFrameDuration_ = AsterionTools.Clamp(value, .1f, 10.0f); } }
-        private float TileAnimationFrameDuration_ = .5f;
+        public float TileAnimationFrameDuration { get { return TileAnimationFrameDuration_; } set { TileAnimationFrameDuration_ = AsterionTools.Clamp(value, .1f, 10.0f); ResetAnimation(); } }
+        private float TileAnimationFrameDuration_ = 1.0f;
 
         /// <summary>
         /// Current animation frame.
@@ -128,6 +128,7 @@ namespace Asterion.OpenGL
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
             Shader = new TileShader();
+            ResetAnimation();
         }
 
         /// <summary>
@@ -168,11 +169,15 @@ namespace Asterion.OpenGL
 
             CurrentAnimationFrameTime += elapsedSeconds;
 
-            if (CurrentAnimationFrame >= TileAnimationFrameDuration_)
+            if (CurrentAnimationFrameTime >= TileAnimationFrameDuration_)
             {
                 CurrentAnimationFrameTime = 0;
                 CurrentAnimationFrame++;
-                CurrentAnimationFrame %= TileAnimationFrames_;
+
+                // 3-frames animation actually have 4 steps, to allow for a "ping-pong" 0-1-2-1 animation
+                int totalFrameSteps = (TileAnimationFrames_ == 3) ? 4 : TileAnimationFrames_;
+                CurrentAnimationFrame %= totalFrameSteps;
+                Shader.SetAnimationFrame((CurrentAnimationFrame == 3) ? 1 : CurrentAnimationFrame);
             }
         }
 
@@ -242,6 +247,16 @@ namespace Asterion.OpenGL
 
             for (int i = 0; i < TILEMAP_COUNT; i++)
                 Tilemaps[i]?.Use(i);
+        }
+
+        /// <summary>
+        /// Resets animation timer and sets the current frame to 0.
+        /// </summary>
+        private void ResetAnimation()
+        {
+            CurrentAnimationFrameTime = 0;
+            CurrentAnimationFrame = 0;
+            Shader.SetAnimationFrame(0);
         }
 
         /// <summary>
