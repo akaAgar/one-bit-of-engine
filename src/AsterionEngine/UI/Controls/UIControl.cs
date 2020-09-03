@@ -63,6 +63,12 @@ namespace Asterion.UI.Controls
         private int Tilemap_ = 0;
 
         /// <summary>
+        /// Special shader effect to use when drawing this control.
+        /// </summary>
+        public TileEffect TileEffect { get { return TileEffect_; } set { TileEffect_ = value; Page.UI.Invalidate(); } }
+        public TileEffect TileEffect_ = TileEffect.None;
+
+        /// <summary>
         /// The Z-Order of this control. Higher values are drawn last.
         /// </summary>
         public int ZOrder { get { return ZOrder_; } set { ZOrder_ = value; Page.UI.Invalidate(); } }
@@ -93,7 +99,7 @@ namespace Asterion.UI.Controls
         /// <summary>
         /// Are keyboard/gamepad input events enabled for this control?
         /// </summary>
-        public virtual bool InputEnabled { get; set; } = false;
+        internal virtual bool InputEnabled { get; set; } = false;
 
         /// <summary>
         /// Only gamepad with an index featured in this array will be able to raise input events for this control.

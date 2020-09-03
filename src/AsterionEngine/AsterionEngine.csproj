@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
+    <Compile Include="Core\TileEffect.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Area.cs" />
     <Compile Include="Input\ModifierKeys.cs" />
