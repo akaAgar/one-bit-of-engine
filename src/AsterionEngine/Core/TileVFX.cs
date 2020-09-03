@@ -33,9 +33,9 @@ namespace Asterion.Core
         GlowSlow,
 
         /// <summary>
-        /// Average glow (2 hz).
+        /// Medium glow (2 hz).
         /// </summary>
-        GlowAverage,
+        GlowMedium,
 
         /// <summary>
         /// Fast glow (4 hz).
@@ -48,9 +48,9 @@ namespace Asterion.Core
         BlinkSlow,
 
         /// <summary>
-        /// Average blink (4 hz).
+        /// Medium blink (4 hz).
         /// </summary>
-        BlinkAverage,
+        BlinkMedium,
 
         /// <summary>
         /// Fast blink (8 hz).
@@ -62,6 +62,73 @@ namespace Asterion.Core
         /// </summary>
         Negative,
 
-        Test
+        /// <summary>
+        /// Negative, blink slow (1 hz).
+        /// </summary>
+        NegativeBlinkSlow,
+
+        /// <summary>
+        /// Negative, blink medium (2 hz).
+        /// </summary>
+        NegativeBlinkMedium,
+
+        /// <summary>
+        /// Negative, blink fast (4 hz).
+        /// </summary>
+        NegativeBlinkFast,
+
+        NegativeGlowSlow,
+        NegativeGlowMedium,
+        NegativeGlowFast,
+
+        /// <summary>
+        /// Slanted to the right.
+        /// </summary>
+        SlantedRight,
+
+        /// <summary>
+        /// Slanted to the left.
+        /// </summary>
+        SlantedLeft,
+
+        /// <summary>
+        /// Slow top oscillation (1 hz).
+        /// </summary>
+        OscillateTopSlow,
+
+        /// <summary>
+        /// Medium top oscillation (2 hz).
+        /// </summary>
+        OscillateTopMedium,
+
+        /// <summary>
+        /// Fast top oscillation (4 hz).
+        /// </summary>
+        OscillateTopFast,
+
+        /// <summary>
+        /// Slow top oscillation (1 hz).
+        /// </summary>
+        OscillateBottomSlow,
+
+        /// <summary>
+        /// Medium bottom oscillation (2 hz).
+        /// </summary>
+        OscillateBottomMedium,
+
+        /// <summary>
+        /// Fast bottom oscillation (4 hz).
+        /// </summary>
+        OscillateBottomFast,
+
+        WaveHorizontalSlow,
+        WaveHorizontalMedium,
+        WaveHorizontalFast,
+
+        WaveVerticalSlow,
+        WaveVerticalMedium,
+        WaveVerticalFast,
+
+        TEST
     }
 }
