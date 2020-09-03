@@ -88,11 +88,13 @@
     <Compile Include="OpenGL\VBO.cs" />
     <Compile Include="Core\VSync.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Textures\FXTextures.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
-    <EmbeddedResource Include="Shaders\TilesShader.frag" />
-    <EmbeddedResource Include="Shaders\TilesShader.vert" />
+    <EmbeddedResource Include="Resources\Shaders\TilesShader.frag" />
+    <EmbeddedResource Include="Resources\Shaders\TilesShader.vert" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

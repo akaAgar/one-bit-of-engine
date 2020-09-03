@@ -70,10 +70,10 @@ namespace Asterion.OpenGL
             vertexShader = GL.CreateShader(ShaderType.VertexShader);
             fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
 
-            GL.ShaderSource(vertexShader, ReadShaderSourceCode("Asterion.Shaders.TilesShader.vert"));
+            GL.ShaderSource(vertexShader, ReadShaderSourceCode("Asterion.Resources.Shaders.TilesShader.vert"));
             GL.CompileShader(vertexShader);
 
-            GL.ShaderSource(fragmentShader, ReadShaderSourceCode("Asterion.Shaders.TilesShader.frag"));
+            GL.ShaderSource(fragmentShader, ReadShaderSourceCode("Asterion.Resources.Shaders.TilesShader.frag"));
             GL.CompileShader(fragmentShader);
 
             Handle = GL.CreateProgram();
