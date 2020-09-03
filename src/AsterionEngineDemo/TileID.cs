@@ -28,8 +28,8 @@ namespace Asterion.Demo
         Wall = 96,
         Grass = 97,
         Skeleton = 98,
-        Fireball = 100,
-        FireballExplosion = 101,
-        Frame = 104,
+        Fireball = 99,
+        FireballExplosion = 100,
+        Frame = 103,
     }
 }
