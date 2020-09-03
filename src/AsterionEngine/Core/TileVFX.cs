@@ -17,14 +17,12 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 namespace Asterion.Core
 {
-    public enum TileEffect
+    public enum TileVFX
     {
         None = 0,
         GlowSlow,
-        GlowSlowHalf,
         GlowAverage,
-        GlowAverageHalf,
         GlowFast,
-        GlowFastHalf,
+        Test
     }
 }

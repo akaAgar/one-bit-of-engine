@@ -23,10 +23,12 @@ layout(location = 0) in vec2 vertPosition;
 layout(location = 1) in vec3 vertColor;
 layout(location = 2) in vec2 vertUV;
 layout(location = 3) in float vertTileMap;
+layout(location = 4) in float vertVFX;
 
 out vec3 fragColor;
 out vec2 fragUV;
 out float fragTileMap;
+out float fragVFX;
 
 void main()
 {
@@ -34,4 +36,5 @@ void main()
   fragColor = vertColor;
   fragUV = vertUV;
   fragTileMap = vertTileMap;
+  fragVFX = vertVFX;
 }

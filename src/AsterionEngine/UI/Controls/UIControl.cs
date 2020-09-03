@@ -65,8 +65,8 @@ namespace Asterion.UI.Controls
         /// <summary>
         /// Special shader effect to use when drawing this control.
         /// </summary>
-        public TileEffect TileEffect { get { return TileEffect_; } set { TileEffect_ = value; Page.UI.Invalidate(); } }
-        public TileEffect TileEffect_ = TileEffect.None;
+        public TileVFX TileEffect { get { return TileEffect_; } set { TileEffect_ = value; Page.UI.Invalidate(); } }
+        private TileVFX TileEffect_ = TileVFX.None;
 
         /// <summary>
         /// The Z-Order of this control. Higher values are drawn last.
@@ -115,7 +115,8 @@ namespace Asterion.UI.Controls
         /// <param name="y">Y coordinate</param>
         /// <param name="tile">Font tile to use</param>
         /// <param name="color">Text color</param>
-        internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile, RGBColor color)
+        /// <param name="effect">Tile shader special effect to use</param>
+        internal void DrawTextOnVBO(VBO vbo, string text, int x, int y, int tile, RGBColor color, TileVFX effect)
         {
             if (string.IsNullOrEmpty(text)) return;
 
@@ -125,7 +126,7 @@ namespace Asterion.UI.Controls
             {
                 if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
 
-                Tile charTile = new Tile(tile + textBytes[i] - 32, color, Tilemap);
+                Tile charTile = new Tile(tile + textBytes[i] - 32, color, Tilemap, effect);
 
                 vbo.UpdateTileData(x + i, y, charTile);
             }

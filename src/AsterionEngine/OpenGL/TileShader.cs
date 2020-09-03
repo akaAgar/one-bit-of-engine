@@ -106,6 +106,7 @@ namespace Asterion.OpenGL
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
+            GL.EnableVertexAttribArray(4);
         }
 
         /// <summary>

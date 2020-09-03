@@ -37,12 +37,8 @@ namespace Asterion.UI
         /// <summary>
         /// The background tile to draw on this page where no controls appears.
         /// </summary>
-        public Tile BackgroundTile { get { return BackgroundTileP; } set { BackgroundTileP = value; UI.Invalidate(); } }
-
-        /// <summary>
-        /// (Private) The background tile to draw on this page where no controls appears.
-        /// </summary>
-        private Tile BackgroundTileP { get; set; } = new Tile(0, RGBColor.Black);
+        public Tile BackgroundTile { get { return BackgroundTile_; } set { BackgroundTile_ = value; UI.Invalidate(); } }
+        private Tile BackgroundTile_ { get; set; } = Tile.Empty;
 
         /// <summary>
         /// The <see cref="UIEnvironment"/> this UIPage belongs to.

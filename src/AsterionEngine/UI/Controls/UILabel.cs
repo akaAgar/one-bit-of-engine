@@ -39,7 +39,7 @@ namespace Asterion.UI.Controls
             string realText = Text_;
             if (MaxLength_ > 0) realText = Text.Substring(0, Math.Min(realText.Length, MaxLength_));
 
-            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_, Color);
+            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_, Color, TileEffect);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Asterion.UI.Controls
             for (int i = 0; i < lines.Length; i++)
             {
                 if (i >= Height) break;
-                DrawTextOnVBO(vbo, lines[i], Position.X, Position.Y + i, FontTile_, Color);
+                DrawTextOnVBO(vbo, lines[i], Position.X, Position.Y + i, FontTile_, Color, TileEffect);
             }
         }
     }

@@ -35,9 +35,9 @@ namespace Asterion.OpenGL
 
         /// <summary>
         /// (Private) Number of floats per vertex.
-        /// Each vertex contains 8 floats, in this order: X,Y coordinates (2), R,G,B colors (3), U,V coordinates (2), and TILEMAP index (1).
+        /// Each vertex contains 8 floats, in this order: X,Y coordinates (2), R,G,B colors (3), U,V coordinates (2), TILEMAP index (1), VFX index (1).
         /// </summary>
-        private const int FLOATS_PER_VERTEX = 8;
+        private const int FLOATS_PER_VERTEX = 9;
 
         /// <summary>
         /// (Private) Number of bytes per vertex. Basically FLOATS_PER_VERTEX × SIZE_OF_FLOAT.
@@ -155,7 +155,7 @@ namespace Asterion.OpenGL
                         color4.R, color4.G, color4.B,
                         (tileX + TILE_CORNERS[i].X) * Renderer.TileUV.Width,
                         (tileY + TILE_CORNERS[i].Y) * Renderer.TileUV.Height,
-                        tile.Tilemap
+                        tile.Tilemap, (float)tile.Effect
                     },
                     0, vertexData, FLOATS_PER_VERTEX * i, FLOATS_PER_VERTEX);
 
@@ -173,6 +173,7 @@ namespace Asterion.OpenGL
             GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 2 * SIZE_OF_FLOAT); // r, g, b
             GL.VertexAttribPointer(2, 2, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 5 * SIZE_OF_FLOAT); // u, v
             GL.VertexAttribPointer(3, 1, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 7 * SIZE_OF_FLOAT); // tilemap
+            GL.VertexAttribPointer(4, 1, VertexAttribPointerType.Float, false, BYTES_PER_VERTEX, 8 * SIZE_OF_FLOAT); // VFX
             GL.DrawArrays(PrimitiveType.Quads, 0, VertexCount);
         }
 

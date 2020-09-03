@@ -59,7 +59,7 @@ namespace Asterion.UI.Controls
                     else
                         continue;
 
-                    frameTile = new Tile(frameTileIndex, Color, Tilemap);
+                    frameTile = new Tile(frameTileIndex, Color, Tilemap, TileEffect);
 
                     vbo.UpdateTileData(x, y, frameTile);
                 }

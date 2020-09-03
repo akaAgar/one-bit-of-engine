@@ -165,7 +165,7 @@ namespace Asterion.UI.Controls
             for (int i = 0; i < MenuItems.Count; i++)
                 DrawTextOnVBO(
                     vbo, MenuItems[i], Position.X, Position.Y + i, FontTile_,
-                    (SelectedIndex == i) ? SelectedColor_ : Color);
+                    (SelectedIndex == i) ? SelectedColor_ : Color, TileEffect);
         }
 
         /// <summary>
