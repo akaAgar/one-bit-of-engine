@@ -111,6 +111,15 @@ namespace Asterion.UI.Controls
         }
 
         /// <summary>
+        /// Removes all menu items.
+        /// </summary>
+        public void Clear()
+        {
+            MenuItems.Clear();
+            Page.UI.Invalidate();
+        }
+
+        /// <summary>
         /// Changes the text of a menu item.
         /// </summary>
         /// <param name="index">Index of the menu item to change</param>
