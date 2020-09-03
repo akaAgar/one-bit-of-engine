@@ -7,3 +7,4 @@
 *.xml
 
 !/[Pp]ackages/*.txt
+![Oo]penTK.dll.config
