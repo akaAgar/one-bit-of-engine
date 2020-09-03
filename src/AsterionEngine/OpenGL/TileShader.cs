@@ -48,7 +48,12 @@ namespace Asterion.OpenGL
         /// Pointer to the "animationFrame" int uniform in the shader.
         /// </summary>
         private readonly int UniformAnimationFrame;
-        
+
+        /// <summary>
+        /// Pointer to the "time" float uniform in the shader.
+        /// </summary>
+        private readonly int UniformTime;
+
         /// <summary>
         /// Pointers to the texture uniforms in the shader (one texture for each tilemap in TileScreen)
         /// </summary>
@@ -78,6 +83,9 @@ namespace Asterion.OpenGL
 
             UniformAnimationFrame = GL.GetUniformLocation(Handle, "animationFrame");
             GL.Uniform1(UniformAnimationFrame, 0);
+
+            UniformTime = GL.GetUniformLocation(Handle, "time");
+            GL.Uniform1(UniformTime, 0f);
 
             UniformProjection = GL.GetUniformLocation(Handle, "projection");
 
@@ -155,6 +163,15 @@ namespace Asterion.OpenGL
         internal void SetAnimationFrame(int frameIndex)
         {
             GL.Uniform1(UniformAnimationFrame, frameIndex);
+        }
+
+        /// <summary>
+        /// Sets the total elapsed time in the shader.
+        /// </summary>
+        /// <param name="totalElapsedSeconds">total elapsed seconds</param>
+        internal void SetTime(float totalElapsedSeconds)
+        {
+            GL.Uniform1(UniformTime, totalElapsedSeconds);
         }
     }
 }

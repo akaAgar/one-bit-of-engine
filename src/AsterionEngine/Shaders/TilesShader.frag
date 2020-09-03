@@ -18,6 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 #version 330 core
 
 uniform int animationFrame;
+uniform float time;
 
 uniform sampler2D texture0;
 uniform sampler2D texture1;

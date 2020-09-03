@@ -98,6 +98,11 @@ namespace Asterion.OpenGL
         private float CurrentAnimationFrameTime = 0.0f;
 
         /// <summary>
+        /// Total elapsed time since the renderer was created.
+        /// </summary>
+        private float TotalElapsedSeconds = 0f;
+
+        /// <summary>
         /// (Internal) Constructor.
         /// </summary>
         /// <param name="files">The FileSystem from which tilemaps will be loaded</param>
@@ -115,6 +120,8 @@ namespace Asterion.OpenGL
             TileUV = new SizeF(
                 (float)tileSize.Width / tilemapSize.Width,
                 (float)tileSize.Height / tilemapSize.Height);
+
+            TotalElapsedSeconds = 0f;
         }
 
         /// <summary>
@@ -160,24 +167,28 @@ namespace Asterion.OpenGL
         }
 
         /// <summary>
-        /// (Internal) Called on each main loop update. Updates frame animations in the shader.
+        /// (Internal) Called on each main loop update. Updates frame animations and VFX in the shader.
         /// </summary>
         /// <param name="elapsedSeconds">Seconds elapsed since the last update</param>
         internal void OnUpdate(float elapsedSeconds)
         {
-            if (TileAnimationFrames_ < 2) return; // No animation, no need to do anything
+            TotalElapsedSeconds += elapsedSeconds;
+            Shader.SetTime(TotalElapsedSeconds);
 
-            CurrentAnimationFrameTime += elapsedSeconds;
-
-            if (CurrentAnimationFrameTime >= TileAnimationFrameDuration_)
+            if (TileAnimationFrames_ > 1) // No need to process animation logic if animations only have one frame (aka, "no animation")
             {
-                CurrentAnimationFrameTime = 0;
-                CurrentAnimationFrame++;
+                CurrentAnimationFrameTime += elapsedSeconds;
 
-                // 3-frames animation actually have 4 steps, to allow for a "ping-pong" 0-1-2-1 animation
-                int totalFrameSteps = (TileAnimationFrames_ == 3) ? 4 : TileAnimationFrames_;
-                CurrentAnimationFrame %= totalFrameSteps;
-                Shader.SetAnimationFrame((CurrentAnimationFrame == 3) ? 1 : CurrentAnimationFrame);
+                if (CurrentAnimationFrameTime >= TileAnimationFrameDuration_)
+                {
+                    CurrentAnimationFrameTime = 0;
+                    CurrentAnimationFrame++;
+
+                    // 3-frames animation actually have 4 steps, to allow for a "ping-pong" 0-1-2-1 animation
+                    int totalFrameSteps = (TileAnimationFrames_ == 3) ? 4 : TileAnimationFrames_;
+                    CurrentAnimationFrame %= totalFrameSteps;
+                    Shader.SetAnimationFrame((CurrentAnimationFrame == 3) ? 1 : CurrentAnimationFrame);
+                }
             }
         }
 
