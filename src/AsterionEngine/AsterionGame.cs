@@ -20,13 +20,11 @@ using Asterion.Core;
 using Asterion.Input;
 using Asterion.IO;
 using Asterion.UI;
-using Asterion.Scene;
 using Asterion.OpenGL;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Drawing;
-using System.IO;
 
 namespace Asterion
 {
@@ -120,11 +118,6 @@ namespace Asterion
         }
 
         /// <summary>
-        /// Scene manager, used to draw the game world.
-        /// </summary>
-        public SceneManager Scene { get; } = null;
-        
-        /// <summary>
         /// UI Environment, draws menus and UI controls.
         /// </summary>
         public UIEnvironment UI { get; } = null;
@@ -159,8 +152,6 @@ namespace Asterion
             Audio = new AudioPlayer(Files);
 
             UI = new UIEnvironment(this);
-            Scene = new SceneManager(this);
-
             Input = new InputManager(this);
         }
 
@@ -170,7 +161,6 @@ namespace Asterion
         internal void OnLoadInternal()
         {
             Renderer.OnLoad();
-            Scene.OnLoad();
             UI.OnLoad();
             OnLoad();
         }
@@ -182,7 +172,6 @@ namespace Asterion
         internal void OnUpdateInternal(float elapsedSeconds)
         {
             Renderer.OnUpdate(elapsedSeconds);
-            Scene.OnUpdate(elapsedSeconds);
             Input.OnUpdate(elapsedSeconds);
             OnUpdate(elapsedSeconds);
         }
@@ -266,7 +255,6 @@ namespace Asterion
 
             GL.Disable(EnableCap.Blend);
             UI.OnRenderFrame();
-            Scene.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
             UI.Cursor.OnRenderFrame();
         }
@@ -277,8 +265,6 @@ namespace Asterion
         public void Dispose()
         {
             UI.Destroy();
-            Scene.Dispose();
-
             Audio.Destroy();
             OpenTKWindow.Dispose();
             Renderer.Dispose();

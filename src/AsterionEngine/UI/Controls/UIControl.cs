@@ -99,7 +99,7 @@ namespace Asterion.UI.Controls
         /// <summary>
         /// Are keyboard/gamepad input events enabled for this control?
         /// </summary>
-        internal virtual bool InputEnabled { get; set; } = false;
+        public virtual bool InputEnabled { get; set; } = false;
 
         /// <summary>
         /// Only gamepad with an index featured in this array will be able to raise input events for this control.
