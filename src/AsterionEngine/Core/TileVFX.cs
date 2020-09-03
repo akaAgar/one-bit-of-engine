@@ -23,39 +23,44 @@ namespace Asterion.Core
         // Must match values in the TilesShader.frag fragment shader
 
         /// <summary>
-        /// No special effect
+        /// No special effect.
         /// </summary>
         None = 0,
 
         /// <summary>
-        /// Slow glow (1 hz)
+        /// Slow glow (1 hz).
         /// </summary>
         GlowSlow,
 
         /// <summary>
-        /// Average glow (2 hz)
+        /// Average glow (2 hz).
         /// </summary>
         GlowAverage,
 
         /// <summary>
-        /// Fast glow (4 hz)
+        /// Fast glow (4 hz).
         /// </summary>
         GlowFast,
 
         /// <summary>
-        /// Slow blink (2 hz)
+        /// Slow blink (2 hz).
         /// </summary>
         BlinkSlow,
 
         /// <summary>
-        /// Average blink (4 hz)
+        /// Average blink (4 hz).
         /// </summary>
         BlinkAverage,
 
         /// <summary>
-        /// Fast blink (8 hz)
+        /// Fast blink (8 hz).
         /// </summary>
         BlinkFast,
+
+        /// <summary>
+        /// Negative.
+        /// </summary>
+        Negative,
 
         Test
     }

@@ -52,9 +52,11 @@ void main()
   // Values must match those in the TileVFX enumeration
   switch (int(fragVFX))
   {
+  /*
     case 7:
 	  InternalTileUV(fragUV, texUV);
 	  break;
+	  */
   }
 
   switch (int(fragTileMap))
@@ -84,6 +86,8 @@ void main()
 	case 4: if (cos(time * 4) < 0) brightness = 0; break; // BlinkSlow
 	case 5: if (cos(time * 8) < 0) brightness = 0; break; // BlinkAverage
 	case 6: if (cos(time * 16) < 0) brightness = 0; break; // BlinkFast
+	
+	case 7: brightness = 1 - brightness; break; // Negative
 
 	/*
 	case 7:
