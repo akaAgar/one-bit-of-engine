@@ -44,6 +44,8 @@ namespace Asterion.Demo
 
             Title = "Asterion Engine Demo Game";
             Renderer.LoadTilemap(0, "tilemap.png");
+            Renderer.TileAnimationFrameDuration = .7f;
+            Renderer.TileAnimationFrames = 3;
 
             UI.ShowPage<PageMainMenu>();
             UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
