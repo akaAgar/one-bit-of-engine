@@ -43,16 +43,23 @@ namespace Asterion.Core
         public int Tilemap { get; }
 
         /// <summary>
+        /// Special shader effect to use when drawing this tile.
+        /// </summary>
+        public TileEffect Effect { get; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="tileIndex">Index of the tile in the tilemap</param>
         /// <param name="color">Color of the tile</param>
         /// <param name="tilemap">Index of the tilemap</param>
-        public Tile(int tileIndex, RGBColor color, int tilemap = 0)
+        /// <param name="effect">Special shader effect to use when drawing tile</param>
+        public Tile(int tileIndex, RGBColor color, int tilemap = 0, TileEffect effect = TileEffect.None)
         {
             TileIndex = tileIndex;
             Color = color;
             Tilemap = tilemap;
+            Effect = effect;
         }
     }
 }
