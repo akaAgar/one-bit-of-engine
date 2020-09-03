@@ -7,6 +7,8 @@ namespace Asterion.Demo.UIPages
 {
     public sealed class PageMainMenu : UIPage
     {
+        private int MenuUI, MenuDrawingBoard, MenuAudio, MenuGameWorld, MenuExit;
+
         protected override void OnInitialize(object[] parameters)
         {
             UIFrame frame = AddFrame(
@@ -19,10 +21,11 @@ namespace Asterion.Demo.UIPages
             AddLabel(2, 4, "Please select an option:", (int)TileID.Font, RGBColor.PaleGoldenrod);
             UIMenu menu = AddMenu(2, 6, (int)TileID.Font, RGBColor.White);
             menu.SelectedColor = RGBColor.Yellow;
-            menu.AddMenuItem("User interface demo");
-            menu.AddMenuItem("Drawing board");
-            menu.AddMenuItem("Audio demo");
-            menu.AddMenuItem("Game world demo");
+            MenuUI = menu.AddMenuItem("User interface demo");
+            MenuDrawingBoard = menu.AddMenuItem("Drawing board");
+            MenuAudio = menu.AddMenuItem("Audio demo");
+            MenuGameWorld = menu.AddMenuItem("Game world demo");
+            MenuExit = menu.AddMenuItem("Exit");
             menu.OnSelectedItemValidated += OnMenuItemValidated;
 
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "[UP,DOWN]: select, [ENTER]: validate", (int)TileID.Font, RGBColor.PaleGoldenrod);
@@ -31,13 +34,9 @@ namespace Asterion.Demo.UIPages
 
         private void OnMenuItemValidated(int selectedIndex, string selectedText)
         {
-            switch (selectedIndex)
-            {
-                case 0: return;
-                case 1: UI.ShowPage<PageDrawingBoard>(); return;
-                case 2: UI.ShowPage<PageAudioDemo>(); return;
-                case 3: return;
-            }
+            if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
+            else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
+            else if (selectedIndex == MenuExit) UI.Game.Close();
         }
 
         protected override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
