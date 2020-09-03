@@ -31,5 +31,6 @@ namespace Asterion.Demo
         Fireball = 99,
         FireballExplosion = 100,
         Frame = 103,
+        AnimationDemo = 111
     }
 }

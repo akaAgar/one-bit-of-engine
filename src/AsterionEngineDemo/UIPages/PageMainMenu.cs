@@ -7,7 +7,7 @@ namespace Asterion.Demo.UIPages
 {
     public sealed class PageMainMenu : UIPage
     {
-        private int MenuUI, MenuDrawingBoard, MenuAudio, MenuGameWorld, MenuExit;
+        private int MenuUI, MenuVFX, MenuAudio, MenuGameWorld, MenuDrawingBoard, MenuExit;
 
         protected override void OnInitialize(object[] parameters)
         {
@@ -22,9 +22,10 @@ namespace Asterion.Demo.UIPages
             UIMenu menu = AddMenu(2, 6, (int)TileID.Font, RGBColor.White);
             menu.SelectedColor = RGBColor.Yellow;
             MenuUI = menu.AddMenuItem("User interface demo");
-            MenuDrawingBoard = menu.AddMenuItem("Drawing board");
+            MenuVFX = menu.AddMenuItem("Visual FX demo");
             MenuAudio = menu.AddMenuItem("Audio demo");
             MenuGameWorld = menu.AddMenuItem("Game world demo");
+            MenuDrawingBoard = menu.AddMenuItem("Drawing board");
             MenuExit = menu.AddMenuItem("Exit");
             menu.OnSelectedItemValidated += OnMenuItemValidated;
 
@@ -34,8 +35,9 @@ namespace Asterion.Demo.UIPages
 
         private void OnMenuItemValidated(int selectedIndex, string selectedText)
         {
-            if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
+            if (selectedIndex == MenuVFX) UI.ShowPage<PageVFXDemo>();
             else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
+            else if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
             else if (selectedIndex == MenuExit) UI.Game.Close();
         }
 
