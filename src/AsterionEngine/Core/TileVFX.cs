@@ -17,12 +17,46 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 
 namespace Asterion.Core
 {
+    
     public enum TileVFX
     {
+        // Must match values in the TilesShader.frag fragment shader
+
+        /// <summary>
+        /// No special effect
+        /// </summary>
         None = 0,
+
+        /// <summary>
+        /// Slow glow (1 hz)
+        /// </summary>
         GlowSlow,
+
+        /// <summary>
+        /// Average glow (2 hz)
+        /// </summary>
         GlowAverage,
+
+        /// <summary>
+        /// Fast glow (4 hz)
+        /// </summary>
         GlowFast,
+
+        /// <summary>
+        /// Slow blink (2 hz)
+        /// </summary>
+        BlinkSlow,
+
+        /// <summary>
+        /// Average blink (4 hz)
+        /// </summary>
+        BlinkAverage,
+
+        /// <summary>
+        /// Fast blink (8 hz)
+        /// </summary>
+        BlinkFast,
+
         Test
     }
 }

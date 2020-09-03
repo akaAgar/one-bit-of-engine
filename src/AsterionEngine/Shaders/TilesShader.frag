@@ -35,20 +35,27 @@ in float fragVFX;
 
 out vec4 color;
 
+
+// Returns the UV of the pixel within the tile and not within the entire tilemap (with UV 0,0 in the top-left corner of the tile and UV 1,1 in its bottom-right corner)
+void InternalTileUV(in vec2 absoluteUV, out vec2 tileUV)
+{
+  tileUV = vec2(
+    (absoluteUV.x - floor(absoluteUV.x / tileUVWidth) * tileUVWidth) / tileUVWidth,
+    (absoluteUV.y - floor(absoluteUV.y / tileUVHeight) * tileUVHeight) / tileUVHeight
+  );
+}
+
 void main()
 {
   vec2 texUV = fragUV;
 
-  /*
   // Values must match those in the TileVFX enumeration
   switch (int(fragVFX))
   {
-    case 4:
-	  texUV.x += tileUVWidth;
-	  texUV.y += tileUVHeight;
+    case 7:
+	  InternalTileUV(fragUV, texUV);
 	  break;
   }
-  */
 
   switch (int(fragTileMap))
   {
@@ -74,7 +81,12 @@ void main()
     case 2: brightness *= abs(cos(time * 2)); break; // GlowAverage
     case 3: brightness *= abs(cos(time * 4)); break; // GlowFast
 
-	case 4:
+	case 4: if (cos(time * 4) < 0) brightness = 0; break; // BlinkSlow
+	case 5: if (cos(time * 8) < 0) brightness = 0; break; // BlinkAverage
+	case 6: if (cos(time * 16) < 0) brightness = 0; break; // BlinkFast
+
+	/*
+	case 7:
 	  // brightness *= abs(cos(time * (texUV.x / tileUVWidth)));
 	  // brightness *= abs(cos(time * mod(texUV.x, tileUVWidth)));
 	  
@@ -82,6 +94,7 @@ void main()
 	  xOffset *= tileUVWidth;
 	  brightness *= abs(cos(xOffset));
 	  break;
+	  */
   }
 
   color = vec4(brightness, brightness, brightness, 1) * vec4(fragColor, 1);
