@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing.Imaging;
 using System.Windows.Forms;
 
 namespace AsterionEngine.Tools.Forms
 {
     public partial class TilemapAnimationMakerForm : Form
     {
+        private Bitmap OutputTilemap = null;
+
         public TilemapAnimationMakerForm()
         {
             InitializeComponent();
@@ -19,7 +17,7 @@ namespace AsterionEngine.Tools.Forms
 
         private void TilemapAnimationMakerForm_Load(object sender, EventArgs e)
         {
-
+            SourceTilemapPictureBox.Image = Image.FromFile(@"..\..\media\animationFramesExample.png");
         }
 
         public Bitmap MakeTileSetAnimations(Bitmap inputImage, int tileWidth, int tileHeight, int animationSteps, int outTilesPerRow)
@@ -88,11 +86,63 @@ namespace AsterionEngine.Tools.Forms
             return outTilemap;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ButtonClick(object sender, EventArgs e)
         {
-            MakeTileSetAnimations(
-                (Bitmap)Image.FromFile(@"..\..\media\tilemap.png"),
-                16, 16, 3, 8).Save("output.png");
+            if (sender == LoadImageButton)
+            {
+                using (OpenFileDialog ofd = new OpenFileDialog())
+                {
+                    try
+                    {
+                    ofd.Filter = "PNG images (*.png)|*.png";
+                    if (ofd.ShowDialog() != DialogResult.OK) return;
+                    SourceTilemapPictureBox.Image = Image.FromFile(ofd.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Failed to load image: {ex.Message}");
+                    }
+                }
+            }
+            else if (sender == SaveImageButton)
+            {
+                if (OutputTilemap == null) return;
+
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    try
+                    {
+                        sfd.Filter = "PNG images (*.png)|*.png";
+                        if (sfd.ShowDialog() != DialogResult.OK) return;
+                        OutputTilemap.Save(sfd.FileName, ImageFormat.Png);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Failed to save image: {ex.Message}");
+                    }
+                }
+            }
+            else if (sender == CreateAnimatedTilemapButton)
+            {
+                if (SourceTilemapPictureBox.Image == null) return;
+                OutputImagePictureBox.Image = null;
+                if (OutputTilemap != null) OutputTilemap.Dispose();
+                OutputTilemap = null;
+
+                try
+                {
+                    OutputTilemap = MakeTileSetAnimations(
+                        (Bitmap)SourceTilemapPictureBox.Image,
+                        (int)TileWidthNumericUpDown.Value, (int)TileHeightNumericUpDown.Value,
+                        (int)AnimationFramesLabelNumericUpDown.Value, SourceTilemapPictureBox.Width / (int)TileWidthNumericUpDown.Value);
+
+                    OutputImagePictureBox.Image = OutputTilemap;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to create image: {ex.Message}");
+                }
+            }
         }
     }
 }
