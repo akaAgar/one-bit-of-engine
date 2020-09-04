@@ -264,6 +264,7 @@ namespace Asterion
 
             GL.Disable(EnableCap.Blend);
             UI.OnRenderFrame();
+            Sprites.OnRenderFrame();
             GL.Enable(EnableCap.Blend);
             UI.Cursor.OnRenderFrame();
         }

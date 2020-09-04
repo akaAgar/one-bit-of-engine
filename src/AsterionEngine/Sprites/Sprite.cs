@@ -16,53 +16,30 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 */
 
 using Asterion.Core;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
 
 namespace Asterion.Sprites
 {
     internal struct Sprite
     {
         internal string Name { get; }
-        internal SpriteType AnimType { get; }
-        internal int[] Tiles { get; }
+        internal SpriteType SpriteType { get; }
+        internal int Tile { get; }
+        internal int TileCount { get; }
         internal RGBColor Color { get; }
         internal int Tilemap { get; }
-        internal float FrameTime { get; }
+        internal float FrameDuration { get; }
         internal Position[] Positions { get; }
 
-        internal Sprite(string name, SpriteType animType, int[] tiles, RGBColor color, int tilemap, float time, params Position[] positions)
+        internal Sprite(string name, SpriteType animType, int tile, int tileCount, RGBColor color, int tilemap, float time, params Position[] positions)
         {
             Name = name;
-            AnimType = animType;
-            Tiles = tiles;
+            SpriteType = animType;
+            Tile = tile;
+            TileCount = tileCount;
             Color = color;
             Tilemap = tilemap;
-            FrameTime = time;
+            FrameDuration = time;
             Positions = positions;
-
-            switch (AnimType)
-            {
-                case SpriteType.Moving:
-                    Positions = GetPointsBetween(positions[0], positions[1]);
-                    FrameTime = time / Positions.Length;
-                    break;
-            }
-        }
-
-        private Position[] GetPointsBetween(Position start, Position end)
-        {
-            List<Position> points = new List<Position>();
-
-            float length = (float)Math.Sqrt(Math.Pow(end.X - start.X, 2) + Math.Pow(end.Y - start.Y, 2));
-            float dX = (end.X - start.X) / length;
-            float dY = (end.Y - start.Y) / length;
-
-            for (float f = 0; f <= length; f += 1f)
-                points.Add(new Position((int)(start.X + dX * f), (int)(start.Y + dY * f)));
-
-            return points.ToArray();
         }
     }
 }
