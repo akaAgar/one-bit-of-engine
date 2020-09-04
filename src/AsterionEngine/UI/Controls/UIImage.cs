@@ -38,7 +38,7 @@ namespace Asterion.UI.Controls
                     if (Composite_)
                         tileIndex += x + (y * Page.UI.Game.Renderer.TilemapCount.Width);
 
-                    vbo.UpdateTileData(Position.X + x, Position.Y + y, new Tile(tileIndex, Color, Tilemap, TileEffect));
+                    vbo.UpdateTileData(Position.X + x, Position.Y + y, tileIndex, Color, Tilemap, TileEffect);
                 }
         }
     }

@@ -81,7 +81,7 @@
     <Compile Include="Core\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IO\FileSourceArchiveIndex.cs" />
-    <Compile Include="Core\Tile.cs" />
+    <Compile Include="UI\Controls\UITileBoardTile.cs" />
     <Compile Include="OpenGL\TilemapTexture.cs" />
     <None Include="packages.config" />
     <Compile Include="OpenGL\TileShader.cs" />

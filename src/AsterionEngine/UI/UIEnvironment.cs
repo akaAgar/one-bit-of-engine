@@ -132,7 +132,7 @@ namespace Asterion.UI
 
             for (x = 0; x < Game.Renderer.TileCount.Width; x++)
                 for (y = 0; y < Game.Renderer.TileCount.Height; y++)
-                    UIVBO.UpdateTileData(x, y, new Tile(0, RGBColor.Black));
+                    UIVBO.UpdateTileData(x, y, 0, RGBColor.Black);
         }
 
         /// <summary>

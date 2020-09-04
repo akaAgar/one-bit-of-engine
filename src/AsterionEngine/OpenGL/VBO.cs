@@ -122,8 +122,14 @@ namespace Asterion.OpenGL
         /// </summary>
         /// <param name="x">Tile X index in the VBO *AND* X position on the screen</param>
         /// <param name="y">Tile Y index in the VBO *AND* Y position on the screen</param>
-        /// <param name="tile">Tile data</param>
-        internal void UpdateTileData(int x, int y, Tile tile) { UpdateTileData(x, y, x, y, tile); }
+        /// <param name="tile">Tile index</param>
+        /// <param name="color">Tile color</param>
+        /// <param name="tilemap">Tilemap from which to load the tile</param>
+        /// <param name="vfx">Special shader VFX to use for this tile</param>
+        internal void UpdateTileData(int x, int y, int tile, RGBColor color, int tilemap = 0, TileVFX vfx = TileVFX.None)
+        {
+            UpdateTileData(x, y, x, y, tile, color, tilemap, vfx);
+        }
 
         /// <summary>
         /// (Internal) Updates the VBO data for a given tile.
@@ -132,19 +138,22 @@ namespace Asterion.OpenGL
         /// <param name="y">Tile Y INDEX (not position) in the VBO</param>
         /// <param name="xPos">Tile X POSITION (not index) on the screen</param>
         /// <param name="yPos">Tile Y POSITION (not index) on the screen</param>
-        /// <param name="tile">Tile data</param>
-        internal void UpdateTileData(int x, int y, float xPos, float yPos, Tile tile)
+        /// <param name="tile">Tile index</param>
+        /// <param name="color">Tile color</param>
+        /// <param name="tilemap">Tilemap from which to load the tile</param>
+        /// <param name="vfx">Special shader VFX to use for this tile</param>
+        internal void UpdateTileData(int x, int y, float xPos, float yPos, int tile, RGBColor color, int tilemap = 0, TileVFX vfx = TileVFX.None)
         {
             if ((x < 0) || (y < 0) || (x >= Columns) || (y >= Rows)) return; // Tile index is out of bounds
 
             int index = y * Columns + x;
 
-            int tileY = tile.TileIndex / Renderer.TilemapCount.Width;
-            int tileX = tile.TileIndex - tileY * Renderer.TilemapCount.Width;
+            int tileY = tile / Renderer.TilemapCount.Width;
+            int tileX = tile - tileY * Renderer.TilemapCount.Width;
 
             float[] vertexData = new float[FLOATS_PER_VERTEX * 4];
 
-            Color4 color4 = tile.Color.ToColor4();
+            Color4 color4 = color.ToColor4();
 
             for (int i = 0; i < 4; i++)
                 Array.Copy(
@@ -155,7 +164,7 @@ namespace Asterion.OpenGL
                         color4.R, color4.G, color4.B,
                         (tileX + TILE_CORNERS[i].X) * Renderer.TileUV.Width,
                         (tileY + TILE_CORNERS[i].Y) * Renderer.TileUV.Height,
-                        tile.Tilemap, (float)tile.Effect
+                        tilemap, (float)vfx
                     },
                     0, vertexData, FLOATS_PER_VERTEX * i, FLOATS_PER_VERTEX);
 

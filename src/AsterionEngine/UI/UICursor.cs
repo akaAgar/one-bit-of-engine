@@ -26,14 +26,34 @@ namespace Asterion.UI
     public sealed class UICursor
     {
         /// <summary>
-        /// (Private) Cursor tile/appearance.
+        /// Cursor tile.
         /// </summary>
-        private Tile Tile = new Tile(0, RGBColor.Black);
-        
+        public int Tile { get { return Tile_; } set { Tile_ = value; UpdateCursor(); } }
+        private int Tile_ = 0;
+
         /// <summary>
-        /// (Private) Cursor position.
+        /// Cursor color.
         /// </summary>
-        private Position Position = Position.NegativeOne;
+        public RGBColor Color { get { return Color_; } set { Color_ = value; UpdateCursor(); } }
+        private RGBColor Color_ = RGBColor.White;
+
+        /// <summary>
+        /// Tile map to read the cursor tile from.
+        /// </summary>
+        public int Tilemap { get { return Tilemap_; } set { Tilemap_ = value; UpdateCursor(); } }
+        private int Tilemap_ = 0;
+
+        /// <summary>
+        /// Special shader effect to use for the cursor tile.
+        /// </summary>
+        public TileVFX VFX { get { return VFX_; } set { VFX_ = value; UpdateCursor(); } }
+        private TileVFX VFX_ = TileVFX.None;
+
+        /// <summary>
+        /// Cursor position.
+        /// </summary>
+        public Position Position { get { return Position_; } set { Position_ = value; UpdateCursor(); } }
+        private Position Position_ = Position.Zero;
 
         /// <summary>
         /// (Private) Cursor VBO (1×1 tile).
@@ -61,57 +81,6 @@ namespace Asterion.UI
         }
 
         /// <summary>
-        /// Moves the cursor by a certain number of tiles.
-        /// </summary>
-        /// <param name="positionOffset">Cursor displacement offset, in tiles</param>
-        public void MoveBy(Position positionOffset)
-        {
-            MoveBy(positionOffset.X, positionOffset.Y);
-        }
-
-        /// <summary>
-        /// Moves the cursor by a certain number of tiles.
-        /// </summary>
-        /// <param name="offsetX">Cursor displacement X offset, in tiles</param>
-        /// <param name="offsetY">Cursor displacement Y offset, in tiles</param>
-        public void MoveBy(int offsetX, int offsetY)
-        {
-            Position newCursorPosition = new Position(Position.X + offsetX, Position.Y + offsetY);
-            MoveTo(newCursorPosition);
-        }
-
-        /// <summary>
-        /// Moves the cursor to a given tile.
-        /// </summary>
-        /// <param name="position">Coordinates of the tile the cursor should be moved to.</param>
-        public void MoveTo(Position position)
-        {
-            MoveTo(position.X, position.Y);
-        }
-
-        /// <summary>
-        /// Moves the cursor to a given tile.
-        /// </summary>
-        /// <param name="x">X coordinate of the tile the cursor should be moved to.</param>
-        /// <param name="y">Y coordinate of the tile the cursor should be moved to.</param>
-        public void MoveTo(int x, int y)
-        {
-            Position = new Position(x, y);
-
-            UpdateCursor();
-        }
-
-        /// <summary>
-        /// Sets the cursor tile/appearance.
-        /// </summary>
-        /// <param name="tile">A tile to use as a cursor</param>
-        public void SetTile(Tile tile)
-        {
-            Tile = tile;
-            UpdateCursor();
-        }
-
-        /// <summary>
         /// (Internal) Called each frame. Draws the cursor VBO, if required.
         /// </summary>
         internal void OnRenderFrame()
@@ -125,7 +94,7 @@ namespace Asterion.UI
         /// </summary>
         private void UpdateCursor()
         {
-            CursorVBO.UpdateTileData(0, 0, Position.X, Position.Y, Tile);
+            CursorVBO.UpdateTileData(0, 0, Position_.X, Position_.Y, Tile_, Color_, Tilemap_, VFX_);
         }
 
         /// <summary>

@@ -15,28 +15,30 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
-namespace Asterion.Core
+using Asterion.Core;
+
+namespace Asterion.UI.Controls
 {
     /// <summary>
-    /// Describes a tile to be displayed on the screen.
+    /// Describes a tile to be displayed on a <see cref="UITileBoard"/> control.
     /// </summary>
-    public struct Tile
+    public struct UITileBoardTile
     {
         /// <summary>
         /// An empty tile: tile index 0, tilemap 0, black (0,0,0) color.
         /// </summary>
-        public static Tile Empty { get; } = new Tile(0, RGBColor.Black);
+        public static UITileBoardTile Empty { get; } = new UITileBoardTile(0, RGBColor.Black);
 
         /// <summary>
         /// Index of the tile in the tilemap.
         /// </summary>
         public int TileIndex { get; }
-        
+
         /// <summary>
         /// Color of the tile.
         /// </summary>
         public RGBColor Color { get; }
-        
+
         /// <summary>
         /// Tilemap from which to load the tile.
         /// </summary>
@@ -45,7 +47,7 @@ namespace Asterion.Core
         /// <summary>
         /// Special shader effect to use when drawing this tile.
         /// </summary>
-        public TileVFX Effect { get; }
+        public TileVFX VFX { get; }
 
         /// <summary>
         /// Constructor.
@@ -54,12 +56,12 @@ namespace Asterion.Core
         /// <param name="color">Color of the tile</param>
         /// <param name="tilemap">Index of the tilemap</param>
         /// <param name="effect">Special shader effect to use when drawing tile</param>
-        public Tile(int tileIndex, RGBColor color, int tilemap = 0, TileVFX effect = TileVFX.None)
+        public UITileBoardTile(int tileIndex, RGBColor color, int tilemap = 0, TileVFX effect = TileVFX.None)
         {
             TileIndex = tileIndex;
             Color = color;
             Tilemap = tilemap;
-            Effect = effect;
+            VFX = effect;
         }
     }
 }

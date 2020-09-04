@@ -31,7 +31,6 @@ namespace Asterion.UI.Controls
         {
             int x, y;
             int frameTileIndex;
-            Tile frameTile;
 
             Area rect = new Area(Position, Size);
 
@@ -59,9 +58,7 @@ namespace Asterion.UI.Controls
                     else
                         continue;
 
-                    frameTile = new Tile(frameTileIndex, Color, Tilemap, TileEffect);
-
-                    vbo.UpdateTileData(x, y, frameTile);
+                    vbo.UpdateTileData(x, y, frameTileIndex, Color, Tilemap, TileEffect);
                 }
         }
     }

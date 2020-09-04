@@ -126,9 +126,7 @@ namespace Asterion.UI.Controls
             {
                 if ((textBytes[i] < 32) || (textBytes[i] > 126)) textBytes[i] = 32;
 
-                Tile charTile = new Tile(tile + textBytes[i] - 32, color, Tilemap, effect);
-
-                vbo.UpdateTileData(x + i, y, charTile);
+                vbo.UpdateTileData(x + i, y, tile + textBytes[i] - 32, color, Tilemap, effect);
             }
         }
 

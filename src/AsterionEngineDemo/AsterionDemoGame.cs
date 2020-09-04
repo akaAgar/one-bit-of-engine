@@ -48,7 +48,7 @@ namespace Asterion.Demo
             Renderer.TileAnimationFrames = 3;
 
             UI.ShowPage<PageMainMenu>();
-            UI.Cursor.SetTile(new Tile((int)TileID.Cursor, RGBColor.White));
+            UI.Cursor.Tile = (int)TileID.Cursor;
          
             AdjustToTileScreenSize(1.5f);
         }

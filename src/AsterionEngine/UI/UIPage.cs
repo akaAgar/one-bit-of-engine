@@ -37,8 +37,20 @@ namespace Asterion.UI
         /// <summary>
         /// The background tile to draw on this page where no controls appears.
         /// </summary>
-        public Tile BackgroundTile { get { return BackgroundTile_; } set { BackgroundTile_ = value; UI.Invalidate(); } }
-        private Tile BackgroundTile_ { get; set; } = Tile.Empty;
+        public int BackgroundTile { get { return BackgroundTile_; } set { BackgroundTile_ = value; UI.Invalidate(); } }
+        private int BackgroundTile_ = 0;
+
+        /// <summary>
+        /// The color of the <see cref="BackgroundTile"/>.
+        /// </summary>
+        public RGBColor BackgroundColor { get { return BackgroundColor_; } set { BackgroundColor_ = value; UI.Invalidate(); } }
+        private RGBColor BackgroundColor_ = RGBColor.Black;
+
+        /// <summary>
+        /// The tilemap from which to load the <see cref="BackgroundTile"/>.
+        /// </summary>
+        public int BackgroundTilemap { get { return BackgroundTilemap_; } set { BackgroundTilemap_ = value; UI.Invalidate(); } }
+        private int BackgroundTilemap_ = 0;
 
         /// <summary>
         /// The <see cref="UIEnvironment"/> this UIPage belongs to.
@@ -253,7 +265,7 @@ namespace Asterion.UI
             int x, y;
             for (x = 0; x < vbo.Columns; x++)
                 for (y = 0; y < vbo.Rows; y++)
-                    vbo.UpdateTileData(x, y, BackgroundTile);
+                    vbo.UpdateTileData(x, y, BackgroundTile_, BackgroundColor_, BackgroundTilemap_);
             
             Controls = Controls.OrderBy(c => c.ZOrder).ToList(); // Order controls by Z-Order
 
