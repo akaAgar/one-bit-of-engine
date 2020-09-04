@@ -99,11 +99,6 @@ namespace OneBitOfEngine.UI.Controls
         public event UIMenuEvent OnSelectedItemValidated = null;
 
         /// <summary>
-        /// Are keyboard/gamepad input events enabled for this control?
-        /// </summary>
-        public override bool InputEnabled { get; set; } = true;
-
-        /// <summary>
         /// Adds a new item to the menu.
         /// </summary>
         /// <param name="text">Text of the new item</param>

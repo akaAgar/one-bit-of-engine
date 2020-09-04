@@ -18,6 +18,7 @@ along with One Bit of Engine. If not, see https://www.gnu.org/licenses/
 using OneBitOfEngine.Core;
 using OneBitOfEngine.Input;
 using OneBitOfEngine.OpenGL;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -90,16 +91,13 @@ namespace OneBitOfEngine.UI.Controls
         /// </summary>
         internal virtual void Destroy() { }
 
+        internal virtual void OnKeyPressEvent(char keyChar) { }
+
         /// <summary>
         /// (Internal) Draws the control on the provided VBO.
         /// </summary>
         /// <param name="vbo">UI VBO on which to draw the control.</param>
         internal abstract void UpdateVBOTiles(VBO vbo);
-
-        /// <summary>
-        /// Are keyboard/gamepad input events enabled for this control?
-        /// </summary>
-        public virtual bool InputEnabled { get; set; } = false;
 
         /// <summary>
         /// Only gamepad with an index featured in this array will be able to raise input events for this control.

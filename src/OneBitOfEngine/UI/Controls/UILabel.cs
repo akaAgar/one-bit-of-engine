@@ -19,13 +19,19 @@ namespace OneBitOfEngine.UI.Controls
         /// <summary>
         /// The text of this label.
         /// </summary>
-        public string Text { get { return Text_; } set { Text_ = value; Page.UI.Invalidate(); } }
+        public virtual string Text { get { return Text_; }
+            set
+            {
+                Text_ = TruncateText(value);
+                Page.UI.Invalidate();
+            }
+        }
         private string Text_ = "";
 
         /// <summary>
         /// Max length of the text. Zero or less means no max length.
         /// </summary>
-        public int MaxLength { get { return MaxLength_; } set { MaxLength_ = value; Page.UI.Invalidate(); } }
+        public int MaxLength { get { return MaxLength_; } set { MaxLength_ = value; Text_ = TruncateText(Text_); Page.UI.Invalidate(); } }
         private int MaxLength_ = 0;
 
         /// <summary>
@@ -36,10 +42,15 @@ namespace OneBitOfEngine.UI.Controls
         {
             if (string.IsNullOrEmpty(Text_)) return;
 
-            string realText = Text_;
-            if (MaxLength_ > 0) realText = Text.Substring(0, Math.Min(realText.Length, MaxLength_));
+            DrawTextOnVBO(vbo, Text_, Position.X, Position.Y, FontTile_, Color, TileEffect);
+        }
 
-            DrawTextOnVBO(vbo, realText, Position.X, Position.Y, FontTile_, Color, TileEffect);
+        private string TruncateText(string text)
+        {
+            if (text == null) return "";
+            if (MaxLength_ <= 0) return text; // No length limit
+
+            return text.Substring(0, Math.Min(text.Length, MaxLength_));
         }
     }
 }
