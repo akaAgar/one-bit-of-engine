@@ -18,6 +18,8 @@ namespace Asterion.Demo.UIPages
             UI.Cursor.Position = BOARD_POSITION;
             UI.Cursor.BoundingBox = new Area(BOARD_POSITION, BOARD_SIZE);
             UI.Cursor.Moveable = true;
+            UI.Cursor.Tile = (int)TileID.Cursor;
+            UI.Cursor.VFX = TileVFX.BlinkMedium;
 
             AddLabel(1, 1, "DRAWING BOARD", (int)TileID.Font, RGBColor.PaleGoldenrod);
 

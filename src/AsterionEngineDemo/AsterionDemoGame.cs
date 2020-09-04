@@ -49,7 +49,8 @@ namespace Asterion.Demo
 
             UI.ShowPage<PageMainMenu>();
             UI.Cursor.Tile = (int)TileID.Cursor;
-         
+            UI.Cursor.Color = RGBColor.White;
+
             AdjustToTileScreenSize(1.5f);
         }
 

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AsterionDemoGame.cs" />
     <Compile Include="UIPages\PageAudioDemo.cs" />
+    <Compile Include="UIPages\PageGameWorld.cs" />
     <Compile Include="UIPages\PageVFXDemo.cs" />
     <Compile Include="UIPages\PageDrawingBoard.cs" />
     <Compile Include="UIPages\PageMainMenu.cs" />
