@@ -154,6 +154,7 @@ namespace Asterion.UI
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
         internal void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
+            Cursor.OnInputEventInternal(key, modifiers, gamepadIndex, isRepeat);
             if (!Active) return;
 
             Page.OnInputEventInternal(key, modifiers, gamepadIndex, isRepeat);

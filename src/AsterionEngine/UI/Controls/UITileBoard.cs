@@ -5,18 +5,18 @@ namespace Asterion.UI.Controls
 {
     public class UITileBoard : UIControl
     {
-        public Dimension Dimension
+        public Dimension Size
         {
-            get { return _Dimension; }
+            get { return Size_; }
             set
             {
-                _Dimension = value;
-                Tiles = new UITileBoardTile[Dimension.Width, Dimension.Height];
+                Size_ = value;
+                Tiles = new UITileBoardTile[Size.Width, Size.Height];
                 Clear(UITileBoardTile.Empty);
             }
         }
 
-        private Dimension _Dimension = Dimension.One;
+        private Dimension Size_ = Dimension.One;
 
         private UITileBoardTile[,] Tiles = new UITileBoardTile[1, 1];
 
@@ -45,7 +45,7 @@ namespace Asterion.UI.Controls
 
         public UITileBoardTile GetTile(int x, int y)
         {
-            if (!Dimension.Contains(x, y)) return UITileBoardTile.Empty;
+            if (!Size.Contains(x, y)) return UITileBoardTile.Empty;
             return Tiles[x, y];
         }
 
@@ -56,7 +56,7 @@ namespace Asterion.UI.Controls
 
         public void SetTile(int x, int y, UITileBoardTile tile)
         {
-            if (!Dimension.Contains(x, y)) return;
+            if (!Size.Contains(x, y)) return;
             Tiles[x, y] = tile;
             Page.UI.Invalidate();
         }
@@ -65,8 +65,8 @@ namespace Asterion.UI.Controls
         {
             int x, y;
 
-            for (x = 0; x < Dimension.Width; x++)
-                for (y = 0; y < Dimension.Height; y++)
+            for (x = 0; x < Size.Width; x++)
+                for (y = 0; y < Size.Height; y++)
                     Tiles[x, y] = tile;
 
             Page.UI.Invalidate();
@@ -76,8 +76,8 @@ namespace Asterion.UI.Controls
         {
             int x, y;
 
-            for (x = 0; x < Dimension.Width; x++)
-                for (y = 0; y < Dimension.Height; y++)
+            for (x = 0; x < Size.Width; x++)
+                for (y = 0; y < Size.Height; y++)
                     vbo.UpdateTileData(x + Position.X, y + Position.Y, Tiles[x, y].TileIndex, Tiles[x, y].Color, Tiles[x, y].Tilemap, Tiles[x, y].VFX);
         }
     }

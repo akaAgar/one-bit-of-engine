@@ -1,7 +1,6 @@
 ﻿using Asterion.Core;
 using Asterion.Input;
 using Asterion.OpenGL;
-using OpenTK.Input;
 using System.Collections.Generic;
 using System.Linq;
 

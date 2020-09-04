@@ -120,6 +120,21 @@ namespace Asterion.UI
         /// <summary>
         /// (Protected) Adds a new <see cref="UIFrame"/> control on the page.
         /// </summary>
+        /// <param name="position">Frame position</param>
+        /// <param name="size">Frame size</param>
+        /// <param name="frameTile">The tile to use for the frame. Frame tile must follow one another on the tilemap (but can be on multiple rows) in this order: upper-left corner, upper-right corner, lower-left corner, lower-right corner, top border, left border, bottom border, right border</param>
+        /// <param name="color">Color</param>
+        /// <param name="fillTile">The tile to use as a background for the frame, or null if none</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns>An UIFrame control</returns>
+        protected UIFrame AddFrame(Position position, Dimension size, int frameTile, RGBColor color, int? fillTile = null, int tilemap = 0)
+        {
+            return AddFrame(position.X, position.Y, size.Width, size.Height, frameTile, color, fillTile, tilemap);
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UIFrame"/> control on the page.
+        /// </summary>
         /// <param name="x">X coordinate</param>
         /// <param name="y">Y coordinate</param>
         /// <param name="width">Width of the frame</param>
@@ -135,6 +150,21 @@ namespace Asterion.UI
             control.FrameTile = frameTile;
             control.Size = new Dimension(width, height);
             control.FillTile = fillTile;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UITileBoard"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="width">Width of the frame</param>
+        /// <param name="height">Height of the frame</param>
+        /// <returns>An UIFrame control</returns>
+        protected UITileBoard AddTileBoard(int x, int y, int width, int height)
+        {
+            UITileBoard control = AddControl<UITileBoard>(x, y, RGBColor.Black, 0);
+            control.Size = new Dimension(width, height);
             return control;
         }
 
