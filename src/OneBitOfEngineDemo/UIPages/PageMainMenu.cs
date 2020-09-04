@@ -32,13 +32,21 @@ namespace OneBitOfEngine.Demo.UIPages
             MenuInput = menu.AddMenuItem("Input demo");
             MenuExit = menu.AddMenuItem("Exit");
             menu.OnSelectedItemValidated += OnMenuItemValidated;
+            menu.OnSelectedItemChanged += OnMenuItemChanged;
 
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "[UP,DOWN]: select, [ENTER]: validate", (int)TileID.Font, RGBColor.PaleGoldenrod);
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "[F]: fullscreen toggle, [ESC]: quit", (int)TileID.Font, RGBColor.PaleGoldenrod);
         }
 
+        private void OnMenuItemChanged(int selectedIndex, string selectedText)
+        {
+            UI.Game.Audio.PlaySound("select.wav");
+        }
+
         private void OnMenuItemValidated(int selectedIndex, string selectedText)
         {
+            UI.Game.Audio.PlaySound("validate.wav");
+
             if (selectedIndex == MenuVFX) UI.ShowPage<PageVFXDemo>();
             else if (selectedIndex == MenuUI) UI.ShowPage<PageUIDemo>();
             else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
