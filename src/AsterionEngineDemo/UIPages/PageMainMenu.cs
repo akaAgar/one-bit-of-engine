@@ -7,7 +7,7 @@ namespace Asterion.Demo.UIPages
 {
     public sealed class PageMainMenu : UIPage
     {
-        private int MenuUI, MenuVFX, MenuAudio, MenuGameWorld, MenuDrawingBoard, MenuExit;
+        private int MenuUI, MenuVFX, MenuAudio, MenuGameWorld, MenuDrawingBoard, MenuInput, MenuExit;
 
         protected override void OnInitialize(object[] parameters)
         {
@@ -25,10 +25,11 @@ namespace Asterion.Demo.UIPages
             menu.SelectedVFX = TileVFX.Negative;
 
             MenuUI = menu.AddMenuItem("User interface demo");
-            MenuVFX = menu.AddMenuItem("Visual FX demo");
-            MenuAudio = menu.AddMenuItem("Audio demo");
             MenuGameWorld = menu.AddMenuItem("Game world demo");
             MenuDrawingBoard = menu.AddMenuItem("Drawing board");
+            MenuVFX = menu.AddMenuItem("Visual FX demo");
+            MenuAudio = menu.AddMenuItem("Audio demo");
+            MenuInput = menu.AddMenuItem("Input demo");
             MenuExit = menu.AddMenuItem("Exit");
             menu.OnSelectedItemValidated += OnMenuItemValidated;
 
@@ -42,6 +43,7 @@ namespace Asterion.Demo.UIPages
             else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
             else if (selectedIndex == MenuGameWorld) UI.ShowPage<PageGameWorld>();
             else if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
+            else if (selectedIndex == MenuInput) UI.ShowPage<PageInputDemo>();
             else if (selectedIndex == MenuExit) UI.Game.Close();
         }
 
@@ -50,7 +52,11 @@ namespace Asterion.Demo.UIPages
             switch (key)
             {
                 case KeyCode.Escape:
+                case KeyCode.GamepadB:
                     UI.Game.Close();
+                    return;
+                case KeyCode.F:
+                    UI.Game.WindowState = (UI.Game.WindowState == GameWindowState.Normal) ? GameWindowState.Fullscreen : GameWindowState.Normal;
                     return;
             }
         }
