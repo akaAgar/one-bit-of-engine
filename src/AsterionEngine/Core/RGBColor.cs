@@ -136,7 +136,7 @@ namespace Asterion.Core
         /// </summary>
         /// <param name="value">An integer value</param>
         /// <returns>The value, bounded in the 0-255 range</returns>
-        private static int BoundChannelValue(int value) { return Math.Max(0, Math.Min(255, value)); }
+        private static int BoundChannelValue(int value) { return AsterionTools.Clamp(value, 0, 255); }
 
         /// <summary>
         /// == operator override.
