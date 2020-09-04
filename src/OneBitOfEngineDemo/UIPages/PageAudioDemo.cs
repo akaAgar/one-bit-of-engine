@@ -27,9 +27,9 @@ namespace OneBitOfEngine.Demo.UIPages
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "[F]: fullscreen toggle, [ESC]: back", (int)TileID.Font, RGBColor.PaleGoldenrod);
         }
 
-        private void OnMenuItemValidated(int selectedIndex, string selectedText)
+        private void OnMenuItemValidated(int index, string key, string text)
         {
-            switch (selectedIndex)
+            switch (index)
             {
                 case 0: UI.Game.Audio.PlaySound("impact.wav"); return;
                 case 1: UI.Game.Audio.PlaySound("fire.wav"); return;

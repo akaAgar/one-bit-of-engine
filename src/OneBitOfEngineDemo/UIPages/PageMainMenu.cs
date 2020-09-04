@@ -16,7 +16,7 @@ namespace OneBitOfEngine.Demo.UIPages
                 (int)TileID.Frame, RGBColor.Goldenrod);
             frame.ZOrder = 1;
 
-            AddLabel(2, 2, "WELCOME TO THE ONE BIT OF ENGINE DEMO", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, 2, "ONE BIT OF ENGINE DEMO", (int)TileID.Font, RGBColor.PaleGoldenrod);
 
             AddLabel(2, 4, "Please select an option:", (int)TileID.Font, RGBColor.PaleGoldenrod);
             
@@ -30,7 +30,9 @@ namespace OneBitOfEngine.Demo.UIPages
             MenuVFX = menu.AddMenuItem("Visual FX demo");
             MenuAudio = menu.AddMenuItem("Audio demo");
             MenuInput = menu.AddMenuItem("Input demo");
+            menu.AddSeparator();
             MenuExit = menu.AddMenuItem("Exit");
+
             menu.OnSelectedItemValidated += OnMenuItemValidated;
             menu.OnSelectedItemChanged += OnMenuItemChanged;
 
@@ -38,22 +40,22 @@ namespace OneBitOfEngine.Demo.UIPages
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "[F]: fullscreen toggle, [ESC]: quit", (int)TileID.Font, RGBColor.PaleGoldenrod);
         }
 
-        private void OnMenuItemChanged(int selectedIndex, string selectedText)
+        private void OnMenuItemChanged(int index, string key, string text)
         {
             UI.Game.Audio.PlaySound("select.wav");
         }
 
-        private void OnMenuItemValidated(int selectedIndex, string selectedText)
+        private void OnMenuItemValidated(int index, string key, string text)
         {
             UI.Game.Audio.PlaySound("validate.wav");
 
-            if (selectedIndex == MenuVFX) UI.ShowPage<PageVFXDemo>();
-            else if (selectedIndex == MenuUI) UI.ShowPage<PageUIDemo>();
-            else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
-            else if (selectedIndex == MenuGameWorld) UI.ShowPage<PageGameWorld>();
-            else if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
-            else if (selectedIndex == MenuInput) UI.ShowPage<PageInputDemo>();
-            else if (selectedIndex == MenuExit) UI.Game.Close();
+            if (index == MenuVFX) UI.ShowPage<PageVFXDemo>();
+            else if (index == MenuUI) UI.ShowPage<PageUIDemo>();
+            else if (index == MenuAudio) UI.ShowPage<PageAudioDemo>();
+            else if (index == MenuGameWorld) UI.ShowPage<PageGameWorld>();
+            else if (index == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
+            else if (index == MenuInput) UI.ShowPage<PageInputDemo>();
+            else if (index == MenuExit) UI.Game.Close();
         }
 
         protected override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
