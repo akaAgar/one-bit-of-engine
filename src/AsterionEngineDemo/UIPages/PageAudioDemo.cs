@@ -42,6 +42,7 @@ namespace Asterion.Demo.UIPages
             switch (key)
             {
                 case KeyCode.Escape:
+                case KeyCode.GamepadB:
                     UI.ShowPage<PageMainMenu>();
                     return;
             }

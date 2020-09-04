@@ -49,11 +49,15 @@ namespace Asterion.Demo.UIPages
             UI.Cursor.Tile = (int)TileID.CursorCrosshair;
             UI.Cursor.VFX = TileVFX.GlowFast;
 
+            UI.Game.Sprites.Viewport = new Area(BOARD_POSITION, BOARD_SIZE);
+
             TileBoard = AddTileBoard(BOARD_POSITION.X, BOARD_POSITION.Y, BOARD_SIZE.Width, BOARD_SIZE.Height);
 
             AddImage(0, BOARD_POSITION.Y + BOARD_SIZE.Height, 48, 1, (int)TileID.Frame + 4, RGBColor.CornflowerBlue);
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "Arrow keys, gamepad sticks/DPad: move cursor", (int)TileID.Font, RGBColor.PaleGoldenrod);
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "F: fullscreen toggle, ESC: back", (int)TileID.Font, RGBColor.PaleGoldenrod);
+
+            UI.Game.Sprites.OnSpriteCreation += OnSpriteCreation;
 
             UpdateWorld();
         }
@@ -111,29 +115,52 @@ namespace Asterion.Demo.UIPages
         protected override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
             if (modifiers != 0) return;
+            if (UI.Game.Sprites.Active) return; // No input while a sprite is drawn
 
             switch (key)
             {
                 case KeyCode.Up:
+                case KeyCode.GamepadDPadUp:
+                case KeyCode.GamepadLeftStickUp:
+                case KeyCode.GamepadRightStickUp:
                     MovePlayer(-Position.OneY); return;
 
                 case KeyCode.Down:
+                case KeyCode.GamepadDPadDown:
+                case KeyCode.GamepadLeftStickDown:
+                case KeyCode.GamepadRightStickDown:
                     MovePlayer(Position.OneY); return;
 
                 case KeyCode.Left:
+                case KeyCode.GamepadDPadLeft:
+                case KeyCode.GamepadLeftStickLeft:
+                case KeyCode.GamepadRightStickLeft:
                     MovePlayer(-Position.OneX); return;
 
                 case KeyCode.Right:
+                case KeyCode.GamepadDPadRight:
+                case KeyCode.GamepadLeftStickRight:
+                case KeyCode.GamepadRightStickRight:
                     MovePlayer(Position.OneX); return;
 
                 case KeyCode.Escape:
+                case KeyCode.GamepadB:
                     UI.ShowPage<PageMainMenu>(); return;
 
                 case KeyCode.Space:
+                case KeyCode.GamepadX:
+                case KeyCode.GamepadY:
+                case KeyCode.GamepadA:
                     if (AttackMode)
                     {
                         AttackMode = false;
                         UI.Cursor.Enabled = false;
+                        UI.Game.Audio.PlaySound("fire.wav");
+                        UI.Game.Sprites.AddMovingAnimation("fireball", PlayerPosition + BOARD_POSITION, UI.Cursor.Position, 16f, (int)TileID.Fireball, RGBColor.OrangeRed);
+
+                        Position[] impactPositions = new Position[] { UI.Cursor.Position, UI.Cursor.Position + Position.OneX, UI.Cursor.Position - Position.OneX, UI.Cursor.Position + Position.OneY, UI.Cursor.Position - Position.OneY };
+
+                        UI.Game.Sprites.AddStaticAnimation("fireballImpact", impactPositions, (int)TileID.FireballExplosion, RGBColor.OrangeRed, 3);
                     }
                     else
                     {
@@ -145,8 +172,15 @@ namespace Asterion.Demo.UIPages
             }
         }
 
+        private void OnSpriteCreation(string name)
+        {
+            if (name == "fireballImpact")
+                UI.Game.Audio.PlaySound("impact.wav");
+        }
+
         protected override void OnClose()
         {
+            UI.Game.Sprites.OnSpriteCreation -= OnSpriteCreation;
             UI.Cursor.Enabled = false;
         }
     }

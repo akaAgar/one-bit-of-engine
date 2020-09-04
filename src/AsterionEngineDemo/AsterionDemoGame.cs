@@ -41,6 +41,7 @@ namespace Asterion.Demo
             Files.SetFolderAsFileSource(@"..\..\media\");
 
             Audio.Enable();
+            Input.EnableGamePads = true;
 
             Title = "Asterion Engine Demo Game";
             Renderer.LoadTilemap(0, "tilemap.png");
@@ -52,19 +53,6 @@ namespace Asterion.Demo
             UI.Cursor.Color = RGBColor.White;
 
             AdjustToTileScreenSize(1.5f);
-        }
-
-        protected override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
-        {
-            switch (key)
-            {
-                case KeyCode.F:
-                    if (WindowState == GameWindowState.Normal)
-                        WindowState = GameWindowState.Fullscreen;
-                    else
-                        WindowState = GameWindowState.Normal;
-                    break;
-            }
         }
     }
 }

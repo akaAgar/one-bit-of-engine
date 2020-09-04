@@ -39,16 +39,23 @@ namespace Asterion.Demo.UIPages
             switch (key)
             {
                 case KeyCode.Escape:
+                case KeyCode.GamepadB:
                     UI.ShowPage<PageMainMenu>();
                     return;
 
                 case KeyCode.Left:
+                case KeyCode.GamepadDPadLeft:
+                case KeyCode.GamepadLeftStickLeft:
+                case KeyCode.GamepadRightStickLeft:
                     CurrentEffect--;
                     if ((int)CurrentEffect < 1) CurrentEffect = (TileVFX)(VFX_COUNT - 1);
                     UpdateSelectedVFX();
                     return;
 
                 case KeyCode.Right:
+                case KeyCode.GamepadDPadRight:
+                case KeyCode.GamepadLeftStickRight:
+                case KeyCode.GamepadRightStickRight:
                     CurrentEffect++;
                     if (CurrentEffect > (TileVFX)(VFX_COUNT - 1)) CurrentEffect = (TileVFX)1;
                     UpdateSelectedVFX();

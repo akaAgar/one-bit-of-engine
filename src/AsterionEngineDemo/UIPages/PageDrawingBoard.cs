@@ -19,7 +19,7 @@ namespace Asterion.Demo.UIPages
             UI.Cursor.BoundingBox = new Area(BOARD_POSITION, BOARD_SIZE);
             UI.Cursor.Moveable = true;
             UI.Cursor.Tile = (int)TileID.Cursor;
-            UI.Cursor.VFX = TileVFX.BlinkMedium;
+            UI.Cursor.VFX = TileVFX.None;
 
             AddLabel(1, 1, "DRAWING BOARD", (int)TileID.Font, RGBColor.PaleGoldenrod);
 
@@ -30,7 +30,8 @@ namespace Asterion.Demo.UIPages
             TileBoard = AddTileBoard(BOARD_POSITION.X, BOARD_POSITION.Y, BOARD_SIZE.Width, BOARD_SIZE.Height);
             TileBoard.Clear(new UITileBoardTile(1, RGBColor.Blue));
 
-            AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "Arrow keys, gamepad sticks/DPad: move cursor", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, UI.Game.Renderer.TileCount.Height - 5, "Arrow keys, gamepad sticks/DPad: move cursor", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "Space, gamepad buttons: paint tile", (int)TileID.Font, RGBColor.PaleGoldenrod);
             AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "F: fullscreen toggle, ESC: back", (int)TileID.Font, RGBColor.PaleGoldenrod);
         }
 
@@ -39,10 +40,14 @@ namespace Asterion.Demo.UIPages
             switch (key)
             {
                 case KeyCode.Space:
+                case KeyCode.GamepadX:
+                case KeyCode.GamepadA:
+                case KeyCode.GamepadY:
                     Position boardPosition = UI.Cursor.Position - BOARD_POSITION;
                     TileBoard[boardPosition] = new UITileBoardTile(2, RGBColor.BurlyWood);
                     return;
                 case KeyCode.Escape:
+                case KeyCode.GamepadB:
                     UI.ShowPage<PageMainMenu>();
                     return;
             }
