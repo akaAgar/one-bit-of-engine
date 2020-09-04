@@ -110,6 +110,19 @@ namespace Asterion.Core
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="preset">A preset color from the PresetColor enumeration</param>
+        public RGBColor(PresetColor preset)
+        {
+            Color color = Color.FromKnownColor((KnownColor)preset);
+
+            R = color.R;
+            G = color.G;
+            B = color.B;
+        }
+
+        /// <summary>
         /// (Internal) Constructor.
         /// </summary>
         /// <param name="color">A System.Drawing.Color to copy R,G,B values from.</param>
@@ -253,563 +266,563 @@ namespace Asterion.Core
         public object Clone() { return new RGBColor(R, G, B); }
 
         /// <summary>
-        /// The system color with (R, G, B) = (240,248,255).
+        /// The preset color with (R, G, B) = (240,248,255).
         /// <\summary>
         public static RGBColor AliceBlue { get; } = new RGBColor(240, 248, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (250,235,215).
+        /// The preset color with (R, G, B) = (250,235,215).
         /// <\summary>
         public static RGBColor AntiqueWhite { get; } = new RGBColor(250, 235, 215);
         /// <summary>
-        /// The system color with (R, G, B) = (0,255,255).
+        /// The preset color with (R, G, B) = (0,255,255).
         /// <\summary>
         public static RGBColor Aqua { get; } = new RGBColor(0, 255, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (127,255,212).
+        /// The preset color with (R, G, B) = (127,255,212).
         /// <\summary>
         public static RGBColor Aquamarine { get; } = new RGBColor(127, 255, 212);
         /// <summary>
-        /// The system color with (R, G, B) = (240,255,255).
+        /// The preset color with (R, G, B) = (240,255,255).
         /// <\summary>
         public static RGBColor Azure { get; } = new RGBColor(240, 255, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (245,245,220).
+        /// The preset color with (R, G, B) = (245,245,220).
         /// <\summary>
         public static RGBColor Beige { get; } = new RGBColor(245, 245, 220);
         /// <summary>
-        /// The system color with (R, G, B) = (255,228,196).
+        /// The preset color with (R, G, B) = (255,228,196).
         /// <\summary>
         public static RGBColor Bisque { get; } = new RGBColor(255, 228, 196);
         /// <summary>
-        /// The system color with (R, G, B) = (0,0,0).
+        /// The preset color with (R, G, B) = (0,0,0).
         /// <\summary>
         public static RGBColor Black { get; } = new RGBColor(0, 0, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (255,235,205).
+        /// The preset color with (R, G, B) = (255,235,205).
         /// <\summary>
         public static RGBColor BlanchedAlmond { get; } = new RGBColor(255, 235, 205);
         /// <summary>
-        /// The system color with (R, G, B) = (0,0,255).
+        /// The preset color with (R, G, B) = (0,0,255).
         /// <\summary>
         public static RGBColor Blue { get; } = new RGBColor(0, 0, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (138,43,226).
+        /// The preset color with (R, G, B) = (138,43,226).
         /// <\summary>
         public static RGBColor BlueViolet { get; } = new RGBColor(138, 43, 226);
         /// <summary>
-        /// The system color with (R, G, B) = (165,42,42).
+        /// The preset color with (R, G, B) = (165,42,42).
         /// <\summary>
         public static RGBColor Brown { get; } = new RGBColor(165, 42, 42);
         /// <summary>
-        /// The system color with (R, G, B) = (222,184,135).
+        /// The preset color with (R, G, B) = (222,184,135).
         /// <\summary>
         public static RGBColor BurlyWood { get; } = new RGBColor(222, 184, 135);
         /// <summary>
-        /// The system color with (R, G, B) = (95,158,160).
+        /// The preset color with (R, G, B) = (95,158,160).
         /// <\summary>
         public static RGBColor CadetBlue { get; } = new RGBColor(95, 158, 160);
         /// <summary>
-        /// The system color with (R, G, B) = (127,255,0).
+        /// The preset color with (R, G, B) = (127,255,0).
         /// <\summary>
         public static RGBColor Chartreuse { get; } = new RGBColor(127, 255, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (210,105,30).
+        /// The preset color with (R, G, B) = (210,105,30).
         /// <\summary>
         public static RGBColor Chocolate { get; } = new RGBColor(210, 105, 30);
         /// <summary>
-        /// The system color with (R, G, B) = (255,127,80).
+        /// The preset color with (R, G, B) = (255,127,80).
         /// <\summary>
         public static RGBColor Coral { get; } = new RGBColor(255, 127, 80);
         /// <summary>
-        /// The system color with (R, G, B) = (100,149,237).
+        /// The preset color with (R, G, B) = (100,149,237).
         /// <\summary>
         public static RGBColor CornflowerBlue { get; } = new RGBColor(100, 149, 237);
         /// <summary>
-        /// The system color with (R, G, B) = (255,248,220).
+        /// The preset color with (R, G, B) = (255,248,220).
         /// <\summary>
         public static RGBColor Cornsilk { get; } = new RGBColor(255, 248, 220);
         /// <summary>
-        /// The system color with (R, G, B) = (220,20,60).
+        /// The preset color with (R, G, B) = (220,20,60).
         /// <\summary>
         public static RGBColor Crimson { get; } = new RGBColor(220, 20, 60);
         /// <summary>
-        /// The system color with (R, G, B) = (0,255,255).
+        /// The preset color with (R, G, B) = (0,255,255).
         /// <\summary>
         public static RGBColor Cyan { get; } = new RGBColor(0, 255, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (0,0,139).
+        /// The preset color with (R, G, B) = (0,0,139).
         /// <\summary>
         public static RGBColor DarkBlue { get; } = new RGBColor(0, 0, 139);
         /// <summary>
-        /// The system color with (R, G, B) = (0,139,139).
+        /// The preset color with (R, G, B) = (0,139,139).
         /// <\summary>
         public static RGBColor DarkCyan { get; } = new RGBColor(0, 139, 139);
         /// <summary>
-        /// The system color with (R, G, B) = (184,134,11).
+        /// The preset color with (R, G, B) = (184,134,11).
         /// <\summary>
         public static RGBColor DarkGoldenrod { get; } = new RGBColor(184, 134, 11);
         /// <summary>
-        /// The system color with (R, G, B) = (169,169,169).
+        /// The preset color with (R, G, B) = (169,169,169).
         /// <\summary>
         public static RGBColor DarkGray { get; } = new RGBColor(169, 169, 169);
         /// <summary>
-        /// The system color with (R, G, B) = (0,100,0).
+        /// The preset color with (R, G, B) = (0,100,0).
         /// <\summary>
         public static RGBColor DarkGreen { get; } = new RGBColor(0, 100, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (189,183,107).
+        /// The preset color with (R, G, B) = (189,183,107).
         /// <\summary>
         public static RGBColor DarkKhaki { get; } = new RGBColor(189, 183, 107);
         /// <summary>
-        /// The system color with (R, G, B) = (139,0,139).
+        /// The preset color with (R, G, B) = (139,0,139).
         /// <\summary>
         public static RGBColor DarkMagenta { get; } = new RGBColor(139, 0, 139);
         /// <summary>
-        /// The system color with (R, G, B) = (85,107,47).
+        /// The preset color with (R, G, B) = (85,107,47).
         /// <\summary>
         public static RGBColor DarkOliveGreen { get; } = new RGBColor(85, 107, 47);
         /// <summary>
-        /// The system color with (R, G, B) = (255,140,0).
+        /// The preset color with (R, G, B) = (255,140,0).
         /// <\summary>
         public static RGBColor DarkOrange { get; } = new RGBColor(255, 140, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (153,50,204).
+        /// The preset color with (R, G, B) = (153,50,204).
         /// <\summary>
         public static RGBColor DarkOrchid { get; } = new RGBColor(153, 50, 204);
         /// <summary>
-        /// The system color with (R, G, B) = (139,0,0).
+        /// The preset color with (R, G, B) = (139,0,0).
         /// <\summary>
         public static RGBColor DarkRed { get; } = new RGBColor(139, 0, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (233,150,122).
+        /// The preset color with (R, G, B) = (233,150,122).
         /// <\summary>
         public static RGBColor DarkSalmon { get; } = new RGBColor(233, 150, 122);
         /// <summary>
-        /// The system color with (R, G, B) = (143,188,139).
+        /// The preset color with (R, G, B) = (143,188,139).
         /// <\summary>
         public static RGBColor DarkSeaGreen { get; } = new RGBColor(143, 188, 139);
         /// <summary>
-        /// The system color with (R, G, B) = (72,61,139).
+        /// The preset color with (R, G, B) = (72,61,139).
         /// <\summary>
         public static RGBColor DarkSlateBlue { get; } = new RGBColor(72, 61, 139);
         /// <summary>
-        /// The system color with (R, G, B) = (47,79,79).
+        /// The preset color with (R, G, B) = (47,79,79).
         /// <\summary>
         public static RGBColor DarkSlateGray { get; } = new RGBColor(47, 79, 79);
         /// <summary>
-        /// The system color with (R, G, B) = (0,206,209).
+        /// The preset color with (R, G, B) = (0,206,209).
         /// <\summary>
         public static RGBColor DarkTurquoise { get; } = new RGBColor(0, 206, 209);
         /// <summary>
-        /// The system color with (R, G, B) = (148,0,211).
+        /// The preset color with (R, G, B) = (148,0,211).
         /// <\summary>
         public static RGBColor DarkViolet { get; } = new RGBColor(148, 0, 211);
         /// <summary>
-        /// The system color with (R, G, B) = (255,20,147).
+        /// The preset color with (R, G, B) = (255,20,147).
         /// <\summary>
         public static RGBColor DeepPink { get; } = new RGBColor(255, 20, 147);
         /// <summary>
-        /// The system color with (R, G, B) = (0,191,255).
+        /// The preset color with (R, G, B) = (0,191,255).
         /// <\summary>
         public static RGBColor DeepSkyBlue { get; } = new RGBColor(0, 191, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (105,105,105).
+        /// The preset color with (R, G, B) = (105,105,105).
         /// <\summary>
         public static RGBColor DimGray { get; } = new RGBColor(105, 105, 105);
         /// <summary>
-        /// The system color with (R, G, B) = (30,144,255).
+        /// The preset color with (R, G, B) = (30,144,255).
         /// <\summary>
         public static RGBColor DodgerBlue { get; } = new RGBColor(30, 144, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (178,34,34).
+        /// The preset color with (R, G, B) = (178,34,34).
         /// <\summary>
         public static RGBColor Firebrick { get; } = new RGBColor(178, 34, 34);
         /// <summary>
-        /// The system color with (R, G, B) = (255,250,240).
+        /// The preset color with (R, G, B) = (255,250,240).
         /// <\summary>
         public static RGBColor FloralWhite { get; } = new RGBColor(255, 250, 240);
         /// <summary>
-        /// The system color with (R, G, B) = (34,139,34).
+        /// The preset color with (R, G, B) = (34,139,34).
         /// <\summary>
         public static RGBColor ForestGreen { get; } = new RGBColor(34, 139, 34);
         /// <summary>
-        /// The system color with (R, G, B) = (255,0,255).
+        /// The preset color with (R, G, B) = (255,0,255).
         /// <\summary>
         public static RGBColor Fuchsia { get; } = new RGBColor(255, 0, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (220,220,220).
+        /// The preset color with (R, G, B) = (220,220,220).
         /// <\summary>
         public static RGBColor Gainsboro { get; } = new RGBColor(220, 220, 220);
         /// <summary>
-        /// The system color with (R, G, B) = (248,248,255).
+        /// The preset color with (R, G, B) = (248,248,255).
         /// <\summary>
         public static RGBColor GhostWhite { get; } = new RGBColor(248, 248, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (255,215,0).
+        /// The preset color with (R, G, B) = (255,215,0).
         /// <\summary>
         public static RGBColor Gold { get; } = new RGBColor(255, 215, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (218,165,32).
+        /// The preset color with (R, G, B) = (218,165,32).
         /// <\summary>
         public static RGBColor Goldenrod { get; } = new RGBColor(218, 165, 32);
         /// <summary>
-        /// The system color with (R, G, B) = (128,128,128).
+        /// The preset color with (R, G, B) = (128,128,128).
         /// <\summary>
         public static RGBColor Gray { get; } = new RGBColor(128, 128, 128);
         /// <summary>
-        /// The system color with (R, G, B) = (0,128,0).
+        /// The preset color with (R, G, B) = (0,128,0).
         /// <\summary>
         public static RGBColor Green { get; } = new RGBColor(0, 128, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (173,255,47).
+        /// The preset color with (R, G, B) = (173,255,47).
         /// <\summary>
         public static RGBColor GreenYellow { get; } = new RGBColor(173, 255, 47);
         /// <summary>
-        /// The system color with (R, G, B) = (240,255,240).
+        /// The preset color with (R, G, B) = (240,255,240).
         /// <\summary>
         public static RGBColor Honeydew { get; } = new RGBColor(240, 255, 240);
         /// <summary>
-        /// The system color with (R, G, B) = (255,105,180).
+        /// The preset color with (R, G, B) = (255,105,180).
         /// <\summary>
         public static RGBColor HotPink { get; } = new RGBColor(255, 105, 180);
         /// <summary>
-        /// The system color with (R, G, B) = (205,92,92).
+        /// The preset color with (R, G, B) = (205,92,92).
         /// <\summary>
         public static RGBColor IndianRed { get; } = new RGBColor(205, 92, 92);
         /// <summary>
-        /// The system color with (R, G, B) = (75,0,130).
+        /// The preset color with (R, G, B) = (75,0,130).
         /// <\summary>
         public static RGBColor Indigo { get; } = new RGBColor(75, 0, 130);
         /// <summary>
-        /// The system color with (R, G, B) = (255,255,240).
+        /// The preset color with (R, G, B) = (255,255,240).
         /// <\summary>
         public static RGBColor Ivory { get; } = new RGBColor(255, 255, 240);
         /// <summary>
-        /// The system color with (R, G, B) = (240,230,140).
+        /// The preset color with (R, G, B) = (240,230,140).
         /// <\summary>
         public static RGBColor Khaki { get; } = new RGBColor(240, 230, 140);
         /// <summary>
-        /// The system color with (R, G, B) = (230,230,250).
+        /// The preset color with (R, G, B) = (230,230,250).
         /// <\summary>
         public static RGBColor Lavender { get; } = new RGBColor(230, 230, 250);
         /// <summary>
-        /// The system color with (R, G, B) = (255,240,245).
+        /// The preset color with (R, G, B) = (255,240,245).
         /// <\summary>
         public static RGBColor LavenderBlush { get; } = new RGBColor(255, 240, 245);
         /// <summary>
-        /// The system color with (R, G, B) = (124,252,0).
+        /// The preset color with (R, G, B) = (124,252,0).
         /// <\summary>
         public static RGBColor LawnGreen { get; } = new RGBColor(124, 252, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (255,250,205).
+        /// The preset color with (R, G, B) = (255,250,205).
         /// <\summary>
         public static RGBColor LemonChiffon { get; } = new RGBColor(255, 250, 205);
         /// <summary>
-        /// The system color with (R, G, B) = (173,216,230).
+        /// The preset color with (R, G, B) = (173,216,230).
         /// <\summary>
         public static RGBColor LightBlue { get; } = new RGBColor(173, 216, 230);
         /// <summary>
-        /// The system color with (R, G, B) = (240,128,128).
+        /// The preset color with (R, G, B) = (240,128,128).
         /// <\summary>
         public static RGBColor LightCoral { get; } = new RGBColor(240, 128, 128);
         /// <summary>
-        /// The system color with (R, G, B) = (224,255,255).
+        /// The preset color with (R, G, B) = (224,255,255).
         /// <\summary>
         public static RGBColor LightCyan { get; } = new RGBColor(224, 255, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (250,250,210).
+        /// The preset color with (R, G, B) = (250,250,210).
         /// <\summary>
         public static RGBColor LightGoldenrodYellow { get; } = new RGBColor(250, 250, 210);
         /// <summary>
-        /// The system color with (R, G, B) = (211,211,211).
+        /// The preset color with (R, G, B) = (211,211,211).
         /// <\summary>
         public static RGBColor LightGray { get; } = new RGBColor(211, 211, 211);
         /// <summary>
-        /// The system color with (R, G, B) = (144,238,144).
+        /// The preset color with (R, G, B) = (144,238,144).
         /// <\summary>
         public static RGBColor LightGreen { get; } = new RGBColor(144, 238, 144);
         /// <summary>
-        /// The system color with (R, G, B) = (255,182,193).
+        /// The preset color with (R, G, B) = (255,182,193).
         /// <\summary>
         public static RGBColor LightPink { get; } = new RGBColor(255, 182, 193);
         /// <summary>
-        /// The system color with (R, G, B) = (255,160,122).
+        /// The preset color with (R, G, B) = (255,160,122).
         /// <\summary>
         public static RGBColor LightSalmon { get; } = new RGBColor(255, 160, 122);
         /// <summary>
-        /// The system color with (R, G, B) = (32,178,170).
+        /// The preset color with (R, G, B) = (32,178,170).
         /// <\summary>
         public static RGBColor LightSeaGreen { get; } = new RGBColor(32, 178, 170);
         /// <summary>
-        /// The system color with (R, G, B) = (135,206,250).
+        /// The preset color with (R, G, B) = (135,206,250).
         /// <\summary>
         public static RGBColor LightSkyBlue { get; } = new RGBColor(135, 206, 250);
         /// <summary>
-        /// The system color with (R, G, B) = (119,136,153).
+        /// The preset color with (R, G, B) = (119,136,153).
         /// <\summary>
         public static RGBColor LightSlateGray { get; } = new RGBColor(119, 136, 153);
         /// <summary>
-        /// The system color with (R, G, B) = (176,196,222).
+        /// The preset color with (R, G, B) = (176,196,222).
         /// <\summary>
         public static RGBColor LightSteelBlue { get; } = new RGBColor(176, 196, 222);
         /// <summary>
-        /// The system color with (R, G, B) = (255,255,224).
+        /// The preset color with (R, G, B) = (255,255,224).
         /// <\summary>
         public static RGBColor LightYellow { get; } = new RGBColor(255, 255, 224);
         /// <summary>
-        /// The system color with (R, G, B) = (0,255,0).
+        /// The preset color with (R, G, B) = (0,255,0).
         /// <\summary>
         public static RGBColor Lime { get; } = new RGBColor(0, 255, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (50,205,50).
+        /// The preset color with (R, G, B) = (50,205,50).
         /// <\summary>
         public static RGBColor LimeGreen { get; } = new RGBColor(50, 205, 50);
         /// <summary>
-        /// The system color with (R, G, B) = (250,240,230).
+        /// The preset color with (R, G, B) = (250,240,230).
         /// <\summary>
         public static RGBColor Linen { get; } = new RGBColor(250, 240, 230);
         /// <summary>
-        /// The system color with (R, G, B) = (255,0,255).
+        /// The preset color with (R, G, B) = (255,0,255).
         /// <\summary>
         public static RGBColor Magenta { get; } = new RGBColor(255, 0, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (128,0,0).
+        /// The preset color with (R, G, B) = (128,0,0).
         /// <\summary>
         public static RGBColor Maroon { get; } = new RGBColor(128, 0, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (102,205,170).
+        /// The preset color with (R, G, B) = (102,205,170).
         /// <\summary>
         public static RGBColor MediumAquamarine { get; } = new RGBColor(102, 205, 170);
         /// <summary>
-        /// The system color with (R, G, B) = (0,0,205).
+        /// The preset color with (R, G, B) = (0,0,205).
         /// <\summary>
         public static RGBColor MediumBlue { get; } = new RGBColor(0, 0, 205);
         /// <summary>
-        /// The system color with (R, G, B) = (186,85,211).
+        /// The preset color with (R, G, B) = (186,85,211).
         /// <\summary>
         public static RGBColor MediumOrchid { get; } = new RGBColor(186, 85, 211);
         /// <summary>
-        /// The system color with (R, G, B) = (147,112,219).
+        /// The preset color with (R, G, B) = (147,112,219).
         /// <\summary>
         public static RGBColor MediumPurple { get; } = new RGBColor(147, 112, 219);
         /// <summary>
-        /// The system color with (R, G, B) = (60,179,113).
+        /// The preset color with (R, G, B) = (60,179,113).
         /// <\summary>
         public static RGBColor MediumSeaGreen { get; } = new RGBColor(60, 179, 113);
         /// <summary>
-        /// The system color with (R, G, B) = (123,104,238).
+        /// The preset color with (R, G, B) = (123,104,238).
         /// <\summary>
         public static RGBColor MediumSlateBlue { get; } = new RGBColor(123, 104, 238);
         /// <summary>
-        /// The system color with (R, G, B) = (0,250,154).
+        /// The preset color with (R, G, B) = (0,250,154).
         /// <\summary>
         public static RGBColor MediumSpringGreen { get; } = new RGBColor(0, 250, 154);
         /// <summary>
-        /// The system color with (R, G, B) = (72,209,204).
+        /// The preset color with (R, G, B) = (72,209,204).
         /// <\summary>
         public static RGBColor MediumTurquoise { get; } = new RGBColor(72, 209, 204);
         /// <summary>
-        /// The system color with (R, G, B) = (199,21,133).
+        /// The preset color with (R, G, B) = (199,21,133).
         /// <\summary>
         public static RGBColor MediumVioletRed { get; } = new RGBColor(199, 21, 133);
         /// <summary>
-        /// The system color with (R, G, B) = (25,25,112).
+        /// The preset color with (R, G, B) = (25,25,112).
         /// <\summary>
         public static RGBColor MidnightBlue { get; } = new RGBColor(25, 25, 112);
         /// <summary>
-        /// The system color with (R, G, B) = (245,255,250).
+        /// The preset color with (R, G, B) = (245,255,250).
         /// <\summary>
         public static RGBColor MintCream { get; } = new RGBColor(245, 255, 250);
         /// <summary>
-        /// The system color with (R, G, B) = (255,228,225).
+        /// The preset color with (R, G, B) = (255,228,225).
         /// <\summary>
         public static RGBColor MistyRose { get; } = new RGBColor(255, 228, 225);
         /// <summary>
-        /// The system color with (R, G, B) = (255,228,181).
+        /// The preset color with (R, G, B) = (255,228,181).
         /// <\summary>
         public static RGBColor Moccasin { get; } = new RGBColor(255, 228, 181);
         /// <summary>
-        /// The system color with (R, G, B) = (255,222,173).
+        /// The preset color with (R, G, B) = (255,222,173).
         /// <\summary>
         public static RGBColor NavajoWhite { get; } = new RGBColor(255, 222, 173);
         /// <summary>
-        /// The system color with (R, G, B) = (0,0,128).
+        /// The preset color with (R, G, B) = (0,0,128).
         /// <\summary>
         public static RGBColor Navy { get; } = new RGBColor(0, 0, 128);
         /// <summary>
-        /// The system color with (R, G, B) = (253,245,230).
+        /// The preset color with (R, G, B) = (253,245,230).
         /// <\summary>
         public static RGBColor OldLace { get; } = new RGBColor(253, 245, 230);
         /// <summary>
-        /// The system color with (R, G, B) = (128,128,0).
+        /// The preset color with (R, G, B) = (128,128,0).
         /// <\summary>
         public static RGBColor Olive { get; } = new RGBColor(128, 128, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (107,142,35).
+        /// The preset color with (R, G, B) = (107,142,35).
         /// <\summary>
         public static RGBColor OliveDrab { get; } = new RGBColor(107, 142, 35);
         /// <summary>
-        /// The system color with (R, G, B) = (255,165,0).
+        /// The preset color with (R, G, B) = (255,165,0).
         /// <\summary>
         public static RGBColor Orange { get; } = new RGBColor(255, 165, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (255,69,0).
+        /// The preset color with (R, G, B) = (255,69,0).
         /// <\summary>
         public static RGBColor OrangeRed { get; } = new RGBColor(255, 69, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (218,112,214).
+        /// The preset color with (R, G, B) = (218,112,214).
         /// <\summary>
         public static RGBColor Orchid { get; } = new RGBColor(218, 112, 214);
         /// <summary>
-        /// The system color with (R, G, B) = (238,232,170).
+        /// The preset color with (R, G, B) = (238,232,170).
         /// <\summary>
         public static RGBColor PaleGoldenrod { get; } = new RGBColor(238, 232, 170);
         /// <summary>
-        /// The system color with (R, G, B) = (152,251,152).
+        /// The preset color with (R, G, B) = (152,251,152).
         /// <\summary>
         public static RGBColor PaleGreen { get; } = new RGBColor(152, 251, 152);
         /// <summary>
-        /// The system color with (R, G, B) = (175,238,238).
+        /// The preset color with (R, G, B) = (175,238,238).
         /// <\summary>
         public static RGBColor PaleTurquoise { get; } = new RGBColor(175, 238, 238);
         /// <summary>
-        /// The system color with (R, G, B) = (219,112,147).
+        /// The preset color with (R, G, B) = (219,112,147).
         /// <\summary>
         public static RGBColor PaleVioletRed { get; } = new RGBColor(219, 112, 147);
         /// <summary>
-        /// The system color with (R, G, B) = (255,239,213).
+        /// The preset color with (R, G, B) = (255,239,213).
         /// <\summary>
         public static RGBColor PapayaWhip { get; } = new RGBColor(255, 239, 213);
         /// <summary>
-        /// The system color with (R, G, B) = (255,218,185).
+        /// The preset color with (R, G, B) = (255,218,185).
         /// <\summary>
         public static RGBColor PeachPuff { get; } = new RGBColor(255, 218, 185);
         /// <summary>
-        /// The system color with (R, G, B) = (205,133,63).
+        /// The preset color with (R, G, B) = (205,133,63).
         /// <\summary>
         public static RGBColor Peru { get; } = new RGBColor(205, 133, 63);
         /// <summary>
-        /// The system color with (R, G, B) = (255,192,203).
+        /// The preset color with (R, G, B) = (255,192,203).
         /// <\summary>
         public static RGBColor Pink { get; } = new RGBColor(255, 192, 203);
         /// <summary>
-        /// The system color with (R, G, B) = (221,160,221).
+        /// The preset color with (R, G, B) = (221,160,221).
         /// <\summary>
         public static RGBColor Plum { get; } = new RGBColor(221, 160, 221);
         /// <summary>
-        /// The system color with (R, G, B) = (176,224,230).
+        /// The preset color with (R, G, B) = (176,224,230).
         /// <\summary>
         public static RGBColor PowderBlue { get; } = new RGBColor(176, 224, 230);
         /// <summary>
-        /// The system color with (R, G, B) = (128,0,128).
+        /// The preset color with (R, G, B) = (128,0,128).
         /// <\summary>
         public static RGBColor Purple { get; } = new RGBColor(128, 0, 128);
         /// <summary>
-        /// The system color with (R, G, B) = (255,0,0).
+        /// The preset color with (R, G, B) = (255,0,0).
         /// <\summary>
         public static RGBColor Red { get; } = new RGBColor(255, 0, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (188,143,143).
+        /// The preset color with (R, G, B) = (188,143,143).
         /// <\summary>
         public static RGBColor RosyBrown { get; } = new RGBColor(188, 143, 143);
         /// <summary>
-        /// The system color with (R, G, B) = (65,105,225).
+        /// The preset color with (R, G, B) = (65,105,225).
         /// <\summary>
         public static RGBColor RoyalBlue { get; } = new RGBColor(65, 105, 225);
         /// <summary>
-        /// The system color with (R, G, B) = (139,69,19).
+        /// The preset color with (R, G, B) = (139,69,19).
         /// <\summary>
         public static RGBColor SaddleBrown { get; } = new RGBColor(139, 69, 19);
         /// <summary>
-        /// The system color with (R, G, B) = (250,128,114).
+        /// The preset color with (R, G, B) = (250,128,114).
         /// <\summary>
         public static RGBColor Salmon { get; } = new RGBColor(250, 128, 114);
         /// <summary>
-        /// The system color with (R, G, B) = (244,164,96).
+        /// The preset color with (R, G, B) = (244,164,96).
         /// <\summary>
         public static RGBColor SandyBrown { get; } = new RGBColor(244, 164, 96);
         /// <summary>
-        /// The system color with (R, G, B) = (46,139,87).
+        /// The preset color with (R, G, B) = (46,139,87).
         /// <\summary>
         public static RGBColor SeaGreen { get; } = new RGBColor(46, 139, 87);
         /// <summary>
-        /// The system color with (R, G, B) = (255,245,238).
+        /// The preset color with (R, G, B) = (255,245,238).
         /// <\summary>
         public static RGBColor SeaShell { get; } = new RGBColor(255, 245, 238);
         /// <summary>
-        /// The system color with (R, G, B) = (160,82,45).
+        /// The preset color with (R, G, B) = (160,82,45).
         /// <\summary>
         public static RGBColor Sienna { get; } = new RGBColor(160, 82, 45);
         /// <summary>
-        /// The system color with (R, G, B) = (192,192,192).
+        /// The preset color with (R, G, B) = (192,192,192).
         /// <\summary>
         public static RGBColor Silver { get; } = new RGBColor(192, 192, 192);
         /// <summary>
-        /// The system color with (R, G, B) = (135,206,235).
+        /// The preset color with (R, G, B) = (135,206,235).
         /// <\summary>
         public static RGBColor SkyBlue { get; } = new RGBColor(135, 206, 235);
         /// <summary>
-        /// The system color with (R, G, B) = (106,90,205).
+        /// The preset color with (R, G, B) = (106,90,205).
         /// <\summary>
         public static RGBColor SlateBlue { get; } = new RGBColor(106, 90, 205);
         /// <summary>
-        /// The system color with (R, G, B) = (112,128,144).
+        /// The preset color with (R, G, B) = (112,128,144).
         /// <\summary>
         public static RGBColor SlateGray { get; } = new RGBColor(112, 128, 144);
         /// <summary>
-        /// The system color with (R, G, B) = (255,250,250).
+        /// The preset color with (R, G, B) = (255,250,250).
         /// <\summary>
         public static RGBColor Snow { get; } = new RGBColor(255, 250, 250);
         /// <summary>
-        /// The system color with (R, G, B) = (0,255,127).
+        /// The preset color with (R, G, B) = (0,255,127).
         /// <\summary>
         public static RGBColor SpringGreen { get; } = new RGBColor(0, 255, 127);
         /// <summary>
-        /// The system color with (R, G, B) = (70,130,180).
+        /// The preset color with (R, G, B) = (70,130,180).
         /// <\summary>
         public static RGBColor SteelBlue { get; } = new RGBColor(70, 130, 180);
         /// <summary>
-        /// The system color with (R, G, B) = (210,180,140).
+        /// The preset color with (R, G, B) = (210,180,140).
         /// <\summary>
         public static RGBColor Tan { get; } = new RGBColor(210, 180, 140);
         /// <summary>
-        /// The system color with (R, G, B) = (0,128,128).
+        /// The preset color with (R, G, B) = (0,128,128).
         /// <\summary>
         public static RGBColor Teal { get; } = new RGBColor(0, 128, 128);
         /// <summary>
-        /// The system color with (R, G, B) = (216,191,216).
+        /// The preset color with (R, G, B) = (216,191,216).
         /// <\summary>
         public static RGBColor Thistle { get; } = new RGBColor(216, 191, 216);
         /// <summary>
-        /// The system color with (R, G, B) = (255,99,71).
+        /// The preset color with (R, G, B) = (255,99,71).
         /// <\summary>
         public static RGBColor Tomato { get; } = new RGBColor(255, 99, 71);
         /// <summary>
-        /// The system color with (R, G, B) = (64,224,208).
+        /// The preset color with (R, G, B) = (64,224,208).
         /// <\summary>
         public static RGBColor Turquoise { get; } = new RGBColor(64, 224, 208);
         /// <summary>
-        /// The system color with (R, G, B) = (238,130,238).
+        /// The preset color with (R, G, B) = (238,130,238).
         /// <\summary>
         public static RGBColor Violet { get; } = new RGBColor(238, 130, 238);
         /// <summary>
-        /// The system color with (R, G, B) = (245,222,179).
+        /// The preset color with (R, G, B) = (245,222,179).
         /// <\summary>
         public static RGBColor Wheat { get; } = new RGBColor(245, 222, 179);
         /// <summary>
-        /// The system color with (R, G, B) = (255,255,255).
+        /// The preset color with (R, G, B) = (255,255,255).
         /// <\summary>
         public static RGBColor White { get; } = new RGBColor(255, 255, 255);
         /// <summary>
-        /// The system color with (R, G, B) = (245,245,245).
+        /// The preset color with (R, G, B) = (245,245,245).
         /// <\summary>
         public static RGBColor WhiteSmoke { get; } = new RGBColor(245, 245, 245);
         /// <summary>
-        /// The system color with (R, G, B) = (255,255,0).
+        /// The preset color with (R, G, B) = (255,255,0).
         /// <\summary>
         public static RGBColor Yellow { get; } = new RGBColor(255, 255, 0);
         /// <summary>
-        /// The system color with (R, G, B) = (154,205,50).
+        /// The preset color with (R, G, B) = (154,205,50).
         /// <\summary>
         public static RGBColor YellowGreen { get; } = new RGBColor(154, 205, 50);
     }
