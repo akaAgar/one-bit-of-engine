@@ -69,57 +69,58 @@ float noise(vec2 uv)
   return fract(sin(dot(uv.xy, vec2(12.9898, 78.233))) * 43758.5453);
 }
 
-// Returns the UV of the pixel within the tile and not within the entire tilemap (with UV 0,0 in the top-left corner of the tile and UV 1,1 in its bottom-right corner)
-/*
-void InternalTileUV(in vec2 absoluteUV, out vec2 tileUV)
+vec2 getUVFromVFX(vec2 baseUV, int vfx)
 {
-  tileUV = vec2(
-    (absoluteUV.x - floor(absoluteUV.x / tileUVSize.x) * tileUVSize.x) / tileUVSize.x,
-    (absoluteUV.y - floor(absoluteUV.y / tileUVSize.y) * tileUVSize.y) / tileUVSize.y
-  );
-}
-*/
+  switch (vfx)
+  {
+    default:
+      return baseUV;
 
-vec2 TileCornerUV(vec2 uv)
-{
-  return vec2(floor(uv.x / tileUVSize.x) * tileUVSize.x, floor(uv.y / tileUVSize.y) * tileUVSize.y);
-}
+    case VFX_SLANTED_RIGHT:
+    case VFX_SLANTED_LEFT:
+    case VFX_OSCILLATE_TOP_SLOW:
+    case VFX_OSCILLATE_TOP_MEDIUM:
+    case VFX_OSCILLATE_TOP_FAST:
+    case VFX_OSCILLATE_BOTTOM_SLOW:
+    case VFX_OSCILLATE_BOTTOM_MEDIUM:
+    case VFX_OSCILLATE_BOTTOM_FAST:
+    case WAVE_HORIZONTAL_SLOW:
+    case WAVE_HORIZONTAL_MEDIUM:
+    case WAVE_HORIZONTAL_FAST:
+    case WAVE_VERTICAL_SLOW:
+    case WAVE_VERTICAL_MEDIUM:
+    case WAVE_VERTICAL_FAST:
+      break;
+  }
 
-vec2 InternalTileUVNormalized(vec2 absoluteUV)
-{
-  return vec2(
-    (absoluteUV.x - floor(absoluteUV.x / tileUVSize.x) * tileUVSize.x) / tileUVSize.x,
-    (absoluteUV.y - floor(absoluteUV.y / tileUVSize.y) * tileUVSize.y) / tileUVSize.y);
-}
+  vec2 tileUV = vec2(floor(baseUV.x / tileUVSize.x) * tileUVSize.x, floor(baseUV.y / tileUVSize.y) * tileUVSize.y);
+  vec2 offsetUV = vec2((baseUV.x - floor(baseUV.x / tileUVSize.x) * tileUVSize.x) / tileUVSize.x, (baseUV.y - floor(baseUV.y / tileUVSize.y) * tileUVSize.y) / tileUVSize.y);
 
-vec2 InternalTileUV(vec2 uv)
-{
-  return vec2(uv.x - floor(uv.x / tileUVSize.x) * tileUVSize.x, uv.y - floor(uv.y / tileUVSize.y) * tileUVSize.y);
-}
+  float speed = 1;
+  switch (vfx)
+  {
+    case VFX_OSCILLATE_TOP_MEDIUM:
+    case VFX_OSCILLATE_BOTTOM_MEDIUM:
+    case WAVE_HORIZONTAL_MEDIUM:
+    case WAVE_VERTICAL_MEDIUM:
+      speed = 2; break;
 
-void main()
-{
-  vec2 texUV = fragUV;
-  vec2 tileUV, offsetUV;
+    case VFX_OSCILLATE_TOP_FAST:
+    case VFX_OSCILLATE_BOTTOM_FAST:
+    case WAVE_HORIZONTAL_FAST:
+    case WAVE_VERTICAL_FAST:
+      speed = 4; break;
+  }
 
-  int fragVFXi = int(fragVFX);
-
-  // This switch handles all VFX UV modifications
-  switch (fragVFXi)
+  switch (vfx)
   {
     case VFX_SLANTED_RIGHT:
-	  tileUV = TileCornerUV(texUV);
-	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.x = clamp(offsetUV.x + offsetUV.y * .2, 0, 1);
-	  texUV = tileUV + offsetUV * tileUVSize;
-      break;
+      offsetUV.x = clamp(offsetUV.x + offsetUV.y * .2, 0, 1);
+      return tileUV + offsetUV * tileUVSize;
 
     case VFX_SLANTED_LEFT:
-	  tileUV = TileCornerUV(texUV);
-	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.x = clamp(offsetUV.x + (1 - offsetUV.y) * .2, 0, 1);
-	  texUV = tileUV + offsetUV * tileUVSize;
-      break;
+      offsetUV.x = clamp(offsetUV.x + (1 - offsetUV.y) * .2, 0, 1);
+      return tileUV + offsetUV * tileUVSize;
 
     case VFX_OSCILLATE_TOP_SLOW:
     case VFX_OSCILLATE_TOP_MEDIUM:
@@ -127,47 +128,62 @@ void main()
     case VFX_OSCILLATE_BOTTOM_SLOW:
     case VFX_OSCILLATE_BOTTOM_MEDIUM:
     case VFX_OSCILLATE_BOTTOM_FAST:
-	  float oscillateSpeed = 1;
-	  if ((fragVFXi == VFX_OSCILLATE_TOP_MEDIUM) || (fragVFXi == VFX_OSCILLATE_BOTTOM_MEDIUM)) oscillateSpeed = 2;
-	  else if ((fragVFXi == VFX_OSCILLATE_TOP_FAST) || (fragVFXi == VFX_OSCILLATE_BOTTOM_FAST)) oscillateSpeed = 4;
-
-      tileUV = TileCornerUV(texUV);
-	  offsetUV = InternalTileUVNormalized(texUV);
-
-	  float oscillateOffsetY = (1 - offsetUV.y);
-	  if (fragVFXi >= VFX_OSCILLATE_BOTTOM_SLOW) oscillateOffsetY = offsetUV.y;
-
-	  offsetUV.x = clamp(offsetUV.x + oscillateOffsetY * cos(time * oscillateSpeed) * .1, 0.01, 0.99);
-	  texUV = tileUV + offsetUV * tileUVSize;
-      break;
+      float oscillateOffsetY = (1 - offsetUV.y);
+      if (vfx >= VFX_OSCILLATE_BOTTOM_SLOW) oscillateOffsetY = offsetUV.y;
+      offsetUV.x = clamp(offsetUV.x + oscillateOffsetY * cos(time * speed) * .1, 0.01, 0.99);
+      return tileUV + offsetUV * tileUVSize;
 
     case WAVE_HORIZONTAL_SLOW:
     case WAVE_HORIZONTAL_MEDIUM:
     case WAVE_HORIZONTAL_FAST:
-	  float waveSpeed = 1;
-	  if (fragVFXi == WAVE_HORIZONTAL_MEDIUM) waveSpeed = 2;
-	  else if (fragVFXi == WAVE_HORIZONTAL_FAST) waveSpeed = 4;
-
-	  tileUV = TileCornerUV(texUV);
-	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.x = clamp(offsetUV.x + cos(time * waveSpeed) * sin(offsetUV.y * 16) * .15, 0.01, 0.99);
-	  texUV = tileUV + offsetUV * tileUVSize;
-      break;
+      offsetUV.x = clamp(offsetUV.x + cos(time * speed) * sin(offsetUV.y * 16) * .15, 0.01, 0.99);
+      return tileUV + offsetUV * tileUVSize;
 
     case WAVE_VERTICAL_SLOW:
     case WAVE_VERTICAL_MEDIUM:
     case WAVE_VERTICAL_FAST:
-	  float wave2Speed = 1;
-	  if (fragVFXi == WAVE_VERTICAL_MEDIUM) wave2Speed = 2;
-	  else if (fragVFXi == WAVE_VERTICAL_FAST) wave2Speed = 4;
-
-	  tileUV = TileCornerUV(texUV);
-	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.y = clamp(offsetUV.y + cos(time * wave2Speed) * sin(offsetUV.x * 16) * .15, 0.01, 0.99);
-	  texUV = tileUV + offsetUV * tileUVSize;
-      break;
+      offsetUV.y = clamp(offsetUV.y + cos(time * speed) * sin(offsetUV.x * 16) * .15, 0.01, 0.99);
+      return tileUV + offsetUV * tileUVSize;
   }
 
+  return baseUV;
+}
+
+vec4 getColorFromVFX(float brightness, int vfx)
+{
+  vec3 tileColor = fragColor;
+
+  switch (vfx)
+  {
+    case VFX_GLOW_SLOW: brightness *= abs(cos(time)); break;
+    case VFX_GLOW_MEDIUM: brightness *= abs(cos(time * 2)); break;
+    case VFX_GLOW_FAST: brightness *= abs(cos(time * 4)); break;
+
+    case VFX_BLINK_SLOW: if (cos(time * 4) < 0) brightness = 0; break;
+    case VFX_BLINK_MEDIUM: if (cos(time * 8) < 0) brightness = 0; break;
+    case VFX_BLINK_FAST: if (cos(time * 16) < 0) brightness = 0; break;
+
+    case VFX_NEGATIVE: brightness = 1 - brightness; break; // Negative
+
+    case VFX_NEGATIVE_BLINK_SLOW: if (cos(time * 4) < 0) brightness = 1 - brightness; break;
+    case VFX_NEGATIVE_BLINK_MEDIUM: if (cos(time * 8) < 0) brightness = 1 - brightness; break;
+    case VFX_NEGATIVE_BLINK_FAST: if (cos(time * 16) < 0) brightness = 1 - brightness; break;
+
+    case VFX_NEGATIVE_GLOW_SLOW: brightness = mix(brightness, 1 - brightness, abs(cos(time))); break;
+    case VFX_NEGATIVE_GLOW_MEDIUM: brightness = mix(brightness, 1 - brightness, abs(cos(time * 2))); break;
+    case VFX_NEGATIVE_GLOW_FAST: brightness = mix(brightness, 1 - brightness, abs(cos(time * 4))); break;
+  }
+
+  return vec4(brightness, brightness, brightness, 1) * vec4(tileColor, 1);
+}
+
+
+void main()
+{
+  // Get UV coordinates
+  vec2 texUV = getUVFromVFX(fragUV, int(fragVFX));
+
+  // Read pixel from the proper tilemap
   switch (int(fragTileMap))
   {
    default: color = texture(texture0, texUV); break;
@@ -176,54 +192,17 @@ void main()
    case 3: color = texture(texture3, texUV); break;
   }
  
+  // Get brightness from the proper animation frame
   float brightness = 0;
-
   switch (animationFrame)
   {
     default: brightness = color.r; break;
     case 1: brightness = color.g; break;
     case 2: brightness = color.b; break;
   }
-  
-  switch (int(fragVFX))
-  {
-    case VFX_GLOW_SLOW: brightness *= abs(cos(time)); break;
-    case VFX_GLOW_MEDIUM: brightness *= abs(cos(time * 2)); break;
-    case VFX_GLOW_FAST: brightness *= abs(cos(time * 4)); break;
 
-	case VFX_BLINK_SLOW: if (cos(time * 4) < 0) brightness = 0; break;
-	case VFX_BLINK_MEDIUM: if (cos(time * 8) < 0) brightness = 0; break;
-	case VFX_BLINK_FAST: if (cos(time * 16) < 0) brightness = 0; break;
+  // Get color
+  color = getColorFromVFX(brightness, int(fragVFX));
 
-	case VFX_NEGATIVE: brightness = 1 - brightness; break; // Negative
-
-	case VFX_NEGATIVE_BLINK_SLOW: if (cos(time * 4) < 0) brightness = 1 - brightness; break;
-	case VFX_NEGATIVE_BLINK_MEDIUM: if (cos(time * 8) < 0) brightness = 1 - brightness; break;
-	case VFX_NEGATIVE_BLINK_FAST: if (cos(time * 16) < 0) brightness = 1 - brightness; break;
-
-    case VFX_NEGATIVE_GLOW_SLOW: brightness = mix(brightness, 1 - brightness, abs(cos(time))); break;
-    case VFX_NEGATIVE_GLOW_MEDIUM: brightness = mix(brightness, 1 - brightness, abs(cos(time * 2))); break;
-    case VFX_NEGATIVE_GLOW_FAST: brightness = mix(brightness, 1 - brightness, abs(cos(time * 4))); break;
-
-/*
-	case 8:
-	  float noise = noise(InternalTileUV(texUV));
-	  brightness *= noise + abs(cos(time)) * (1 - noise);
-	  break;
-	  */
-
-	/*
-	case 7:
-	  // brightness *= abs(cos(time * (texUV.x / tileUVSize.x)));
-	  // brightness *= abs(cos(time * mod(texUV.x, tileUVSize.x)));
-	  
-	  float xOffset = texUV.x - (tileUVSize.x * floor(texUV.x / tileUVSize.x));
-	  xOffset *= tileUVSize.x;
-	  brightness *= abs(cos(xOffset));
-	  break;
-	  */
-  }
-
-  color = vec4(brightness, brightness, brightness, 1) * vec4(fragColor, 1);
   color.a = color.r;
 }
