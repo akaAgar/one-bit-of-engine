@@ -43,6 +43,12 @@ namespace Asterion.UI.Controls
         private RGBColor SelectedColor_ = RGBColor.Yellow;
 
         /// <summary>
+        /// The tile special effect to use on the selected menu item.
+        /// </summary>
+        public TileVFX SelectedVFX { get { return SelectedVFX_; } set { SelectedVFX_ = value; Page.UI.Invalidate(); } }
+        private TileVFX SelectedVFX_ = TileVFX.None;
+
+        /// <summary>
         /// Index of the currently selected menu item
         /// </summary>
         public int SelectedIndex { get { return SelectedIndex_; }
@@ -164,7 +170,8 @@ namespace Asterion.UI.Controls
             for (int i = 0; i < MenuItems.Count; i++)
                 DrawTextOnVBO(
                     vbo, MenuItems[i], Position.X, Position.Y + i, FontTile_,
-                    (SelectedIndex == i) ? SelectedColor_ : Color, TileEffect);
+                    (SelectedIndex == i) ? SelectedColor_ : Color,
+                    (SelectedIndex == i) ? SelectedVFX_ : TileEffect);
         }
 
         /// <summary>

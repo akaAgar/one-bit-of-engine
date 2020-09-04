@@ -19,8 +19,11 @@ namespace Asterion.Demo.UIPages
             AddLabel(2, 2, "WELCOME TO THE ASTERION DEMO GAME PROJECT", (int)TileID.Font, RGBColor.PaleGoldenrod);
 
             AddLabel(2, 4, "Please select an option:", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            
             UIMenu menu = AddMenu(2, 6, (int)TileID.Font, RGBColor.White);
             menu.SelectedColor = RGBColor.Yellow;
+            menu.SelectedVFX = TileVFX.Negative;
+
             MenuUI = menu.AddMenuItem("User interface demo");
             MenuVFX = menu.AddMenuItem("Visual FX demo");
             MenuAudio = menu.AddMenuItem("Audio demo");
