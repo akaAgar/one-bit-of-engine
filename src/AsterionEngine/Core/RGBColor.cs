@@ -23,7 +23,7 @@ using System.Globalization;
 namespace Asterion.Core
 {
     /// <summary>
-    /// Stores a R,G,B color 24-bit color.
+    /// Stores a R,G,B 24-bit color.
     /// </summary>
     public struct RGBColor : ICloneable, IEquatable<RGBColor>
     {

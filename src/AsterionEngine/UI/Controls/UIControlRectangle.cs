@@ -10,7 +10,7 @@ namespace Asterion.UI.Controls
         /// <summary>
         /// Size of the control.
         /// </summary>
-        public Dimension Size { get { return Size_; } set { Size_ = value; Page.UI.Invalidate(); } }
+        public virtual Dimension Size { get { return Size_; } set { Size_ = value; Page.UI.Invalidate(); } }
         private Dimension Size_ = Dimension.One;
 
         /// <summary>
