@@ -151,7 +151,7 @@ namespace OneBitOfEngine
         /// <param name="tilemapSize">Size of the tilemaps images to be loaded with <see cref="SetTilemap(int, string)"/>, in pixels.</param>
         public OneBitOfGame(Dimension tileSize, Dimension tileCount, Dimension tilemapSize)
         {
-            OpenTKWindow = new OpenTKWindow(this) { Title = "One Bit of Engine" };
+            OpenTKWindow = new OpenTKWindow(this) { Title = "" };
 
             Files = new FileSystem();
             Renderer = new TileRenderer(Files, tileSize, tileCount, tilemapSize);
