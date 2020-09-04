@@ -19,6 +19,7 @@ using Asterion.Audio;
 using Asterion.Core;
 using Asterion.Input;
 using Asterion.IO;
+using Asterion.Sprites;
 using Asterion.UI;
 using Asterion.OpenGL;
 using OpenTK;
@@ -138,6 +139,11 @@ namespace Asterion
         public TileRenderer Renderer { get; } = null;
 
         /// <summary>
+        /// Tile renderer.
+        /// </summary>
+        public SpriteManager Sprites { get; } = null;
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="tileSize">Size of a each tile, in pixels.</param>
@@ -150,6 +156,7 @@ namespace Asterion
             Files = new FileSystem();
             Renderer = new TileRenderer(Files, tileSize, tileCount, tilemapSize);
             Audio = new AudioPlayer(Files);
+            Sprites = new SpriteManager();
 
             UI = new UIEnvironment(this);
             Input = new InputManager(this);
@@ -162,6 +169,7 @@ namespace Asterion
         {
             Renderer.OnLoad();
             UI.OnLoad();
+            Sprites.OnLoad(Renderer);
             OnLoad();
         }
 
@@ -173,6 +181,7 @@ namespace Asterion
         {
             Renderer.OnUpdate(elapsedSeconds);
             Input.OnUpdate(elapsedSeconds);
+            Sprites.OnUpdate(elapsedSeconds);
             OnUpdate(elapsedSeconds);
         }
 
@@ -260,14 +269,15 @@ namespace Asterion
         }
 
         /// <summary>
-        /// IDispose implementation.
+        /// IDisposable implementation.
         /// </summary>
         public void Dispose()
         {
+            Sprites.Destroy();
             UI.Destroy();
             Audio.Destroy();
-            OpenTKWindow.Dispose();
             Renderer.Dispose();
+            OpenTKWindow.Dispose();
 
             OnDispose();
         }
@@ -275,6 +285,9 @@ namespace Asterion
         /// <summary>
         /// Closes the game window.
         /// </summary>
-        public void Close() { OpenTKWindow.Close(); }
+        public void Close()
+        {
+            OpenTKWindow.Close();
+        }
     }
 }

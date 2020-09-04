@@ -60,6 +60,9 @@
     <Compile Include="Core\RGBColor.cs" />
     <Compile Include="Input\KeyCode.cs" />
     <Compile Include="OpenGL\TileRenderer.cs" />
+    <Compile Include="Sprites\SpriteManager.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
+    <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="UI\Controls\UIControlRectangle.cs" />
     <Compile Include="UI\Controls\UIImage.cs" />
     <Compile Include="UI\Controls\UIInputBox.cs" />
