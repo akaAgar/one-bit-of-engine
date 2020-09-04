@@ -23,6 +23,7 @@ namespace Asterion.Demo
     public enum TileID
     {
         Null = 0,
+
         Font = 0,
         Cursor = 95,
         Wall = 96,
@@ -31,6 +32,10 @@ namespace Asterion.Demo
         Fireball = 99,
         FireballExplosion = 100,
         Frame = 103,
-        AnimationDemo = 111
+        AnimationDemo = 111,
+        Tree = 112,
+        CursorCrosshair = 113,
+        DoorOpen = 114,
+        DoorClosed = 115
     }
 }

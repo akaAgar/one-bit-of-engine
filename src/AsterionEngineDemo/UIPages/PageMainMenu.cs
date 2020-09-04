@@ -40,6 +40,7 @@ namespace Asterion.Demo.UIPages
         {
             if (selectedIndex == MenuVFX) UI.ShowPage<PageVFXDemo>();
             else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
+            else if (selectedIndex == MenuGameWorld) UI.ShowPage<PageGameWorld>();
             else if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();
             else if (selectedIndex == MenuExit) UI.Game.Close();
         }
