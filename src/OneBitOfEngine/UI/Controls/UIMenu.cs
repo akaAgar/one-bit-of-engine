@@ -1,6 +1,7 @@
 ﻿using OneBitOfEngine.Core;
 using OneBitOfEngine.Input;
 using OneBitOfEngine.OpenGL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,14 +15,15 @@ namespace OneBitOfEngine.UI.Controls
         /// <summary>
         /// UI Menu event
         /// </summary>
-        /// <param name="selectedIndex">Index of the currently selected menu item</param>
-        /// <param name="selectedText">Text of the currently selected menu item</param>
-        public delegate void UIMenuEvent(int selectedIndex, string selectedText);
+        /// <param name="index">Index of the currently selected menu item</param>
+        /// <param name="key">Key of the currently selected menu item</param>
+        /// <param name="text">Text of the currently selected menu item</param>
+        public delegate void UIMenuEvent(int index, string key, string text);
 
         /// <summary>
         /// (Private) Menu items
         /// </summary>
-        private readonly List<string> MenuItems = new List<string>();
+        private readonly List<UIMenuItem?> MenuItems = new List<UIMenuItem?>();
 
         /// <summary>
         /// The tile to use for this control's font.
@@ -56,7 +58,11 @@ namespace OneBitOfEngine.UI.Controls
                 if (MenuItems.Count == 0) { SelectedIndex = 0; return; }
 
                 SelectedIndex_ = (MenuItems.Count > 0) ? OneBitOfTools.Clamp(value, 0, MenuItems.Count - 1) : 0;
-                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+                SelectedIndex_ = GetNextNonSeparatorIndex(SelectedIndex_, 1);
+
+                if (MenuItems[SelectedIndex_].HasValue)
+                    OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_].Value.Key, MenuItems[SelectedIndex_].Value.Text);
+
                 Page.UI.Invalidate();
             }
         }
@@ -99,14 +105,30 @@ namespace OneBitOfEngine.UI.Controls
         public event UIMenuEvent OnSelectedItemValidated = null;
 
         /// <summary>
+        /// If true, will check inputs to allow seleciton 
+        /// </summary>
+        public bool Enabled { get; set; } = true;
+
+        /// <summary>
         /// Adds a new item to the menu.
         /// </summary>
         /// <param name="text">Text of the new item</param>
+        /// <param name="key">Key of the new item</param>
         /// <returns>The index of the new item</returns>
-        public int AddMenuItem(string text)
+        public int AddMenuItem(string text, string key = "")
         {
-            MenuItems.Add(text);
+            MenuItems.Add(new UIMenuItem(text, key));
             Page.UI.Invalidate();
+            return MenuItems.Count - 1;
+        }
+
+        /// <summary>
+        /// Adds a new separator to the menu.
+        /// </summary>
+        /// <returns>The index of the new separator</returns>
+        public int AddSeparator()
+        {
+            MenuItems.Add(null);
             return MenuItems.Count - 1;
         }
 
@@ -119,6 +141,20 @@ namespace OneBitOfEngine.UI.Controls
             Page.UI.Invalidate();
         }
 
+        private int GetMenuItemIndexByKey(string key)
+        {
+            if (string.IsNullOrEmpty(key)) return -1;
+            key = key.ToLowerInvariant();
+
+            for (int i = 0; i < MenuItems.Count; i++)
+            {
+                if ((MenuItems[i].HasValue) && (MenuItems[i].Value.Key == key))
+                    return i;
+            }
+
+            return -1;
+        }
+
         /// <summary>
         /// Changes the text of a menu item.
         /// </summary>
@@ -127,8 +163,22 @@ namespace OneBitOfEngine.UI.Controls
         public void ChangeMenuItemText(int index, string text)
         {
             if ((index < 0) || (index >= MenuItems.Count)) return;
-            MenuItems[index] = text;
+            if (!MenuItems[index].HasValue) return;
+
+            MenuItems[index] = new UIMenuItem(text, MenuItems[index].Value.Key);
             Page.UI.Invalidate();
+        }
+
+        /// <summary>
+        /// Changes the text of a menu item.
+        /// </summary>
+        /// <param name="key">Key of the menu item to change</param>
+        /// <param name="text">New text for the menu item</param>
+        public void ChangeMenuItemText(string key, string text)
+        {
+            int index = GetMenuItemIndexByKey(key);
+            if (index >= 0)
+                ChangeMenuItemText(index, text);
         }
 
         /// <summary>
@@ -139,13 +189,23 @@ namespace OneBitOfEngine.UI.Controls
         {
             if ((index < 0) || (index >= MenuItems.Count)) return;
             MenuItems.RemoveAt(index);
+
             if (SelectedIndex_ >= MenuItems.Count)
             {
                 SelectedIndex_ = MenuItems.Count - 1;
-                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+
+                if (MenuItems[SelectedIndex_].HasValue)
+                    OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_].Value.Key, MenuItems[SelectedIndex_].Value.Text);
             }
 
             Page.UI.Invalidate();
+        }
+
+        public void RemoveMenuItem(string key)
+        {
+            int index = GetMenuItemIndexByKey(key);
+            if (index >= 0)
+                RemoveMenuItem(index);
         }
 
         /// <summary>
@@ -153,7 +213,9 @@ namespace OneBitOfEngine.UI.Controls
         /// </summary>
         public void ValidateSelection()
         {
-            OnSelectedItemValidated?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+            if ((MenuItems.Count == 0) || !MenuItems[SelectedIndex_].HasValue) return;
+
+            OnSelectedItemValidated?.Invoke(SelectedIndex, MenuItems[SelectedIndex_].Value.Key, MenuItems[SelectedIndex_].Value.Text);
         }
 
         /// <summary>
@@ -163,10 +225,28 @@ namespace OneBitOfEngine.UI.Controls
         internal override void UpdateVBOTiles(VBO vbo)
         {
             for (int i = 0; i < MenuItems.Count; i++)
+            {
+                if (!MenuItems[i].HasValue) continue;
+
                 DrawTextOnVBO(
-                    vbo, MenuItems[i], Position.X, Position.Y + i, FontTile_,
-                    (SelectedIndex == i) ? SelectedColor_ : Color,
-                    (SelectedIndex == i) ? SelectedVFX_ : TileEffect);
+                    vbo, MenuItems[i].Value.Text, Position.X, Position.Y + i, FontTile_,
+                    (Enabled && (SelectedIndex == i)) ? SelectedColor_ : Color,
+                    (Enabled && (SelectedIndex == i)) ? SelectedVFX_ : TileEffect);
+            }
+        }
+
+        private int GetNextNonSeparatorIndex(int initialIndex, int direction)
+        {
+            direction = Math.Sign(direction);
+
+            for (int i = 0; i < MenuItems.Count; i += direction)
+            {
+                int index = (initialIndex + i) % MenuItems.Count;
+                if (index < 0) index += MenuItems.Count;
+                if (MenuItems[index].HasValue) return index;
+            }
+
+            return initialIndex;
         }
 
         /// <summary>
@@ -178,26 +258,30 @@ namespace OneBitOfEngine.UI.Controls
         /// <param name="isRepeat">Is this a "repeated key press" event, automatically generated while the used holds the key down?</param>
         internal override void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat)
         {
-            if (MenuItems.Count == 0) return; // No menu items, no problems (and nothing to do)
+            if (!Enabled || (MenuItems.Count == 0)) return; // Not enabled or no menu items, do nothing
 
             if (SelectionUpKeys.Contains(key))
             {
-                SelectedIndex_--;
-                if (SelectedIndex_ < 0) SelectedIndex_ = LoopItemSelection ? MenuItems.Count - 1 : 0;
-                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+                //SelectedIndex_--;
+                //if (SelectedIndex_ < 0) SelectedIndex_ = LoopItemSelection ? MenuItems.Count - 1 : 0;
+                SelectedIndex_ = GetNextNonSeparatorIndex(SelectedIndex - 1, -1);
+
+                if (MenuItems[SelectedIndex_].HasValue)
+                    OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_].Value.Key, MenuItems[SelectedIndex_].Value.Text);
                 Page.UI.Invalidate();
             }
             else if (SelectionDownKeys.Contains(key))
             {
-                SelectedIndex_++;
-                if (SelectedIndex_ >= MenuItems.Count) SelectedIndex_ = LoopItemSelection? 0 : MenuItems.Count - 1;
-                OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
+                //SelectedIndex_++;
+                //if (SelectedIndex_ >= MenuItems.Count) SelectedIndex_ = LoopItemSelection? 0 : MenuItems.Count - 1;
+                SelectedIndex_ = GetNextNonSeparatorIndex(SelectedIndex + 1, 1);
+
+                if (MenuItems[SelectedIndex_].HasValue)
+                    OnSelectedItemChanged?.Invoke(SelectedIndex, MenuItems[SelectedIndex_].Value.Key, MenuItems[SelectedIndex_].Value.Text);
                 Page.UI.Invalidate();
             }
             else if (ValidationKeys.Contains(key))
-            {
-                OnSelectedItemValidated?.Invoke(SelectedIndex, MenuItems[SelectedIndex_]);
-            }
+                ValidateSelection();
         }
     }
 }
