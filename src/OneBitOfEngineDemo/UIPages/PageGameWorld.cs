@@ -8,30 +8,31 @@ namespace OneBitOfEngine.Demo.UIPages
     public sealed class PageGameWorld : UIPage
     {
         private static readonly Position BOARD_POSITION = new Position(0, 0);
-        private static readonly Dimension BOARD_SIZE = new Dimension(48, 20);
+        private static readonly Dimension BOARD_SIZE = new Dimension(48, 21);
 
         private static readonly string[] MAP = new string[]
         {
             "................................................",
-            "................................................",
-            "................................................",
-            "................................................",
-            "................................................",
-            "...................................www..........",
-            "..................................wwwww.........",
-            ".............WWWWWWW..............wwwww.........",
+            ".............................T..............T...",
+            "....T.....T..........................T..........",
+            "......................T.......w.......wwww......",
+            "...T..........................w.....www..T......",
+            "..............................w....www......www.",
+            "............................T..ww.wwwww.wwwww...",
+            ".......T.....WWWWWWW............wwwwwwwww.......",
             ".............WfffffW..............wwwww.........",
             ".............WfffffW...............www..........",
-            ".............WfffffW................ww..........",
+            ".............WfffffW...........T....ww......T...",
             ".............WWWDWWW.................ww.........",
             "......................................ww........",
             "..T.....T..............................www......",
             ".....T...................................ww.....",
-            "...T.TT...T...............................wwww..",
+            "...T.TT...T................T..............wwww..",
             ".T.TT..T....................................wwww",
             ".TT..T..T....T..................................",
-            "TTT.T..T...T....................................",
-            "TT..TTT........................................."
+            "TTT.T..T...T..T....................T............",
+            "TT..TTTT.TTTT....T..............................",
+            "TTTTTT..TTTT.TT.T......T...T...................."
         };
 
         private UITileBoard TileBoard;
@@ -39,7 +40,7 @@ namespace OneBitOfEngine.Demo.UIPages
         private bool AttackMode = false;
         private bool DoorOpen = false;
 
-        private Position PlayerPosition = new Position(3, 3);
+        private Position PlayerPosition = new Position(5, 5);
 
         protected override void OnInitialize(object[] parameters)
         {
@@ -54,8 +55,9 @@ namespace OneBitOfEngine.Demo.UIPages
             TileBoard = AddTileBoard(BOARD_POSITION.X, BOARD_POSITION.Y, BOARD_SIZE.Width, BOARD_SIZE.Height);
 
             AddImage(0, BOARD_POSITION.Y + BOARD_SIZE.Height, 48, 1, (int)TileID.Frame + 4, RGBColor.CornflowerBlue);
-            AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "Arrow keys, gamepad sticks/DPad: move cursor", (int)TileID.Font, RGBColor.PaleGoldenrod);
-            AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "F: fullscreen toggle, ESC: back", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, UI.Game.Renderer.TileCount.Height - 5, "ARROW KEYS, GAMEPAD: move character/crosshair", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, UI.Game.Renderer.TileCount.Height - 4, "SPACE, GAMEPAD X,Y,A BUTTONS: aim, then shoot", (int)TileID.Font, RGBColor.PaleGoldenrod);
+            AddLabel(2, UI.Game.Renderer.TileCount.Height - 3, "ESC, GAMEPAD B BUTTON: main menu", (int)TileID.Font, RGBColor.PaleGoldenrod);
 
             UI.Game.Sprites.OnSpriteCreation += OnSpriteCreation;
 
