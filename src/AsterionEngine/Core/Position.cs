@@ -42,6 +42,16 @@ namespace Asterion.Core
         public static Position NegativeOne { get; } = new Position(-1, -1);
 
         /// <summary>
+        /// An instance of Position with the X coordinate set to 1.
+        /// </summary>
+        public static Position OneX { get; } = new Position(1, 0);
+
+        /// <summary>
+        /// An instance of Position with the Y coordinate set to 1.
+        /// </summary>
+        public static Position OneY { get; } = new Position(0, 1);
+
+        /// <summary>
         /// The X coordinate.
         /// </summary>
         public int X { get; private set; }
@@ -85,6 +95,18 @@ namespace Asterion.Core
         /// <param name="p2">Another position</param>
         /// <returns>True if both positions are not equal, false if they are</returns>
         public static bool operator !=(Position p1, Position p2) { return !p1.Equals(p2); }
+
+        /// <summary>
+        /// Returns a copy of this position with X and Y coordinates clamped to the bounds of an area.
+        /// </summary>
+        /// <param name="area">The area in which the position must be contained</param>
+        /// <returns>A copy of this position with X and Y coordinates clamped to the bounds of an area</returns>
+        public Position Bound(Area area)
+        {
+            return new Position(
+                AsterionTools.Clamp(X, area.Left, area.Right - 1),
+                AsterionTools.Clamp(Y, area.Top, area.Bottom - 1));
+        }
 
         /// <summary>
         /// + operator. A new position where X and Y coordinates are the sum of X and Y axis of both positions.
