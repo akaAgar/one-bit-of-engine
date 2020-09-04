@@ -27,7 +27,7 @@ namespace Asterion.Input
         /// <summary>
         /// (Private) Delay (in seconds) before repeat button presses event begin to be raised when a gamepad button is kept down.
         /// </summary>
-        private const float GAMEPAD_REPEAT_DELAY = 1.0f;
+        private const float GAMEPAD_REPEAT_DELAY = 0.6f;
 
         /// <summary>
         /// (Private) Delay (in seconds) between repeat button events.
@@ -162,17 +162,17 @@ namespace Asterion.Input
                 case KeyCode.GamepadHome: return state.Buttons.BigButton == ButtonState.Pressed;
                 case KeyCode.GamepadLeftShoulder: return state.Buttons.LeftShoulder == ButtonState.Pressed;
                 case KeyCode.GamepadLeftStickPress: return state.Buttons.LeftStick == ButtonState.Pressed;
-                case KeyCode.GamepadLeftStickDown: return state.ThumbSticks.Left.Y > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftStickDown: return state.ThumbSticks.Left.Y < -GamepadStickAxisThreshold_;
                 case KeyCode.GamepadLeftStickLeft: return state.ThumbSticks.Left.X < -GamepadStickAxisThreshold_;
                 case KeyCode.GamepadLeftStickRight: return state.ThumbSticks.Left.X > GamepadStickAxisThreshold_;
-                case KeyCode.GamepadLeftStickUp: return state.ThumbSticks.Left.Y < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadLeftStickUp: return state.ThumbSticks.Left.Y > GamepadStickAxisThreshold_;
                 case KeyCode.GamepadLeftTrigger: return state.Triggers.Left > GamepadTriggerThreshold_;
                 case KeyCode.GamepadRightShoulder: return state.Buttons.RightShoulder == ButtonState.Pressed;
                 case KeyCode.GamepadRightStickPress: return state.Buttons.RightStick == ButtonState.Pressed;
-                case KeyCode.GamepadRightStickDown: return state.ThumbSticks.Right.Y > GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightStickDown: return state.ThumbSticks.Right.Y < -GamepadStickAxisThreshold_;
                 case KeyCode.GamepadRightStickLeft: return state.ThumbSticks.Right.X < -GamepadStickAxisThreshold_;
                 case KeyCode.GamepadRightStickRight: return state.ThumbSticks.Right.X > GamepadStickAxisThreshold_;
-                case KeyCode.GamepadRightStickUp: return state.ThumbSticks.Right.Y < -GamepadStickAxisThreshold_;
+                case KeyCode.GamepadRightStickUp: return state.ThumbSticks.Right.Y > GamepadStickAxisThreshold_;
                 case KeyCode.GamepadRightTrigger: return state.Triggers.Right > GamepadTriggerThreshold_;
                 case KeyCode.GamepadStart: return state.Buttons.Start == ButtonState.Pressed;
                 case KeyCode.GamepadX: return state.Buttons.X == ButtonState.Pressed;
