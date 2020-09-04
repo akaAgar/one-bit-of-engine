@@ -155,6 +155,24 @@ namespace Asterion.Core
         public static bool operator !=(RGBColor c1, RGBColor c2) { return !c1.Equals(c2); }
 
         /// <summary>
+        /// * operator override.
+        /// </summary>
+        /// <param name="color1">An RGBColor object</param>
+        /// <param name="color2">Another RGBColor object</param>
+        /// <returns>The product of colors c1 and c2</returns>
+        public static RGBColor operator *(RGBColor color1, RGBColor color2)
+        { return new RGBColor(color1.Rf * color2.Rf, color1.Gf * color2.Gf, color1.Bf * color2.Bf); }
+
+        /// <summary>
+        /// * operator override.
+        /// </summary>
+        /// <param name="color">An RGBColor object</param>
+        /// <param name="f">A floating-point value by which to multiply each color channel of Color color</param>
+        /// <returns>The product of colors c1 and c2</returns>
+        public static RGBColor operator *(RGBColor color, float f)
+        { return new RGBColor(color.Rf * f, color.Gf * f, color.Bf * f); }
+
+        /// <summary>
         /// Checks if this RGBColor is the same as another RGBColor (all three R,G,B channels have the same values)
         /// </summary>
         /// <param name="other">Another RGBColor</param>
