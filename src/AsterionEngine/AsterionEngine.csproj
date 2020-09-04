@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsterionTools.cs" />
+    <Compile Include="Core\PresetColor.cs" />
     <Compile Include="Core\TileVFX.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Core\Area.cs" />
@@ -83,18 +84,17 @@
     <Compile Include="IO\FileSourceArchiveIndex.cs" />
     <Compile Include="UI\Controls\UITileBoardTile.cs" />
     <Compile Include="OpenGL\TilemapTexture.cs" />
-    <None Include="packages.config" />
     <Compile Include="OpenGL\TileShader.cs" />
     <Compile Include="OpenGL\VBO.cs" />
     <Compile Include="Core\VSync.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Textures\FXTextures.png" />
+    <EmbeddedResource Include="Resources\Shaders\TilesShader.frag" />
+    <EmbeddedResource Include="Resources\Shaders\TilesShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <None Include="OpenTK.dll.config" />
-    <EmbeddedResource Include="Resources\Shaders\TilesShader.frag" />
-    <EmbeddedResource Include="Resources\Shaders\TilesShader.vert" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
