@@ -119,10 +119,17 @@ namespace Asterion.Core
         /// <summary>
         /// - operator. A new position where X and Y coordinates are position1's X and Y coordinates minus position2's X and Y of both positions.
         /// </summary>
-        /// <param name="p1">A position</param>
+        /// <param name="position">A position</param>
         /// <param name="p2">Another position</param>
         /// <returns>A new position where X and Y coordinates are position1's X and Y coordinates minus position2's X and Y of both positions</returns>
         public static Position operator -(Position p1, Position p2) { return new Position(p1.X - p2.X, p1.Y - p2.Y); }
+
+        /// <summary>
+        /// - operator. A new position with coordinates equal to the negative of the original coordinates.
+        /// </summary>
+        /// <param name="position">A position</param>
+        /// <returns>A new position where X and Y coordinates are position1's X and Y coordinates minus position2's X and Y of both positions</returns>
+        public static Position operator -(Position position) { return new Position(-position.X, -position.Y); }
 
         /// <summary>
         /// * operator. Returns a new position where the X and Y axis have been multiplied by the multiplier.

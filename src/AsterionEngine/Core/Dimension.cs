@@ -42,7 +42,7 @@ namespace Asterion.Core
             Width = Math.Max(0, width);
             Height = Math.Max(0, height);
         }
-        
+
         internal Dimension(Size size)
         {
             Width = Math.Max(0, size.Width);
