@@ -137,7 +137,7 @@ void main()
 	  float oscillateOffsetY = (1 - offsetUV.y);
 	  if (fragVFXi >= VFX_OSCILLATE_BOTTOM_SLOW) oscillateOffsetY = offsetUV.y;
 
-	  offsetUV.x = clamp(offsetUV.x + oscillateOffsetY * cos(time * oscillateSpeed) * .2, 0, 1);
+	  offsetUV.x = clamp(offsetUV.x + oscillateOffsetY * cos(time * oscillateSpeed) * .1, 0.01, 0.99);
 	  texUV = tileUV + offsetUV * tileUVSize;
       break;
 
@@ -150,7 +150,7 @@ void main()
 
 	  tileUV = TileCornerUV(texUV);
 	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.x = clamp(offsetUV.x + cos(time * waveSpeed) * sin(offsetUV.y * 16) * .15, 0, 1);
+	  offsetUV.x = clamp(offsetUV.x + cos(time * waveSpeed) * sin(offsetUV.y * 16) * .15, 0.01, 0.99);
 	  texUV = tileUV + offsetUV * tileUVSize;
       break;
 
@@ -163,7 +163,7 @@ void main()
 
 	  tileUV = TileCornerUV(texUV);
 	  offsetUV = InternalTileUVNormalized(texUV);
-	  offsetUV.y = clamp(offsetUV.y + cos(time * wave2Speed) * sin(offsetUV.x * 16) * .15, 0, 1);
+	  offsetUV.y = clamp(offsetUV.y + cos(time * wave2Speed) * sin(offsetUV.x * 16) * .15, 0.01, 0.99);
 	  texUV = tileUV + offsetUV * tileUVSize;
       break;
   }
