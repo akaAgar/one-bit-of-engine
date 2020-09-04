@@ -18,6 +18,7 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -62,51 +63,63 @@ namespace Asterion.OpenGL
         /// <summary>
         /// Constructor.
         /// </summary>
-        internal TileShader()
+        internal TileShader(SizeF tileUV)
         {
             int i;
+
+            // Compile the vertex and fragment shaders and link the program
             int vertexShader, fragmentShader;
-
-            vertexShader = GL.CreateShader(ShaderType.VertexShader);
-            fragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-
-            GL.ShaderSource(vertexShader, ReadShaderSourceCode("Asterion.Resources.Shaders.TilesShader.vert"));
-            GL.CompileShader(vertexShader);
-
-            GL.ShaderSource(fragmentShader, ReadShaderSourceCode("Asterion.Resources.Shaders.TilesShader.frag"));
-            GL.CompileShader(fragmentShader);
-
+            vertexShader = CompileShader("TilesShader.vert", ShaderType.VertexShader);
+            fragmentShader = CompileShader("TilesShader.frag", ShaderType.FragmentShader);
+            
             Handle = GL.CreateProgram();
             GL.AttachShader(Handle, vertexShader);
             GL.AttachShader(Handle, fragmentShader);
             GL.LinkProgram(Handle);
 
-            UniformAnimationFrame = GL.GetUniformLocation(Handle, "animationFrame");
-            GL.Uniform1(UniformAnimationFrame, 0);
-
-            UniformTime = GL.GetUniformLocation(Handle, "time");
-            GL.Uniform1(UniformTime, 0f);
-
-            UniformProjection = GL.GetUniformLocation(Handle, "projection");
-
-            for (i = 0; i < TileRenderer.TILEMAP_COUNT; i++)
-                UniformTexture[i] = GL.GetUniformLocation(Handle, $"texture{i}");
-
-            GL.UseProgram(Handle);
-            for (i = 0; i < TileRenderer.TILEMAP_COUNT; i++)
-                GL.Uniform1(UniformTexture[i], i);
-
+            // Delete shaders now that the program is linked
             GL.DeleteShader(vertexShader);
             GL.DeleteShader(fragmentShader);
 
+            // Get uniform locations from the program
+            UniformAnimationFrame = GL.GetUniformLocation(Handle, "animationFrame");
+            UniformTime = GL.GetUniformLocation(Handle, "time");
+            int uniformTileUVSize = GL.GetUniformLocation(Handle, "tileUVSize");
+            UniformProjection = GL.GetUniformLocation(Handle, "projection");
+            for (i = 0; i < TileRenderer.TILEMAP_COUNT; i++) UniformTexture[i] = GL.GetUniformLocation(Handle, $"texture{i}");
+
+            // Set default uniforms values
+            GL.UseProgram(Handle);
+            for (i = 0; i < TileRenderer.TILEMAP_COUNT; i++) GL.Uniform1(UniformTexture[i], i);
+            GL.Uniform1(UniformAnimationFrame, 0);
+            GL.Uniform1(UniformTime, 0f);
+            GL.Uniform2(uniformTileUVSize, new Vector2(tileUV.Width, tileUV.Height));
+
+            // Create the vertex array object
             VAO = GL.GenVertexArray();
             GL.BindVertexArray(VAO);
 
+            // Enable the 5 (xy, color, uv, tilemap, vfx) attributes each vertex will use
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
             GL.EnableVertexAttribArray(4);
+        }
+
+        private int CompileShader(string shaderCodeResource, ShaderType shaderType)
+        {
+            int shader = GL.CreateShader(shaderType);
+
+            GL.ShaderSource(shader, ReadShaderSourceCode($"Asterion.Resources.Shaders.{shaderCodeResource}"));
+            GL.CompileShader(shader);
+
+            GL.GetShader(shader, ShaderParameter.CompileStatus, out int compileStatus);
+
+            if (compileStatus == 0) // Failed to compile
+                throw new Exception($"Failed to compile {shaderType}\r\n{GL.GetShaderInfoLog(shader)}");
+
+            return shader;
         }
 
         /// <summary>

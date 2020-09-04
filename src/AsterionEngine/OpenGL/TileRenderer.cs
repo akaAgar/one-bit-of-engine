@@ -134,7 +134,7 @@ namespace Asterion.OpenGL
             GL.Enable(EnableCap.Blend);
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-            Shader = new TileShader();
+            Shader = new TileShader(TileUV);
             ResetAnimation();
         }
 

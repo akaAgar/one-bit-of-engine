@@ -15,6 +15,8 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+#version 330 core
+
 // Values must match those in the TileVFX enumeration
 #define VFX_NONE 0
 #define VFX_GLOW_SLOW 1
@@ -45,12 +47,9 @@ along with Asterion Engine. If not, see https://www.gnu.org/licenses/
 #define WAVE_VERTICAL_MEDIUM 26
 #define WAVE_VERTICAL_FAST 27
 
-#version 330 core
-
+uniform vec2 tileUVSize;
 uniform int animationFrame;
 uniform float time;
-
-uniform vec2 tileUVSize = vec2(16.0 / 512.0, 16.0 / 64.0);
 
 uniform sampler2D texture0;
 uniform sampler2D texture1;
