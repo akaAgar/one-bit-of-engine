@@ -67,8 +67,8 @@ namespace OneBitOfEngine.Demo.UIPages
             TileBoard.Clear(new UITileBoardTile((int)TileID.Grass, RGBColor.DarkOliveGreen));
 
             int x, y;
-            for (y = 0; y < TileBoard.BoardSize.Height; y++)
-                for (x = 0; x < TileBoard.BoardSize.Width; x++)
+            for (y = 0; y < TileBoard.Size.Height; y++)
+                for (x = 0; x < TileBoard.Size.Width; x++)
                 {
                     switch (MAP[y][x])
                     {
@@ -91,7 +91,7 @@ namespace OneBitOfEngine.Demo.UIPages
             Position newPosition = PlayerPosition + direction;
 
             if (
-                (!TileBoard.BoardSize.Contains(newPosition)) || // Out of bounds
+                (!TileBoard.Size.Contains(newPosition)) || // Out of bounds
                 (MAP[newPosition.Y][newPosition.X] == 'W') || // Tile is a wall
                 (MAP[newPosition.Y][newPosition.X] == 'T') || // Tile is a tree
                 ((MAP[newPosition.Y][newPosition.X] == 'D') && !DoorOpen)  // Tile is a closed door

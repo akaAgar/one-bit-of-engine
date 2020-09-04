@@ -23,14 +23,6 @@ namespace OneBitOfEngine.UI.Controls
         }
 
         /// <summary>
-        /// Number of tiles in the board.
-        /// </summary>
-        public virtual Dimension BoardSize
-        {
-            get { return new Dimension(Tiles.GetLength(0), Tiles.GetLength(1)); }
-        }
-
-        /// <summary>
         /// An 2D array storing the control's tiles.
         /// </summary>
         private UITileBoardTile[,] Tiles = new UITileBoardTile[0, 0];
@@ -86,7 +78,7 @@ namespace OneBitOfEngine.UI.Controls
         /// <returns>The tile, or an empty (tile 0, black color) tile if the position was out of bounds</returns>
         public UITileBoardTile GetTile(int x, int y)
         {
-            if (!BoardSize.Contains(x, y)) return UITileBoardTile.Empty;
+            if (!Size.Contains(x, y)) return UITileBoardTile.Empty;
             return Tiles[x, y];
         }
 
@@ -108,7 +100,7 @@ namespace OneBitOfEngine.UI.Controls
         /// <param name="tile">Tile info</param>
         public void SetTile(int x, int y, UITileBoardTile tile)
         {
-            if (!BoardSize.Contains(x, y)) return;
+            if (!Size.Contains(x, y)) return;
             Tiles[x, y] = tile;
             Page.UI.Invalidate();
         }
@@ -121,8 +113,8 @@ namespace OneBitOfEngine.UI.Controls
         {
             int x, y;
 
-            for (x = 0; x < BoardSize.Width; x++)
-                for (y = 0; y < BoardSize.Height; y++)
+            for (x = 0; x < Tiles.GetLength(0); x++)
+                for (y = 0; y < Tiles.GetLength(1); y++)
                     Tiles[x, y] = tile;
 
             Page.UI.Invalidate();
@@ -136,8 +128,8 @@ namespace OneBitOfEngine.UI.Controls
         {
             int x, y;
 
-            for (x = 0; x < BoardSize.Width; x++)
-                for (y = 0; y < BoardSize.Height; y++)
+            for (x = 0; x < Tiles.GetLength(0); x++)
+                for (y = 0; y < Tiles.GetLength(1); y++)
                     vbo.UpdateTileData(x + Position.X, y + Position.Y, Tiles[x, y].TileIndex, Tiles[x, y].Color, Tiles[x, y].Tilemap, Tiles[x, y].VFX);
         }
     }
