@@ -40,6 +40,7 @@ namespace OneBitOfEngine.Demo.UIPages
         private void OnMenuItemValidated(int selectedIndex, string selectedText)
         {
             if (selectedIndex == MenuVFX) UI.ShowPage<PageVFXDemo>();
+            else if (selectedIndex == MenuUI) UI.ShowPage<PageUIDemo>();
             else if (selectedIndex == MenuAudio) UI.ShowPage<PageAudioDemo>();
             else if (selectedIndex == MenuGameWorld) UI.ShowPage<PageGameWorld>();
             else if (selectedIndex == MenuDrawingBoard) UI.ShowPage<PageDrawingBoard>();

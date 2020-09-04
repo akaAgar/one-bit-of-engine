@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OneBitOfDemoGame.cs" />
+    <Compile Include="UIPages\PageUIDemo.cs" />
     <Compile Include="UIPages\PageInputDemo.cs" />
     <Compile Include="UIPages\PageAudioDemo.cs" />
     <Compile Include="UIPages\PageGameWorld.cs" />
