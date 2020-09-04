@@ -88,10 +88,19 @@ namespace OneBitOfEngine.OpenGL
         /// <summary>
         /// OnKeyDown override. Basically just calls Game.OnKeyDown.
         /// </summary>
-        /// <param name="e">OpenTK keyboard event.</param>
+        /// <param name="e">OpenTK keyboard event</param>
         protected override void OnKeyDown(KeyboardKeyEventArgs e)
         {
             Game.OnInputEventInternal((KeyCode)e.Key, (ModifierKeys)e.Modifiers, -1, e.IsRepeat);
+        }
+
+        /// <summary>
+        /// OnKeyPress override. Sends keychar info to the UI (basically only used for input fields controls)
+        /// </summary>
+        /// <param name="e">OpenTK key press event</param>
+        protected override void OnKeyPress(KeyPressEventArgs e)
+        {
+            Game.UI.OnKeyPressEvent(e.KeyChar);
         }
     }
 }

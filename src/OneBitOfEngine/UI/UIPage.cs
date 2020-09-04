@@ -19,6 +19,7 @@ using OneBitOfEngine.Core;
 using OneBitOfEngine.Input;
 using OneBitOfEngine.OpenGL;
 using OneBitOfEngine.UI.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -82,6 +83,18 @@ namespace OneBitOfEngine.UI
         }
 
         /// <summary>
+        /// (Internal) Send the char matching a key press event to all interactive form controls.
+        /// </summary>
+        /// <param name="keyChar">Character for the key input</param>
+        internal void OnKeyPressEventInternal(char keyChar)
+        {
+            foreach (UIControl c in Controls)
+                c.OnKeyPressEvent(keyChar);
+
+            OnKeyPressEvent(keyChar);
+        }
+
+        /// <summary>
         /// (Protected) Adds a new <see cref="UILabel"/> control on the page.
         /// </summary>
         /// <param name="x">X coordinate</param>
@@ -99,8 +112,9 @@ namespace OneBitOfEngine.UI
             return control;
         }
 
+
         /// <summary>
-        /// (Protected) Adds a new <see cref="UIInputBox"/> control on the page.
+        /// (Protected) Adds a new <see cref="UIInputField"/> control on the page.
         /// </summary>
         /// <param name="x">X coordinate</param>
         /// <param name="y">Y coordinate</param>
@@ -108,10 +122,28 @@ namespace OneBitOfEngine.UI
         /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
         /// <param name="color">Color</param>
         /// <param name="tilemap">Font tile tilemap</param>
-        /// <returns>An <see cref="UIInputBox"/> control</returns>
-        protected UIInputBox AddInputBox(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
+        /// <returns>An <see cref="UIInputField"/> control</returns>
+        protected UIInputField AddInputField(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
         {
-            UIInputBox control = AddControl<UIInputBox>(x, y, color, tilemap);
+            UIInputField control = AddControl<UIInputField>(x, y, color, tilemap);
+            control.Text = text;
+            control.FontTile = fontTile;
+            return control;
+        }
+
+        /// <summary>
+        /// (Protected) Adds a new <see cref="UIInputField"/> control on the page.
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="text">Text</param>
+        /// <param name="fontTile">The tile to use for this control's font. Font tiles must follow one another on the tilemap (but can be on multiple rows) and provide all the ASCII characters in the 32 (white space) to 126 (~) range.</param>
+        /// <param name="color">Color</param>
+        /// <param name="tilemap">Font tile tilemap</param>
+        /// <returns>An <see cref="UIInputField"/> control</returns>
+        protected UIInputField AddInputBox(int x, int y, string text, int fontTile, RGBColor color, int tilemap = 0)
+        {
+            UIInputField control = AddControl<UIInputField>(x, y, color, tilemap);
             control.Text = text;
             control.FontTile = fontTile;
             return control;
@@ -268,6 +300,12 @@ namespace OneBitOfEngine.UI
         protected virtual void OnInputEvent(KeyCode key, ModifierKeys modifiers, int gamepadIndex, bool isRepeat) { }
 
         /// <summary>
+        /// (Protected) Called whenever a keyboard key resulting in text (letter, spacebar, etc. but not function keys or caps lock) is pressed.
+        /// </summary>
+        /// <param name="keyChar">Character for the key input</param>
+        protected void OnKeyPressEvent(char keyChar) { }
+
+        /// <summary>
         /// (Internal) Called whenever an input event is raised while this page is displayed.
         /// </summary>
         /// <param name="key">The key or gamepad button that raised the event</param>
@@ -278,7 +316,6 @@ namespace OneBitOfEngine.UI
         {
             foreach (UIControl c in Controls)
             {
-                if (!c.InputEnabled) continue;
                 if ((gamepadIndex >= 0) && (!c.AllowedGamepads.Contains(gamepadIndex))) continue;
                 c.OnInputEvent(key, modifiers, gamepadIndex, isRepeat);
             }

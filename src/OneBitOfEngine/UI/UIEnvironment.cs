@@ -15,6 +15,7 @@ along with One Bit of Engine. If not, see https://www.gnu.org/licenses/
 ==========================================================================
 */
 
+using System;
 using OneBitOfEngine.Core;
 using OneBitOfEngine.Input;
 using OneBitOfEngine.OpenGL;
@@ -97,6 +98,16 @@ namespace OneBitOfEngine.UI
             Page.Destroy();
             Page = null;
             Invalidate();
+        }
+
+        /// <summary>
+        /// (Internal) Send the char matching a key press event to the current page, if any.
+        /// </summary>
+        /// <param name="keyChar">Char for the key input</param>
+        internal void OnKeyPressEvent(char keyChar)
+        {
+            if (Page != null)
+                Page.OnKeyPressEventInternal(keyChar);
         }
 
         /// <summary>

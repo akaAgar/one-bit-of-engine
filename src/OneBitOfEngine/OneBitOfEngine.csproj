@@ -65,7 +65,7 @@
     <Compile Include="Sprites\SpriteType.cs" />
     <Compile Include="UI\Controls\UIControlRectangle.cs" />
     <Compile Include="UI\Controls\UIImage.cs" />
-    <Compile Include="UI\Controls\UIInputBox.cs" />
+    <Compile Include="UI\Controls\UIInputField.cs" />
     <Compile Include="UI\UICursor.cs" />
     <Compile Include="UI\Controls\UIFrame.cs" />
     <Compile Include="UI\Controls\UIMenu.cs" />
