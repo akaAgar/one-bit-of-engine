@@ -29,7 +29,7 @@ namespace OneBitOfEngine.UI.Controls
         {
             string[] lines = OneBitOfTools.WordWrap(Text_, Width);
 
-            if (lines.Length >= Height) // Too many lines
+            if ((lines.Length >= Height) && (Width >= 4)) // Too many lines
             {
                 lines[Height - 1] = lines[Height - 1].Substring(0, Math.Min(lines[Height - 1].Length, Width - 4));
                 lines[Height - 1] += "...";
