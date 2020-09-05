@@ -123,6 +123,65 @@ namespace OneBitOfEngine.Core
         }
 
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="colorString">A string representing this color. String can be in the "R,G,B" format (128,64,32) or the HTML format (#884422) or be the name of a <see cref="PresetColor"/></param>
+        public RGBColor(string colorString)
+        {
+            try
+            {
+                colorString = colorString.Trim();
+
+                R = 0; G = 0; B = 0;
+
+                if (colorString.StartsWith("#")) // HTML format
+                {
+                    colorString = colorString.Substring(1);
+
+                    if (colorString.Length == 6)
+                    {
+                        R = Convert.ToInt32(colorString.Substring(0, 2), 16);
+                        G = Convert.ToInt32(colorString.Substring(2, 2), 16);
+                        B = Convert.ToInt32(colorString.Substring(4, 2), 16);
+                    }
+                    else if (colorString.Length == 3)
+                    {
+                        string xR = colorString.Substring(0, 1); xR += xR;
+                        string xG = colorString.Substring(1, 1); xG += xG;
+                        string xB = colorString.Substring(2, 1); xB += xB;
+
+                        R = Convert.ToInt32(xR, 16);
+                        G = Convert.ToInt32(xG, 16);
+                        B = Convert.ToInt32(xB, 16);
+                    }
+                }
+                else if (colorString.Contains(",")) // R,G,B format
+                {
+                    string[] rgbStrings = colorString.Split(',');
+
+                    if (rgbStrings.Length >= 3)
+                    {
+                        R = Convert.ToInt32(rgbStrings[0].Trim());
+                        G = Convert.ToInt32(rgbStrings[1].Trim());
+                        B = Convert.ToInt32(rgbStrings[2].Trim());
+                    }
+                }
+                else if (Enum.TryParse(colorString, true, out PresetColor presetColor))
+                {
+                    Color winColor = Color.FromKnownColor((KnownColor)presetColor);
+                    
+                    R = winColor.R;
+                    G = winColor.G;
+                    B = winColor.B;
+                }
+            }
+            catch (Exception)
+            {
+                R = 0; G = 0; B = 0;
+            }
+        }
+
+        /// <summary>
         /// (Internal) Constructor.
         /// </summary>
         /// <param name="color">A System.Drawing.Color to copy R,G,B values from.</param>
