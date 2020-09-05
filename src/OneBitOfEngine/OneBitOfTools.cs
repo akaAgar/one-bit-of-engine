@@ -171,6 +171,32 @@ namespace OneBitOfEngine
         }
 
         /// <summary>
+        /// Returns a random element from a array.
+        /// </summary>
+        /// <typeparam name="T">The type of the array</typeparam>
+        /// <param name="array">The array</param>
+        /// <param name="useSeed">Should the RNG use the seed provided by <see cref="SetRandomSeed(int)"/>?</param>
+        /// <returns>An element from the array</returns>
+        public static T RandomFromArray<T>(T[] array, bool useSeed = false)
+        {
+            if ((array == null) || (array.Length == 0)) return default;
+            return array[RNG[useSeed ? 1 : 0].Next(array.Length)];
+        }
+
+        /// <summary>
+        /// Returns a random element from a list.
+        /// </summary>
+        /// <typeparam name="T">The type of the list</typeparam>
+        /// <param name="list">The list</param>
+        /// <param name="useSeed">Should the RNG use the seed provided by <see cref="SetRandomSeed(int)"/>?</param>
+        /// <returns>An element from the list</returns>
+        public static T RandomFromList<T>(List<T> list, bool useSeed = false)
+        {
+            if ((list == null) || (list.Count == 0)) return default;
+            return list[RNG[useSeed ? 1 : 0].Next(list.Count)];
+        }
+
+        /// <summary>
         /// Returns the number of values in an enumeration of type T.
         /// </summary>
         /// <typeparam name="T">A type of enumeration</typeparam>
@@ -211,6 +237,18 @@ namespace OneBitOfEngine
             if (currentLine.Length > 0) lines.Add(currentLine);
 
             return lines.ToArray();
+        }
+
+        /// <summary>
+        /// Returns the next power of two, or the input value if already was a power of two.
+        /// </summary>
+        /// <param name="value">An integer</param>
+        /// <returns>An integer</returns>
+        public static int RoundUpToNextPowerOfTwo(int value)
+        {
+            int p = 1;
+            while (p < value) p <<= 1;
+            return p;
         }
     }
 }
