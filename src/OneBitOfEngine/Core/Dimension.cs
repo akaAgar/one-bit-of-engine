@@ -43,6 +43,30 @@ namespace OneBitOfEngine.Core
             Height = Math.Max(0, height);
         }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="widthHeightString">A string in the "WIDTHxHEIGHT" or "WIDTH×HEIGHT" format containing the width and height in the <see cref="NumberFormatInfo.InvariantInfo"/> format</param>
+        public Dimension(string widthHeightString)
+        {
+            Width = 0; Height = 0;
+
+            if (string.IsNullOrEmpty(widthHeightString)) return;
+            string[] widthHeightStringValues = widthHeightString.Trim().Split('x', '×', 'X');
+            if (widthHeightStringValues.Length < 2) return;
+
+            try
+            {
+                Width = Math.Max(0, Convert.ToInt32(widthHeightStringValues[0].Trim(), NumberFormatInfo.InvariantInfo));
+                Height = Math.Max(0, Convert.ToInt32(widthHeightStringValues[1].Trim(), NumberFormatInfo.InvariantInfo));
+            }
+            catch (Exception)
+            {
+                Width = 0;
+                Height = 0;
+            }
+        }
+
         internal Dimension(Size size)
         {
             Width = Math.Max(0, size.Width);

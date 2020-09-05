@@ -73,7 +73,31 @@ namespace OneBitOfEngine.Core
         /// <param name="x">The X coordinate</param>
         /// <param name="y">The Y coordinate</param>
         public Position(int x, int y) { X = x; Y = y; }
-        
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="xyString">A string in the "X,Y" format containing the X and Y coordinates in the <see cref="NumberFormatInfo.InvariantInfo"/> format</param>
+        public Position(string xyString)
+        {
+            X = 0; Y = 0;
+
+            if (string.IsNullOrEmpty(xyString)) return;
+            string[] xyStringValues = xyString.Trim().Split(',');
+            if (xyStringValues.Length < 2) return;
+
+            try
+            {
+                X = Convert.ToInt32(xyStringValues[0].Trim(), NumberFormatInfo.InvariantInfo);
+                Y = Convert.ToInt32(xyStringValues[1].Trim(), NumberFormatInfo.InvariantInfo);
+            }
+            catch (Exception)
+            {
+                X = 0;
+                Y = 0;
+            }
+        }
+
         /// <summary>
         /// (Internal) Constructor
         /// </summary>
