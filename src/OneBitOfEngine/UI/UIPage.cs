@@ -337,7 +337,10 @@ namespace OneBitOfEngine.UI
             Controls = Controls.OrderBy(c => c.ZOrder).ToList(); // Order controls by Z-Order
 
             foreach (UIControl control in Controls)
+            {
+                if (!control.Visible) continue;
                 control.UpdateVBOTiles(vbo);
+            }
         }
 
         /// <summary>

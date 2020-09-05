@@ -52,6 +52,12 @@ namespace OneBitOfEngine.UI.Controls
         public int Y { get { return Position_.Y; } set { Position_ = new Position(Position_.X, value); Page.UI.Invalidate(); } }
 
         /// <summary>
+        /// Should the control be drawn?
+        /// </summary>
+        public bool Visible { get { return Visible_; } set { Visible_ = value; Page.UI.Invalidate(); } }
+        private bool Visible_ = true;
+
+        /// <summary>
         /// The color of the control.
         /// </summary>
         public RGBColor Color { get { return Color_; } set { Color_ = value; Page.UI.Invalidate(); } }
