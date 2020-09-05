@@ -3,7 +3,7 @@ A cross-platform OpenGL4 1-bit tilemap engine similar to the one used by the fir
 
 - **Don't forget to add a NuGet reference to OpenTK 3.2 in the OneBitOfEngine project**
 
-![Preview images](Preview.png)
+![Preview images](Preview.gif)
 
 ## Features
 - Similar structure to the OpenTK GameWindow class, just override the OnLoad/OnUpdate methods and you're set
