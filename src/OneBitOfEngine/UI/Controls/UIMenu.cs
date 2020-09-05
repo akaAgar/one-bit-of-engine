@@ -144,11 +144,11 @@ namespace OneBitOfEngine.UI.Controls
         private int GetMenuItemIndexByKey(string key)
         {
             if (string.IsNullOrEmpty(key)) return -1;
-            key = key.ToLowerInvariant();
+            key = key.ToLowerInvariant().Trim();
 
             for (int i = 0; i < MenuItems.Count; i++)
             {
-                if ((MenuItems[i].HasValue) && (MenuItems[i].Value.Key == key))
+                if (MenuItems[i].HasValue && (MenuItems[i].Value.Key == key))
                     return i;
             }
 

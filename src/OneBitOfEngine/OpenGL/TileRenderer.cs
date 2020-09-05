@@ -146,7 +146,7 @@ namespace OneBitOfEngine.OpenGL
         /// <returns>True if everything went right, false otherwise</returns>
         public bool LoadTilemap(int index, string file)
         {
-            if ((index < 0) || (index >= TileRenderer.TILEMAP_COUNT)) return false;
+            if ((index < 0) || (index >= TILEMAP_COUNT)) return false;
             if (!Files.FileExists(file)) return false;
 
             using (Stream textureStream = Files.GetFileAsStream(file))
