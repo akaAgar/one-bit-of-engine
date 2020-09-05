@@ -228,6 +228,32 @@ namespace OneBitOfEngine.Core
         }
 
         /// <summary>
+        /// Returns a fast approximation of the pythagorean distance between two positions.
+        /// </summary>
+        /// <param name="p1">A position</param>
+        /// <param name="p2">Another position</param>
+        /// <returns>The distance, as a float</returns>
+        public float FastDistance(Position p1, Position p2)
+        {
+            int a = Math.Abs(p1.X - p2.X);
+            int b = Math.Abs(p1.Y - p2.Y);
+
+            if (a > b) a = a ^ b ^ (b = a); // swap a and b
+
+            return (OneBitOfTools.SQUARE_ROOT_OF_TWO - 1) * a + b;
+        }
+
+        /// <summary>
+        /// Returns a fast approximation of the pythagorean distance between this position and another.
+        /// </summary>
+        /// <param name="other">Another position</param>
+        /// <returns>The distance, as a float</returns>
+        public float FastDistance(Position other)
+        {
+            return FastDistance(this, other);
+        }
+
+        /// <summary>
         /// Returns a quick approximation of the distance between two positions using the Angband algorithm (distance = long axis + half of short axis).
         /// </summary>
         /// <param name="p1">A position</param>
