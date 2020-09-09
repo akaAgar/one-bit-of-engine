@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace OneBitOfEngine
 {
@@ -332,6 +333,20 @@ namespace OneBitOfEngine
             float interpolation = angleInDegrees - (float)Math.Floor(angleInDegrees);
 
             return Lerp(vFloor, vCeiling, interpolation);
+        }
+
+        /// <summary>
+        /// Returns a string with the first character uppercased.
+        /// </summary>
+        /// <param name="str">A string</param>
+        /// <returns>A string</returns>
+        public static string ICase(string str, CultureInfo culture = null)
+        {
+            if (string.IsNullOrEmpty(str)) return str;
+
+            if (str.Length == 1) return str.ToUpper(culture ?? CultureInfo.InvariantCulture);
+
+            return str.Substring(0, 1).ToUpper(culture ?? CultureInfo.InvariantCulture) + str.Substring(1);
         }
     }
 }
