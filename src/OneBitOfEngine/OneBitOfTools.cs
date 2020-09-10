@@ -238,12 +238,19 @@ namespace OneBitOfEngine
             if (string.IsNullOrEmpty(text)) return new string[0];
             lineLength = Math.Max(1, lineLength);
 
-            string[] words = text.Replace("\\n", "\n").Split(' ', '\t', '\n');
+            string[] words = text.Replace("\\n", "\n").Replace("\n", " \n ").Split(new char[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> lines = new List<string>();
             string currentLine = "";
 
             foreach (string w in words)
             {
+                if (w == "\n")
+                {
+                    lines.Add(currentLine);
+                    currentLine = "";
+                    continue;
+                }
+
                 if (currentLine.Length + w.Length >= lineLength)
                 {
                     lines.Add(currentLine);
