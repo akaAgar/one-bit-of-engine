@@ -1,7 +1,5 @@
 # One Bit of Engine
-A cross-platform OpenGL4 1-bit tilemap engine similar to the one used by the first Ultima games, written in C# (.NET Framework 4.5) with OpenTK. Released under the GNU General Public License.
-
-- **Don't forget to add a NuGet reference to OpenTK 3.2 in the OneBitOfEngine project**
+A cross-platform OpenGL4 1-bit tilemap engine similar to the one used by the first Ultima games, written in C# (.NET Framework 4.5) with OpenTK 3.2. Released under the GNU General Public License.
 
 ![Preview images](Preview.gif)
 
